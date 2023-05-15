@@ -1,6 +1,6 @@
 Sequence Diagram: BARRE Romain; Estimated: 1h; Reality: 1h15
 
-Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
+Use Case Diagram: ETRILLARD Yann; Estimated: 10 min; Reality: 10 min
 
 Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
 
