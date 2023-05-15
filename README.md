@@ -1,10 +1,11 @@
 # CY-Path
 
-The corridor game in java
+The Quoridor game in java
 
 ## Description
 
-CY-Path is a student game project developed in Java which proposes to live the experience of the game of the corridor on pc.
+CY-Path is a student game project developed in Java. It uses JavaFX for the graphics. 
+Quoridor can be played by either 2 or 4 players.
 
 ## Authors
 
