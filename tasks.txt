@@ -5,38 +5,70 @@ Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
 Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
 
 Set up the project (classes,...)
-PROGRESS: ASSIGNED
+PROGRESS: DONE
 Who : MENEUST Robin
 Start : 15:55
 Estimated : 16:30
-Real :
+Real : 16:30
 
 Check if a path exists
-PROGRESS: NEW
+PROGRESS: TODO
 Start :
 Estimated :
 Real :
 
 Detect a win
-PROGRESS: NEW
+PROGRESS: TODO
 Start :
 Estimated :
 Real :
 
 Move the pawn
-PROGRESS: NEW
-Start :
-Estimated :
+PROGRESS: IN_PROGRESS
+Who: Thibault
+Start : 19:30
+Estimated : 20:25
 Real :
 
 Add fences
-PROGRESS: NEW
+PROGRESS: DONE
+Who: Robin
+Start : 18:05
+Estimated : 18:15
+Real : 18:15
+
+Display and play in console mode
+PROGRESS: TODO
 Start :
 Estimated :
 Real :
 
-Display and play in console mode
-PROGRESS: NEW
-Start :
-Estimated :
-Real :
+Create enums
+PROGRESS: DONE
+Who: David
+Start : 17:30
+Estimated : 18h
+Real : 18h
+
+Basic program for testing if the new code is working
+PROGRESS: DONE
+Who: Robin
+Start : 17:30
+Estimated : 18h
+Real : 18h
+
+Start of player control
+PROGRESS: DONE
+Who: Romain
+Start : 16h
+Estimated : 17:45
+Real : 18h
+
+
+
+Basic check if fences are overlapping
+PROGRESS: DONE
+Who: Romain
+Start : 19:30
+Estimated : 19:50
+Real : 19h50
