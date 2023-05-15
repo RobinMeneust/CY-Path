@@ -113,4 +113,8 @@ public class Board {
 			// methode placer fence 
 		}
 	}
+
+	public boolean isOverlapping(int node){
+		return graph.getDegree(node) < 3;
+	}
 }
