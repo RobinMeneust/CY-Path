@@ -57,10 +57,6 @@ public class Board {
 		return graph.getDegree(node) < 3;
 	}
 
-	public boolean isOutOfBoard(Point position){
-        return position.getX() <= this.getNbCols() && position.getX() >= 0 && position.getY() >= 0 && position.getY() <= this.getNbRows();
-    }
-
 	public void choosePosition(Point positionChose){
 		Scanner scanner = new Scanner(System.in);
 
@@ -70,6 +66,94 @@ public class Board {
 		System.out.println("Y : ");
 		positionChose.setY(scanner.nextInt());
 	}
+
+	public boolean isOnTheBoard(Point position){
+        return position.getX() <= this.getNbCols() && position.getX() >= 0 && position.getY() >= 0 && position.getY() <= this.getNbRows();
+    }
+
+	public boolean isPlayerAtThisPosition(Position position){
+
+		for(int i = 0; i < i < this.getGame().getNbPlayers; i++){
+			if(this.pawns[i].position.equals(posistion)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Position possibleMove(Point position, Point positionTested, Point positionTested2){
+
+		//we check if the position is on the board
+		if(this.isOnTheBoard(positionTested)){
+			//We check if the current position and the tested position are not separated by a fence
+			if(this.graph.areConnected(position,positionTested)){
+
+				
+				if(this.isPlayerAtThisPosition()){
+
+					if(this.isOnTheBoard(positionTested2)){
+						if(this.graph.areConnected(position,positionTested2) && !this.isOnTheBoard(positionTested2)){
+							
+							return positionTested2;
+						}
+					}
+				}
+				else{
+					return positionTested;
+				}
+			}
+		}
+
+		return position;
+	}
+
+	public LinkedList<Point> listPossibleMove(Point position){
+
+		LinkedList<Point> listPossibleMovement = new LinkedList<Point>();
+	
+		Position positionTested;
+		Position positionTested2;
+		Position trans;
+		int i;
+
+		//We test the top position
+		positionTested = new Point(position.getx(), position.gety() + 1);
+		positionTested2 = new Point(position.getx(), position.gety() + 2);
+
+		trans = this.possibleMove(position,positionTested,positionTested2);
+		//if we can move to a position other than the initial position in this direction, we add it to the list
+		if(!trans.equals(position)){
+			listPossibleMovement.add(trans);
+		}
+
+		//We test the down position
+		positionTested = new Point(position.getx(), position.gety() - 1);
+		positionTested2 = new Point(position.getx(), position.gety() - 2);
+
+		trans = this.possibleMove(position,positionTested,positionTested2);
+		if(!trans.equals(position)){
+			listPossibleMovement.add(trans);
+		}
+
+		//We test the right position
+		positionTested = new Point(position.getx() - 1, position.gety());
+		positionTested2 = new Point(position.getx() - 2, position.gety());
+		trans = this.possibleMove(position,positionTested,positionTested2);
+		if(!trans.equals(position)){
+			listPossibleMovement.add(trans);
+		}
+
+		//We test the left position
+		positionTested = new Point(position.getx() + 1, position.gety());
+		positionTested2 = new Point(position.getx() + 2, position.gety());
+
+		trans = this.possibleMove(position,positionTested,positionTested2);
+		if(!trans.equals(position)){
+			listPossibleMovement.add(trans);
+		}
+
+		return listPossibleMovement;
+    }
 
 	public void play(int pawnId) {
 		Scanner scanner = new Scanner(System.in);
@@ -99,7 +183,7 @@ public class Board {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(point);
 
-				if(this.isOutOfBoard(point)){
+				if(this.isOnTheBoard(point)){
 					System.out.println("Error : fence out of board");
 				}
 
@@ -107,7 +191,7 @@ public class Board {
 					System.out.println("Error : fence is overlapping another fence");
 				}
 
-			} while(this.isOutOfBoard(point) && this.isOverlapped(point.getX() && this.isOverlapped(point.getX() + 1)));
+			} while(this.isOnTheBoard(point) && this.isOverlapped(point.getX() && this.isOverlapped(point.getX() + 1)));
 			
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
 			// methode placer fence 
