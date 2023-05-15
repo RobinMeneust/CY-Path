@@ -1,0 +1,42 @@
+Sequence Diagram: BARRE Romain; Estimated: 1h; Reality: 1h15
+
+Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
+
+Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
+
+Set up the project (classes,...)
+PROGRESS: ASSIGNED
+Who : MENEUST Robin
+Start : 15:55
+Estimated : 16:30
+Real :
+
+Check if a path exists
+PROGRESS: NEW
+Start :
+Estimated :
+Real :
+
+Detect a win
+PROGRESS: NEW
+Start :
+Estimated :
+Real :
+
+Move the pawn
+PROGRESS: NEW
+Start :
+Estimated :
+Real :
+
+Add fences
+PROGRESS: NEW
+Start :
+Estimated :
+Real :
+
+Display and play in console mode
+PROGRESS: NEW
+Start :
+Estimated :
+Real :
