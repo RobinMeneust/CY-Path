@@ -1,21 +1,36 @@
 public class Game {
 	private GameState state;
-	private int nbPlayers;
 	private int winner;
 	private int nbFences;
 	private Player[] players;
+	private Board board;
 
-	public Game(int nbPlayers, int nbFences) throws InvalidNumberOfPlayersException{
+	public Game(int nbPlayers, Player[] players, int nbFences) throws InvalidNumberOfPlayersException{
 		this.state = GameState.READY;
-		if(nbPlayers != 2 && nbPlayers != 4){
+		if(players == null || (players.length != 2 && players.length != 4)){
 			throw new InvalidNumberOfPlayersException();
 		}
-		this.nbPlayers = nbPlayers;
 		this.winner = -1;
 		this.nbFences = nbFences;
-		// TO-DO
-		
-		this.players = new Player[]
+		this.players = players;
+		this.board = new Board(nbPlayers, nbFences, this);
+	}
+
+	public void launch() {
+		int playerId = 1;
+		while(getState() != GameState.FINISHED){
+			if(playerId>this.getNbPlayers()){
+				playerId = 1;
+			}
+			board.play(playerId);
+			playerId++;
+		}
+		playerId--;
+		setWinner(playerId);
+	}
+
+	private void setWinner(int idPlayer) {
+		this.winner = idPlayer;
 	}
 
 	public GameState getState() {
@@ -23,7 +38,7 @@ public class Game {
 	}
 
 	public int getNbPlayers() {
-		return nbPlayers;
+		return this.players.length;
 	}
 
 	public int getWinner() {

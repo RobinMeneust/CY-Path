@@ -33,5 +33,13 @@ public class Board {
 
 	public int getAvailableFences() {
 		return this.game.getNbFences() - this.nbPlacedFences;
-	}	
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void play(int playerId) {
+		// TODO
+	}
 }
