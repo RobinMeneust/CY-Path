@@ -1,3 +1,3 @@
-public class Orientation {
-	// TO-DO
+public enum Orientation {
+	VERTICAL, HORIZONTAL;
 }
