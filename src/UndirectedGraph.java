@@ -28,4 +28,14 @@ public class UndirectedGraph {
 		// TO-DO
 		return false;
 	}
+
+	public int getDegree(int node){
+		int degree = 0;
+		for (int i = 0; i < this.adjacencyMatrix.length; i++) {
+			if (this.adjacencyMatrix[node][i])
+				degree++;
+		}
+		if(this.adjacencyMatrix[node][node]) degree++;
+		return degree;
+	}
 }

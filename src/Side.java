@@ -4,7 +4,7 @@ public enum Side {
 	public Side getOpposite() {
 		if(this == Side.BOTTOM)
 			return Side.TOP;
-			
+
 		 else if(this == Side.TOP)
 			return Side.BOTTOM;
 

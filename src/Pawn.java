@@ -1,5 +1,5 @@
 public class Pawn {
-	private Point positition;
+	private Point position;
     private int id;
     private int availableFences;
     private Side startingSide;
@@ -7,8 +7,8 @@ public class Pawn {
     private Board board;
 
 
-    public Pawn(Point positition, int id, int availableFences, Side startingSide, Color color, Board board){
-        this.positition = positition;
+    public Pawn(Point position, int id, int availableFences, Side startingSide, Color color, Board board){
+        this.position = position;
         this.id = id;
         this.availableFences = availableFences;
         this.startingSide = startingSide;
@@ -17,7 +17,7 @@ public class Pawn {
     }
 
     public Pawn(int id, Side startingSide, Color color, Board board){
-        this.positition = new Point(board.getNbCols()/board.getGame().getNbPlayers(), board.getNbRows()/board.getGame().getNbPlayers());
+        this.position = new Point(board.getNbCols()/board.getGame().getNbPlayers(), board.getNbRows()/board.getGame().getNbPlayers());
         this.id = id;
         this.availableFences = board.getGame().getNbFences()/board.getGame().getNbPlayers();
         this.startingSide = startingSide;
@@ -25,12 +25,12 @@ public class Pawn {
         this.board = board;
     }
     
-    public Point getPositition() {
-        return positition;
+    public Point getPosition() {
+        return position;
     }
 
-    public void setPositition(Point positition){
-        this.positition = positition;
+    public void setPosition(Point positition){
+        this.position = positition;
     }
 
     public int getId() {
@@ -61,7 +61,7 @@ public class Pawn {
         this.setAvailableFences(this.getAvailableFences()-1);
     }
 
-    public void move(Point positition){
-        this.setPositition(positition);
+    public void move(Point position){
+        this.setPosition(position);
     }
 }
