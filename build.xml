@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for CY-TECH Project" basedir=".">
+    
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <property name="projet.sources.dir" value="src"/>
+    <property name="projet.bin.dir" value="bin"/>
+    <property name="projet.lib.dir" value="lib"/>
+    
+	<path id="projet.classpath">
+        <fileset dir="${projet.lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${projet.bin.dir}"/>
+    </path>
+
+	<target name="delete_dir_bin">
+        <delete dir="${dir.jarfile}/bin"/>
+        <delete>
+            <fileset dir="${basdir}/bin" includes="**/*.class"/>
+        </delete>
+    </target>
+
+	<target name="create_dir_bin">
+        <mkdir dir="${dir.jarfile}/bin"/>
+    </target>
+
+	<target name="compile_src_files" depends="create_dir_bin">
+	    <echo message="Début des traitements"/>
+		<javac srcdir="${projet.sources.dir}" destdir="${projet.bin.dir}" debug="on" 
+				optimize="off" deprecation="on">
+	        <classpath refid="projet.classpath"/>
+	    </javac>
+		<echo message="Fin des traitements"/>
+	</target>
+
+    <target name="run_src_files" depends="compile_src_files">
+        <java classpath="${bindir}" classname="HelloWorld"/>
+    </target>
+
+    <target name="create_run_jar" depends="compile_src_files">
+        <jar destfile="${dir.jarfile}/CY_TECH_Project.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="Main"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.jarfile}/bin"/>
+        </jar>
+    </target>
+	
+	<target name="delete_dir_doc">
+    	<delete dir="${dir.jarfile}/doc"/>
+    	<delete>
+    		<fileset dir="${basedir}/doc" includes="**/*.html"/>
+    	</delete>
+    </target>
+
+	<target name="create_dir_doc" depends="delete_dir_doc">
+	    <mkdir dir="${dir.jarfile}/doc"/>
+	</target>
+
+    <target name="javadoc" depends="create_dir_doc">
+        <javadoc access="public" author="true" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.7" sourcefiles="srcdir/Main.java" sourcepath="srcdir" splitindex="true" use="true" version="true"/>
+    </target>
+	
+	<target name="execute_run_jar" depends="compile">
+	    <java classname="execute_run_jar" fork="true">
+	      <classpath refid="projet.classpath"/>
+	    </java>
+	</target>
+</project>

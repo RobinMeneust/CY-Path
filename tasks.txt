@@ -1,6 +1,6 @@
 Sequence Diagram: BARRE Romain; Estimated: 1h; Reality: 1h15
 
-Use Case Diagram: ETRILLARD Yann; Estimated: 10 min; Reality: 10 min
+Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
 
 Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
 
@@ -24,11 +24,11 @@ Estimated :
 Real :
 
 Move the pawn
-PROGRESS: IN_PROGRESS
+PROGRESS: DONE
 Who: Thibault
 Start : 19:30
 Estimated : 20:25
-Real :
+Real : 20:30
 
 Add fences
 PROGRESS: DONE
@@ -64,16 +64,30 @@ Start : 16h
 Estimated : 17:45
 Real : 18h
 
-Basic check if fences are overlapping
-PROGRESS: DONE
-Who: Romain
-Start : 19:30
-Estimated : 19:50
-Real : 19h50
-
 Ant file
 PROGRESS: DONE
 Who: Yann
 Start: 18:30
 Estimated: 18:50
-Real: 18h45
+Real: 18:45
+
+Basic check if fences are overlapping
+PROGRESS: DONE
+Who: Romain
+Start : 19:30
+Estimated : 19:50
+Real : 19:50
+
+Gameplay
+PROGRESS: IN_PROGRESS
+Who: David
+Start : 19:30
+Estimated : 20:30
+Real : 20:30
+
+List of possible move
+PROGRESS: DONE
+Who: Thibault
+Start : 20:00
+Estimated : 20:50
+Real : 20:50
