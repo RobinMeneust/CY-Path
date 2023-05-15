@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for CY-TECH Project" basedir=".">
-    
+<project default="execute_run_jar" name="Create Runnable Jar for CY-TECH Project" basedir=".">
     <property name="dir.buildfile" value="."/>
     <property name="dir.workspace" value="${dir.buildfile}/.."/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
@@ -26,9 +25,13 @@
         <mkdir dir="${dir.jarfile}/bin"/>
     </target>
 
-	<target name="compile_src_files" depends="create_dir_bin">
+	<target name="create_lib_dir">
+        <mkdir dir="${dir.jarfile}/lib"/>
+    </target>
+
+	<target name="compile_src_files" depends="create_dir_bin,create_lib_dir">
 	    <echo message="Début des traitements"/>
-		<javac srcdir="${projet.sources.dir}" destdir="${projet.bin.dir}" debug="on" 
+		<javac includeantruntime="false" srcdir="${projet.sources.dir}" destdir="${projet.bin.dir}" debug="on" 
 				optimize="off" deprecation="on">
 	        <classpath refid="projet.classpath"/>
 	    </javac>
@@ -36,13 +39,13 @@
 	</target>
 
     <target name="run_src_files" depends="compile_src_files">
-        <java classpath="${bindir}" classname="HelloWorld"/>
+        <java classpath="${bindir}" classname="CYPath"/>
     </target>
 
     <target name="create_run_jar" depends="compile_src_files">
         <jar destfile="${dir.jarfile}/CY_TECH_Project.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="Main"/>
+                <attribute name="Main-Class" value="CYPath"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="${dir.jarfile}/bin"/>
@@ -64,8 +67,8 @@
         <javadoc access="public" author="true" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.7" sourcefiles="srcdir/Main.java" sourcepath="srcdir" splitindex="true" use="true" version="true"/>
     </target>
 	
-	<target name="execute_run_jar" depends="compile">
-	    <java classname="execute_run_jar" fork="true">
+	<target name="execute_run_jar" depends="compile_src_files">
+	    <java classname="CYPath" fork="true">
 	      <classpath refid="projet.classpath"/>
 	    </java>
 	</target>

@@ -35,8 +35,8 @@ public class UndirectedGraph {
 	}
 
 	public boolean areConnected(Point p1, Point p2) {
-		int node1 = p1.getX() + p1.getY();
-		int node2 = p2.getX() + p2.getY();
+		int node1 = p1.getX()*nbCols + p1.getY();
+		int node2 = p2.getX()*nbCols + p2.getY();
 		return this.areConnected(node1,node2);
 	}
 

@@ -53,15 +53,15 @@ public class Board {
 		return game;
 	}
 
-	public void choosePosition(Point positionChose){
-		Scanner scanner = new Scanner(System.in);
+	public void choosePosition(Scanner scanner, Point chosenPos){
+		System.out.print("X : ");
+		int x = scanner.nextInt();
+		scanner.nextLine();
+		System.out.print("Y : ");	
+		int y = scanner.nextInt();
 
-		System.out.println("X : ");
-		positionChose.setX(scanner.nextInt());
-
-		System.out.println("Y : ");
-		positionChose.setY(scanner.nextInt());
-		scanner.close();
+		chosenPos.setX(x);
+		chosenPos.setY(y);
 	}
 
 	public boolean isOnTheBoard(Point position){
@@ -151,6 +151,69 @@ public class Board {
 		return listPossibleMovement;
     }
 
+	public Pawn getPawnAtPos(Point pos) {
+		for(int i=0; i<this.pawns.length; i++) {
+			if(this.pawns[i].getPosition().equals(pos)) {
+				return this.pawns[i];
+			}
+		}
+		return null;
+	}
+
+	public String getCellContentText(int i, int j) {
+		Pawn pawn = getPawnAtPos(new Point(i,j));
+		if(pawn != null) {
+			return ""+pawn.getId();
+		}
+		return " ";
+	}
+
+	public void displayBoard() {
+		int row = 0;
+
+		System.out.println();
+		System.out.print("    ");
+		for(int i=0; i<nbCols; i++) {
+			System.out.printf("%3d",i);
+		}
+		System.out.println();
+		System.out.print("    ");
+		for(int j=0; j<nbCols; j++)
+			System.out.print("___");
+		System.out.println();
+
+		for(int i=0; i<size-nbCols; i+=nbCols) {
+			System.out.printf("%3d |",row);
+			for(int j=0; j<nbCols-1; j++) {
+				if(graph.areConnected(i, j+1)) {
+					System.out.print(getCellContentText(row,j)+"||");
+				} else {
+					System.out.print(getCellContentText(row,j)+" |");
+				}
+			}
+			System.out.println(getCellContentText(row,nbCols-1)+" |");
+			System.out.print("    ");
+			for(int j=0; j<nbCols; j++)
+				System.out.print("___");
+			System.out.println();
+			row++;
+		}
+		System.out.printf("%3d |",row);
+		for(int j=0; j<nbCols-1; j++) {
+			if(graph.areConnected(size-nbCols, j+1)) {
+				System.out.print(getCellContentText(row,j)+"||");
+			} else {
+				System.out.print(getCellContentText(row,j)+" |");
+			}
+		}
+		System.out.print(getCellContentText(row,nbCols-1)+" |");
+		System.out.println();
+		System.out.print("    ");
+		for(int j=0; j<nbCols; j++)
+			System.out.print("___");
+		System.out.println();
+	}
+
 	public void play(int pawnId) {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
@@ -159,24 +222,27 @@ public class Board {
 		if(this.pawns[pawnId].getAvailableFences() == 0){
 			response = "move";
 		} else{
-			System.out.println("What is your next action ? (move or put corridor)");
-			response = scanner.nextLine();
+			do {
+				System.out.println("What is your next action ? ('m' (move) or 'f' (place fence))");
+				response = scanner.nextLine();
+				response = response.toUpperCase();
+			}while(!response.equals("M") && !response.equals("F"));
 		}
 
-		if(response.toUpperCase().equals("MOVE")){
+		if(response.equals("M")){
 			LinkedList<Point> possibleMove = listPossibleMove(this.pawns[pawnId].getPosition());
 
-			System.out.println("This is your possibilities to move :");
+			System.out.println("Those are the possible moves you can do:");
 			System.out.println(possibleMove.toString());
 			
 			System.out.println("Where do you want to go ?");
-			this.choosePosition(point);
+			this.choosePosition(scanner, point);
 			
 			this.pawns[pawnId].setPosition(point);
-		} else {
+		} else if(response.equals("F")) {
 			do {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
-				this.choosePosition(point);
+				this.choosePosition(scanner, point);
 
 				if(this.isOnTheBoard(point)){
 					System.out.println("Error : fence out of board");
@@ -191,7 +257,6 @@ public class Board {
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
 			// methode placer fence 
 		}
-		scanner.close();
 	}
 
 	public boolean isOverlapped(int node){
