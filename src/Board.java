@@ -15,7 +15,7 @@ public class Board {
 		this.nbCols = nbCols;
 		this.nbRows = nbRows;
 		this.size = nbCols * nbRows;
-		this.graph = new UndirectedGraph(size);
+		this.graph = new UndirectedGraph(size, nbRows, nbCols);
 		this.game = game;
 		
 		if(game != null){
@@ -53,10 +53,6 @@ public class Board {
 		return game;
 	}
 
-	public boolean isOverlapping(int node){
-		return graph.getDegree(node) < 3;
-	}
-
 	public void choosePosition(Point positionChose){
 		Scanner scanner = new Scanner(System.in);
 
@@ -65,23 +61,24 @@ public class Board {
 
 		System.out.println("Y : ");
 		positionChose.setY(scanner.nextInt());
+		scanner.close();
 	}
 
 	public boolean isOnTheBoard(Point position){
         return position.getX() <= this.getNbCols() && position.getX() >= 0 && position.getY() >= 0 && position.getY() <= this.getNbRows();
     }
 
-	public boolean isPlayerAtThisPosition(Position position){
+	public boolean isPawnAtPos(Point position){
 
-		for(int i = 0; i < i < this.getGame().getNbPlayers; i++){
-			if(this.pawns[i].position.equals(posistion)){
+		for(int i = 0; i < this.getGame().getNbPlayers(); i++){
+			if(this.pawns[i].getPosition().equals(position)){
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public Position possibleMove(Point position, Point positionTested, Point positionTested2){
+	public Point possibleMove(Point position, Point positionTested, Point positionTested2){
 
 		//we check if the position is on the board
 		if(this.isOnTheBoard(positionTested)){
@@ -89,7 +86,7 @@ public class Board {
 			if(this.graph.areConnected(position,positionTested)){
 
 				
-				if(this.isPlayerAtThisPosition()){
+				if(this.isPawnAtPos(positionTested)){
 
 					if(this.isOnTheBoard(positionTested2)){
 						if(this.graph.areConnected(position,positionTested2) && !this.isOnTheBoard(positionTested2)){
@@ -111,14 +108,13 @@ public class Board {
 
 		LinkedList<Point> listPossibleMovement = new LinkedList<Point>();
 	
-		Position positionTested;
-		Position positionTested2;
-		Position trans;
-		int i;
+		Point positionTested;
+		Point positionTested2;
+		Point trans;
 
 		//We test the top position
-		positionTested = new Point(position.getx(), position.gety() + 1);
-		positionTested2 = new Point(position.getx(), position.gety() + 2);
+		positionTested = new Point(position.getX(), position.getY() + 1);
+		positionTested2 = new Point(position.getX(), position.getY() + 2);
 
 		trans = this.possibleMove(position,positionTested,positionTested2);
 		//if we can move to a position other than the initial position in this direction, we add it to the list
@@ -127,8 +123,8 @@ public class Board {
 		}
 
 		//We test the down position
-		positionTested = new Point(position.getx(), position.gety() - 1);
-		positionTested2 = new Point(position.getx(), position.gety() - 2);
+		positionTested = new Point(position.getX(), position.getY() - 1);
+		positionTested2 = new Point(position.getX(), position.getY() - 2);
 
 		trans = this.possibleMove(position,positionTested,positionTested2);
 		if(!trans.equals(position)){
@@ -136,16 +132,16 @@ public class Board {
 		}
 
 		//We test the right position
-		positionTested = new Point(position.getx() - 1, position.gety());
-		positionTested2 = new Point(position.getx() - 2, position.gety());
+		positionTested = new Point(position.getX() - 1, position.getY());
+		positionTested2 = new Point(position.getX() - 2, position.getY());
 		trans = this.possibleMove(position,positionTested,positionTested2);
 		if(!trans.equals(position)){
 			listPossibleMovement.add(trans);
 		}
 
 		//We test the left position
-		positionTested = new Point(position.getx() + 1, position.gety());
-		positionTested2 = new Point(position.getx() + 2, position.gety());
+		positionTested = new Point(position.getX() + 1, position.getY());
+		positionTested2 = new Point(position.getX() + 2, position.getY());
 
 		trans = this.possibleMove(position,positionTested,positionTested2);
 		if(!trans.equals(position)){
@@ -168,7 +164,7 @@ public class Board {
 		}
 
 		if(response.toUpperCase().equals("MOVE")){
-			LinkedList<Point> possibleMove = listPossibleMove(this.pawns[pawnId].getPositition());
+			LinkedList<Point> possibleMove = listPossibleMove(this.pawns[pawnId].getPosition());
 
 			System.out.println("This is your possibilities to move :");
 			System.out.println(possibleMove.toString());
@@ -176,9 +172,8 @@ public class Board {
 			System.out.println("Where do you want to go ?");
 			this.choosePosition(point);
 			
-			this.pawns[pawnId].setPositition(point);
+			this.pawns[pawnId].setPosition(point);
 		} else {
-
 			do {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(point);
@@ -187,18 +182,19 @@ public class Board {
 					System.out.println("Error : fence out of board");
 				}
 
-				if(this.isOverlapped(point.getX() && this.isOverlapped(point.getX() + 1))){
+				if(this.isOverlapped(point.getX()) && this.isOverlapped(point.getX() + 1)){
 					System.out.println("Error : fence is overlapping another fence");
 				}
 
-			} while(this.isOnTheBoard(point) && this.isOverlapped(point.getX() && this.isOverlapped(point.getX() + 1)));
+			} while(this.isOnTheBoard(point) && this.isOverlapped(point.getX()) && this.isOverlapped(point.getX() + 1));
 			
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
 			// methode placer fence 
 		}
+		scanner.close();
 	}
 
-	public boolean isOverlapping(int node){
+	public boolean isOverlapped(int node){
 		return graph.getDegree(node) < 3;
 	}
 }
