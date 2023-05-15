@@ -59,12 +59,12 @@
     	</delete>
     </target>
 
-	<target name="create_dir_doc" depends="delete_dir_doc">
+	<target name="create_dir_doc">
 	    <mkdir dir="${dir.jarfile}/doc"/>
 	</target>
 
     <target name="javadoc" depends="create_dir_doc">
-        <javadoc access="public" author="true" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.7" sourcefiles="srcdir/Main.java" sourcepath="srcdir" splitindex="true" use="true" version="true"/>
+        <javadoc access="public" author="true" classpath="." destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" source="1.7" sourcefiles="${projet.sources.dir}/Board.java,${projet.sources.dir}/Color.java,${projet.sources.dir}/CYPath.java,${projet.sources.dir}/Fence.java,${projet.sources.dir}/Game.java, ${projet.sources.dir}/GameState.java,${projet.sources.dir}/InvalidNumberOfPlayersException.java, ${projet.sources.dir}/Orientation.java, ${projet.sources.dir}/Pawn.java, ${projet.sources.dir}/Player.java, ${projet.sources.dir}/Point.java, ${projet.sources.dir}/Side.java, ${projet.sources.dir}/UndirectedGraph.java" sourcepath="${projet.sources.dir}" splitindex="true" use="true" version="true"/>
     </target>
 	
 	<target name="execute_run_jar" depends="compile_src_files">
