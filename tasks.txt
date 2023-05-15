@@ -1,0 +1,93 @@
+Sequence Diagram: BARRE Romain; Estimated: 1h; Reality: 1h15
+
+Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
+
+Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
+
+Set up the project (classes,...)
+PROGRESS: DONE
+Who : MENEUST Robin
+Start : 15:55
+Estimated : 16:30
+Real : 16:30
+
+Check if a path exists
+PROGRESS: TODO
+Start :
+Estimated :
+Real :
+
+Detect a win
+PROGRESS: TODO
+Start :
+Estimated :
+Real :
+
+Move the pawn
+PROGRESS: DONE
+Who: Thibault
+Start : 19:30
+Estimated : 20:25
+Real : 20:30
+
+Add fences
+PROGRESS: DONE
+Who: Robin
+Start : 18:05
+Estimated : 18:15
+Real : 18:15
+
+Display and play in console mode
+PROGRESS: TODO
+Start :
+Estimated :
+Real :
+
+Create enums
+PROGRESS: DONE
+Who: David
+Start : 17:30
+Estimated : 18h
+Real : 18h
+
+Basic program for testing if the new code is working
+PROGRESS: DONE
+Who: Robin
+Start : 17:30
+Estimated : 18h
+Real : 18h
+
+Start of player control
+PROGRESS: DONE
+Who: Romain
+Start : 16h
+Estimated : 17:45
+Real : 18h
+
+Ant file
+PROGRESS: DONE
+Who: Yann
+Start: 18:30
+Estimated: 18:50
+Real: 18:45
+
+Basic check if fences are overlapping
+PROGRESS: DONE
+Who: Romain
+Start : 19:30
+Estimated : 19:50
+Real : 19:50
+
+Gameplay
+PROGRESS: IN_PROGRESS
+Who: David
+Start : 19:30
+Estimated : 20:30
+Real : 20:30
+
+List of possible move
+PROGRESS: DONE
+Who: Thibault
+Start : 20:00
+Estimated : 20:50
+Real : 20:50
