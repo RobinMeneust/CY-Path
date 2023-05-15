@@ -42,4 +42,8 @@ public class Board {
 	public void play(int playerId) {
 		// TODO
 	}
+
+	public boolean isOverlapping(int node){
+		return graph.getDegree(node) < 3;
+	}
 }
