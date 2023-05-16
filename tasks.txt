@@ -122,6 +122,12 @@ The task's priority is sorted in ascending order
 				* Start: 2023/05/15 18:30
 				* Estimated end: 2023/05/15 18:50
 				* Real end: 2023/05/15 18:45
+			5.2.1.4 Add the new fence to the list and to the grid
+				* PROGRESS: DONE
+				* Who: Robin
+				* Start: 2023/05/15 20:30
+				* Estimated end: 2023/05/15 21:00
+				* Real end: 2023/05/15 21:30
 		5.2.2 Get a list of all the available cells the player can to move to (can the player jump?, is there a fence? ...)
 			5.2.2.1 The player can jump above another one
 				* PROGRESS: DONE
@@ -218,19 +224,12 @@ The task's priority is sorted in ascending order
 			* Start : 2023/05/16 20:10
 			* Estimated end : 2023/05/16 20:30
 			* Real end :
-	9.3 Create and add fences and add it to the window
-		9.3.1 Create fences images or use a border on the cells ?
-			* PROGRESS: TO_DO
-			* Who: Robin
-			* Start : 2023/05/16 20:30
-			* Estimated end : 2023/05/16 20:50
-			* Real end :
-		9.3.2 Add fences to the grid without breaking the alignement (the size of the grid must not change)
-			* PROGRESS: TO_DO
-			* Who: Robin
-			* Start : 2023/05/16 20:55
-			* Estimated end : 2023/05/16 21:30
-			* Real end :
+	9.3 Add fences to the window (thick black borders) without breaking the alignement (the size of the grid must not change)
+		* PROGRESS: TO_DO
+		* Who: Robin
+		* Start : 2023/05/17 15:00
+		* Estimated end : 2023/05/17 15:30
+		* Real end :
 
 10. Add events and use CAP (Observers...) to link the "presentation" to the "abstraction" using "controllers"
 	10.1 Add buttons (and events) used by the player to choose his next move (place fence or move)
@@ -238,7 +237,7 @@ The task's priority is sorted in ascending order
 			We can also just create one button "Place Fence" that becomes "Move" when pressed (it's probably better to do so)
 			* PROGRESS: TO_DO
 			* Who: PERSON_1
-			* Start : 2023/05/17 12:00
+			* Start : 2023/05/17 15:30
 			* Estimated end : 2023/05/17 12:15
 			* Real end :
 		10.1.1 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,

@@ -34,12 +34,12 @@ public class Fence {
 	public void setEnd(Point start){
 		switch (this.getOrientation()) {
 			case HORIZONTAL:
-				this.end.setY(start.getY() + this.getLength());
-				this.end.setX(start.getX());
-				break;
-			case VERTICAL:
 				this.end.setX(start.getX() + this.getLength());
 				this.end.setY(start.getY());
+				break;
+			case VERTICAL:
+				this.end.setX(start.getX());
+				this.end.setY(start.getY() + this.getLength());
 				break;
 			default:
 				this.end = start;
@@ -62,8 +62,8 @@ public class Fence {
 		}
 	}
 
-	 @Override
+	@Override
 	public String toString(){
 		return("{\nlenght:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
-	 }
+	}
 }

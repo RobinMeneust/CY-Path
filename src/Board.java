@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -7,7 +8,7 @@ public class Board {
 	private int size;
 	private Grid grid;
 	private Game game;
-	private Fence[] fences;
+	private ArrayList<Fence> fences;
 	private int nbPlacedFences;
 	private Pawn[] pawns;
 	
@@ -17,10 +18,12 @@ public class Board {
 		this.size = nbCols * nbRows;
 		this.grid = new Grid(nbRows, nbCols);
 		this.game = game;
+		this.fences = null;
 		
-		if(game != null){
-			this.fences = new Fence[game.getNbFences()];
+		if(game != null && game.getNbFences() > 0){
+			this.fences = new ArrayList<Fence>(game.getNbFences());
 		}
+		
 		this.nbPlacedFences = 0;
 		this.pawns = new Pawn[game.getNbPlayers()];
 		int j = 0;
@@ -223,6 +226,7 @@ public class Board {
 	}
 
 	public void displayBoard() {
+		// TODO : Display is incorrect here : For instance a H fence at (0,0) will be displayed on the line 0 and not the top border of this line
 		System.out.println();
 		System.out.print("    ");
 		for(int i=0; i<nbCols; i++) {
@@ -244,7 +248,7 @@ public class Board {
 					System.out.print(" |");
 				} else {
 					// There is a fence between (x,y) and (x+1,y)
-					System.out.print(" █");
+					System.out.print(" @");
 				}
 			}
 			// Bottom border
@@ -254,11 +258,27 @@ public class Board {
 				if(y == nbRows-1 || grid.areConnected(x, y, x, y + 1)) {
 					System.out.print("|--");
 				} else {
-					System.out.print("|██");
+					System.out.print("@--");
 				}
 			}
 			System.out.print("|");
 			System.out.println();
+		}
+	}
+
+	public void addFenceToData(Fence fence) {
+		this.fences.add(fence);
+		Point start = fence.getStart();
+		Point end = fence.getEnd();
+
+		if(fence.getOrientation() == Orientation.HORIZONTAL) {
+			for(int i=start.getX(); i<end.getX(); i++) {
+				this.grid.removeEdge(new Point(i,start.getY()), new Point(i+1,start.getY()));
+			}
+		} else {
+			for(int i=start.getY(); i<end.getY(); i++) {
+				this.grid.removeEdge(new Point(start.getX(), i), new Point(start.getX(), i+1));
+			}
 		}
 	}
 
@@ -328,9 +348,9 @@ public class Board {
 
 			System.out.println(fence);
 
+			this.addFenceToData(fence);
 
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
-			// methode placer fence 
 		}
 	}
 
