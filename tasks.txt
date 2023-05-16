@@ -92,7 +92,7 @@ The task's priority is sorted in ascending order
 			* Who: Romain
 			* Start : 2023/05/16 18:30
 			* Estimated end : 2023/05/16 19:00
-			* Real end : 2023/05/1
+			* Real end : 2023/05/16 19:20
 
 5. Add game sequence:
 	5.1 Be able to move or to place a fence,
