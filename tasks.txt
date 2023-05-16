@@ -65,7 +65,17 @@ The task's priority is sorted in ascending order
 
 8. Add game sequence:
     8.1 Be able to move or to place a fence,
+        * PROGRESS: DONE
+        * Who: David
+        * Start : 16:30
+        * Estimated : 19h
+        * Real : 20:30
     8.2 Check if any of these actions is possible,
+        * PROGRESS: DONE
+        * Who: David
+        * Start : 16:30
+        * Estimated : 19h
+        * Real : 20:30
     8.3 Let the next player play and so on,
     8.4 Check if anybody wins,
     8.5 Check if the game can be played with 2 or 4 players
