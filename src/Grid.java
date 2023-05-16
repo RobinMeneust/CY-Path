@@ -2,7 +2,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.Map.*;
 
 public class Grid {
 	private HashMap<Point,HashSet<Point>> adjacencyList;
@@ -87,7 +86,6 @@ public class Grid {
 	}
 
 	public boolean areConnected(Point p1, Point p2) {
-		displayGrid();
 		if(p1 != null && p2 != null && this.adjacencyList.containsKey(p1))
 			return this.adjacencyList.get(p1).contains(p2);
 		else
@@ -116,13 +114,6 @@ public class Grid {
 	}
 
 	public HashSet<Point> getListNeighbors(Point node) {
-		for(Entry<Point,HashSet<Point>> p : this.adjacencyList.entrySet()) {
-			if(p.getKey().equals(new Point(0,0))){
-				System.out.println(p.getKey() +" "+p.getValue());
-			}
-		}
-		System.out.println("TEST"+);
-		System.out.println("T2"+this.adjacencyList.get(node));
 		return this.adjacencyList.get(node);
 	}
 

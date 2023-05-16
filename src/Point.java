@@ -39,6 +39,13 @@ public class Point {
 		return false;
 	}
 
+    public int hashCode() {
+        int result = 11 + 83 * this.getX();
+        result += 83 * result + this.getY();
+
+        return result;
+    }
+
     @Override
     public String toString(){
         return("("+this.getX()+","+this.getY()+")");
