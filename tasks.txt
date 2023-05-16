@@ -1,93 +1,116 @@
-Sequence Diagram: BARRE Romain; Estimated: 1h; Reality: 1h15
+The task's priority is sorted in ascending order
 
-Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
+1. Set up the project:
+    1.1 Create each class from the class diagram,
+        * PROGRESS: DONE
+        * Who : MENEUST Robin
+        * Start : 15:55
+        * Estimated : 16:30
+        * Real : 16:30
+    1.2 Create scripts for automation
+        * PROGRESS: DONE
+        * Who: Yann
+        * Start: 18:30
+        * Estimated: 18:50
+        * Real: 18:45
 
-Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
+2. Create the data model with an undirected graph:
+    2.1 Get the number of columns and rows,
+    2.2 Create a graph with an adjacency matrix,
+    2.3 Be capable to manipulate the edges (create a new one; destroy one),
+    2.4 Find a path between to points,
 
-Set up the project (classes,...)
-PROGRESS: DONE
-Who : MENEUST Robin
-Start : 15:55
-Estimated : 16:30
-Real : 16:30
+    /!\ The data model changed
+    2.5 Change data model, DESC: Instead of using an adjacency matrix we are now using a adjacency list
 
-Check if a path exists
-PROGRESS: TODO
-Start :
-Estimated :
-Real :
 
-Detect a win
-PROGRESS: TODO
-Start :
-Estimated :
-Real :
+3. Create the player:
+    3.1 Create a player with a username and his number of wins,
+        * PROGRESS: DONE
+        * Who: Romain
+        * Start : 16h
+        * Estimated : 17:45
+        * Real : 18h
 
-Move the pawn
-PROGRESS: DONE
-Who: Thibault
-Start : 19:30
-Estimated : 20:25
-Real : 20:30
+    3.2 Create a pawn associated to a player:
+        * PROGRESS: DONE
+        * Who: Romain
+        * Start : 16h
+        * Estimated : 17:45
+        * Real : 18h
 
-Add fences
-PROGRESS: DONE
-Who: Robin
-Start : 18:05
-Estimated : 18:15
-Real : 18:15
+        3.2.1 The pawn must have a unique color, a position on the grid, a number of fences available and a side from where it starts,
+            * PROGRESS: DONE
+            3.2.1.1 The available fences must be in relation with the global available fences and the number of players
+        3.2.2 The pawn can move,
+            * PROGRESS: DONE
+            * Who: Thibault
+            * Start : 19:30
+            * Estimated : 20:25
+            * Real : 20:30
+        3.2.3 If the pawn place a fence, its available fences must decrease:
+            3.2.3.1 Check if there is enough fence available
 
-Display and play in console mode
-PROGRESS: TODO
-Start :
-Estimated :
-Real :
+7. Create fences:
+    7.1 Create a fence with a length, a position and an orientation:
+        * PROGRESS: DONE
+        * Who: Robin
+        * Start : 18:05
+        * Estimated : 18:15
+        * Real : 18:15
 
-Create enums
-PROGRESS: DONE
-Who: David
-Start : 17:30
-Estimated : 18h
-Real : 18h
+        7.1.1 Check if the starting point of the fence is outside the board
+    7.2 The end of the fence must in relation with its starting point and its length
 
-Basic program for testing if the new code is working
-PROGRESS: DONE
-Who: Robin
-Start : 17:30
-Estimated : 18h
-Real : 18h
 
-Start of player control
-PROGRESS: DONE
-Who: Romain
-Start : 16h
-Estimated : 17:45
-Real : 18h
+8. Add game sequence:
+    8.1 Be able to move or to place a fence,
+    8.2 Check if any of these actions is possible,
+    8.3 Let the next player play and so on,
+    8.4 Check if anybody wins,
+    8.5 Check if the game can be played with 2 or 4 players
 
-Ant file
-PROGRESS: DONE
-Who: Yann
-Start: 18:30
-Estimated: 18:50
-Real: 18:45
+9. Create a console interface to be able to test the game:
+    * PROGRESS: DONE
+    * Who: Robin
+    * Start : 17:30
+    * Estimated : 18h
+    * Real : 18h
 
-Basic check if fences are overlapping
-PROGRESS: DONE
-Who: Romain
-Start : 19:30
-Estimated : 19:50
-Real : 19:50
+    9.1 Be able to see the player on the grid,
+        * PROGRESS: DONE
+        * Who: Robin
+    9.2 Be able to move the player on the grid,
+        * PROGRESS: DONE
+        * Who: Robin
+    9.3 Be able to place a fence,
+    9.4 Check if the move is valid or not,
+        * PROGRESS: IN_PROGRESS
+        * Who: Thibault
+        * Start :
+        * Estimated :
+        * Real :
+    9.5 Check if the player can jump another player,
 
-Gameplay
-PROGRESS: IN_PROGRESS
-Who: David
-Start : 19:30
-Estimated : 20:30
-Real : 20:30
+10. Create a save:
+    10.1 Choose the file format to save the game,
+    10.2 Let the player choose the location and the name of the save,
+    10.3
 
-List of possible move
-PROGRESS: DONE
-Who: Thibault
-Start : 20:00
-Estimated : 20:50
-Real : 20:50
+11. Load a save:
+    11.1 From a file, load a game,
+    11.2 Let the player the file,
+
+12. Create a user interface using JavaFX:
+    12.1 Create a window
+        12.1.1 This window might need to be not resizable
+    12.2 Create a grid
+    12.3 Create buttons for the interactions with the game
+    12.4 Add shapes for the players and the fences
+
+13. Link the presentation of the game to functionalities
+    13.1 When the pawn moves, the shape of the pawn moves on the window
+    13.2 When a fence is placed, the shape of the fence is placed on the window
+    13.3 The player can the save or load button on the window
+        13.3.1 Create a load button
+        13.3.2 Create a save button
