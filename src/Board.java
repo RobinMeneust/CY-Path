@@ -77,8 +77,11 @@ public class Board {
 	}
 
 	public boolean isFenceOnTheBoard(Fence fence){
-
-        return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() >= 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() >= 0 && fence.getEnd().getY() < this.getNbCols()));
+		if(fence.getOrientation() == Orientation.HORIZONTAL){
+			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols()-1 && fence.getStart().getY() > 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() > 0 && fence.getEnd().getY() < this.getNbCols()-1));
+		} else {
+			return ((fence.getStart().getX() < this.getNbRows()-1 && fence.getStart().getX() > 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() >= 0) && (fence.getEnd().getX() > 0 && fence.getEnd().getX() < this.getNbRows()-1) && (fence.getEnd().getY() >= 0 && fence.getEnd().getY() < this.getNbCols()));
+		}
     }
 	public boolean isOnTheBoard(Point point){
 		return point.getX() < this.getNbRows() && point.getX() >= 0 && point.getY() >= 0 && point.getY() < this.getNbCols();
@@ -230,35 +233,38 @@ public class Board {
 		System.out.println();
 		System.out.print("    ");
 		for(int i=0; i<nbCols; i++) {
-			System.out.printf("%3d",i);
+			System.out.printf("%3d ",i);
 		}
 		System.out.println();
 		System.out.print("    ");
-		for(int x=0; x<nbCols; x++)
-			System.out.print("|--");
+		for(int x=0; x<nbCols; x++){
+			System.out.print("|---");
+		}
 		System.out.print("|");
 		System.out.println();
 
-		for(int y=0; y<nbRows; y++) {
-			System.out.printf("%3d |",y);
+		for(int y=0; y<nbRows-1; y++) {
+			System.out.printf("%3d | ",y);
+
 			for(int x=0; x<nbCols; x++) {
 				System.out.print(getCellContentText(x,y));
-				if(x == nbCols-1 || grid.areConnected(x, y, x+1, y)) {
-					// It's the left border or there is no fence between (x,y) and (x+1,y)
-					System.out.print(" |");
+				if(x==nbCols-1 || grid.areConnected(x, y, x+1, y)) {
+					// It's the right border or there is no vertical fence between (x,y) and (x+1,y)
+					System.out.print(" | ");
 				} else {
-					// There is a fence between (x,y) and (x+1,y)
-					System.out.print(" @");
+					// There is a vertical fence between (x,y) and (x+1,y)
+					System.out.print(" @ ");
 				}
 			}
-			// Bottom border
+
+			// bottom border
 			System.out.println();
 			System.out.print("    ");
 			for(int x=0; x<nbCols; x++){
-				if(y == nbRows-1 || grid.areConnected(x, y, x, y + 1)) {
-					System.out.print("|--");
+				if(y == nbRows-1 || grid.areConnected(x, y, x, y+1)) {
+					System.out.print("|---");
 				} else {
-					System.out.print("@--");
+					System.out.print("|@@@");
 				}
 			}
 			System.out.print("|");
@@ -273,11 +279,11 @@ public class Board {
 
 		if(fence.getOrientation() == Orientation.HORIZONTAL) {
 			for(int i=start.getX(); i<end.getX(); i++) {
-				this.grid.removeEdge(new Point(i,start.getY()), new Point(i+1,start.getY()));
+				this.grid.removeEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
 			}
 		} else {
 			for(int i=start.getY(); i<end.getY(); i++) {
-				this.grid.removeEdge(new Point(start.getX(), i), new Point(start.getX(), i+1));
+				this.grid.removeEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
 			}
 		}
 	}

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="execute_run_jar" name="Create Runnable Jar for CY-TECH Project" basedir=".">
+<project default="give_and_run" name="Create Runnable Jar for CY-TECH Project" basedir=".">
     <property name="dir.buildfile" value="."/>
     <property name="dir.workspace" value="${dir.buildfile}/.."/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
     <property name="projet.sources.dir" value="src"/>
     <property name="projet.bin.dir" value="bin"/>
     <property name="projet.lib.dir" value="lib"/>
+    <property name="javafx.dir" value="E:/install/javafx-sdk-17.0.7"/> <!-- Change it to your javafx installation location -->
     
 	<path id="projet.classpath">
         <fileset dir="${projet.lib.dir}">
@@ -34,6 +35,7 @@
 		<javac includeantruntime="false" srcdir="${projet.sources.dir}" destdir="${projet.bin.dir}" debug="on" 
 				optimize="off" deprecation="on">
 	        <classpath refid="projet.classpath"/>
+            <compilerarg line="--module-path ${javafx.dir}/lib --add-modules javafx.controls,javafx.fxml,javafx.swing,javafx.base,javafx.graphics,javafx.media,javafx.web" />
 	    </javac>
 		<echo message="Fin des traitements"/>
 	</target>
@@ -70,6 +72,10 @@
 	<target name="execute_run_jar" depends="compile_src_files">
 	    <java classname="CYPath" fork="true">
 	      <classpath refid="projet.classpath"/>
+          <jvmarg line="--module-path ${javafx.dir}/lib" />
+          <jvmarg line="--add-modules javafx.controls,javafx.fxml,javafx.swing,javafx.base,javafx.graphics,javafx.media,javafx.web"/>
 	    </java>
 	</target>
+
+    <target name="give_and_run" depends="create_run_jar, execute_run_jar"/>
 </project>
