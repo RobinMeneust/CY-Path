@@ -46,6 +46,10 @@ public class Game {
 		return winner;
 	}
 
+	public Player getPlayer(int index){
+		return players[index];
+	}
+
 	public int getNbFences() {
 		return nbFences;
 	}

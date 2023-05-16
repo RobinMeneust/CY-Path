@@ -20,4 +20,9 @@ public class Player {
     public void setNbWins(int nbWin){
         this.nbWins = nbWin;
     }
+
+    @Override
+    public String toString(){
+        return this.getUsername();
+    }
 }
