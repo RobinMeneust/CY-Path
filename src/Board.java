@@ -197,24 +197,29 @@ public class Board {
 		}
 		System.out.println();
 		System.out.print("    ");
-		for(int j=0; j<nbCols; j++)
-			System.out.print("___");
+		for(int x=0; x<nbCols; x++)
+			System.out.print("|--");
+		System.out.print("|");
 		System.out.println();
 
-		for(int i=0; i<nbRows; i++) {
-			System.out.printf("%3d |",i);
-			for(int j=0; j<nbCols; j++) {
-				System.out.print(getCellContentText(i,j));
-				if(grid.areConnected(i, j, i, j+1)) {
-					System.out.print("||");
-				} else {
+		for(int y=0; y<nbRows; y++) {
+			System.out.printf("%3d |",y);
+			for(int x=0; x<nbCols; x++) {
+				System.out.print(getCellContentText(y,x));
+				if(x == nbCols-1 || grid.areConnected(y, x, y, x+1)) {
+					// It's the left border or there is no fence between (x,y) and (x+1,y)
 					System.out.print(" |");
+				} else {
+					// There is a fence between (x,y) and (x+1,y)
+					System.out.print("||");
 				}
 			}
+			// Bottom border
 			System.out.println();
 			System.out.print("    ");
-			for(int j=0; j<nbCols; j++)
-				System.out.print("___");
+			for(int x=0; x<nbCols; x++)
+				System.out.print("|--");
+			System.out.print("|");
 			System.out.println();
 		}
 	}
