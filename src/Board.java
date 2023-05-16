@@ -205,6 +205,7 @@ public class Board {
 					System.out.print(" |");
 				}
 			}
+			System.out.println();
 			System.out.print("    ");
 			for(int j=0; j<nbCols; j++)
 				System.out.print("___");
