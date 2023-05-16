@@ -59,10 +59,10 @@ public class Board {
 
 		// TODO : The lines aren't displayed properly here
 		System.out.print("X : ");
-		int x = Integer.parseInt(scanner.nextLine());
+		int x = Integer.parseInt(scanner.next());
 		System.out.println();
 		System.out.print("Y : ");	
-		int y = Integer.parseInt(scanner.nextLine());
+		int y = Integer.parseInt(scanner.next());
 
 		chosenPos.setX(x);
 		chosenPos.setY(y);
@@ -73,9 +73,14 @@ public class Board {
 		return orientation;
 	}
 
-	public boolean isOnTheBoard(Point position){
-        return position.getX() <= this.getNbCols() && position.getX() >= 0 && position.getY() >= 0 && position.getY() <= this.getNbRows();
+	public boolean isFenceOnTheBoard(Fence fence){
+
+        return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() >= 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() >= 0 && fence.getEnd().getY() < this.getNbCols()));
     }
+	public boolean isOnTheBoard(Point point){
+		return point.getX() < this.getNbRows() && point.getX() >= 0 && point.getY() >= 0 && point.getY() < this.getNbCols();
+	}
+
 
 	public boolean isPawnAtPos(Point position){
 
@@ -221,8 +226,6 @@ public class Board {
 		String orientation = "";
 
 		int winner = this.checkWin();
-		System.out.println(winner);
-		System.out.println(pawns[pawnId]);
 		if(winner != -1){
 			Player playerWinner = null;
 			for (int i = 0; i < this.game.getNbPlayers(); i++){
@@ -259,15 +262,6 @@ public class Board {
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.equals("F")) {
 			Fence fence = new Fence(2);
-			do {
-				System.out.println("Where do you want to put your fence ? (X,Y)");
-				this.choosePosition(scanner, point);
-				if(!(this.isOnTheBoard(point))){
-					System.out.println("The fence is out of the board.\nTry again.");
-				}
-			} while(!(this.isOnTheBoard(point)));
-
-			fence.setStart(point);
 
 			do {
 				System.out.println("What is the orientaion of your fence ? (H(ORIZONTAL) or V(ERTICAL))");
@@ -275,10 +269,19 @@ public class Board {
 				if(!(this.isValidOrientation(orientation))){
 					System.out.println("The fence is in the wrong orientation.\nTry again.");
 				}
+				fence.setOrientation(orientation);
 			}while(!(this.isValidOrientation(orientation)));
 
-			fence.setOrientation(orientation);
-			fence.setEnd(fence.getStart());
+			do {
+				System.out.println("Where do you want to put your fence ? (X,Y)");
+				this.choosePosition(scanner, point);
+				fence.setStart(point);
+				fence.setEnd(fence.getStart());
+				System.out.println(this.isFenceOnTheBoard(fence));
+				if(!(this.isFenceOnTheBoard(fence))){
+					System.out.println("The fence is out of the board.\nTry again.");
+				}
+			} while(!(this.isFenceOnTheBoard(fence)));
 
 			System.out.println(fence);
 
