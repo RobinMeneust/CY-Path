@@ -17,12 +17,16 @@ public class Pawn {
     }
 
     public Pawn(int id, Side startingSide, Color color, Board board){
-        this.position = new Point(board.getNbCols()/board.getGame().getNbPlayers(), board.getNbRows()/board.getGame().getNbPlayers());
-        this.id = id;
-        this.availableFences = board.getGame().getNbFences()/board.getGame().getNbPlayers();
-        this.startingSide = startingSide;
-        this.color = color;
-        this.board = board;
+        try{
+            this.position = board.getGrid().getCenterOfSide(startingSide);
+            this.id = id;
+            this.availableFences = board.getGame().getNbFences()/board.getGame().getNbPlayers();
+            this.startingSide = startingSide;
+            this.color = color;
+            this.board = board;
+        }catch (UnknownSideException e){
+            System.out.println(e);
+        }
     }
     
     public Point getPosition() {
@@ -63,5 +67,10 @@ public class Pawn {
 
     public void move(Point position){
         this.setPosition(position);
+    }
+
+    @Override
+    public String toString(){
+        return("{\nposition:"+this.getPosition()+",\n"+"id:"+this.getId()+",\n"+"availableFences:"+this.getAvailableFences()+",\n"+"startingSide:"+this.getStartingSide()+",\n"+"color:"+this.getColor()+",\n"+"}");
     }
 }

@@ -1,5 +1,5 @@
 public enum Side {
-	LEFT, RIGHT, TOP, BOTTOM;
+	BOTTOM, TOP, LEFT, RIGHT;
 
 	public Side getOpposite() {
 		if(this == Side.BOTTOM)

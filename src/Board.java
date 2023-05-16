@@ -27,9 +27,6 @@ public class Board {
 		for(int i = 0; i < pawns.length; i++){
 			pawns[i] = new Pawn(i, Side.values()[j], Color.values()[j], this);
 			j++;
-			if(game.getNbPlayers() == 2){
-				j++;
-			}
 		}
 	}
 
@@ -51,6 +48,10 @@ public class Board {
 
 	public Game getGame() {
 		return game;
+	}
+
+	public Grid getGrid(){
+		return grid;
 	}
 
 	public void choosePosition(Scanner scanner, Point chosenPos){
@@ -233,8 +234,11 @@ public class Board {
 			System.out.println(possibleMoves);
 			
 			System.out.println("Where do you want to go ?");
-			this.choosePosition(scanner, point);
 			
+			while(!possibleMoves.contains(point)){
+				this.choosePosition(scanner, point);
+			}
+		
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.equals("F")) {
 			Fence fence = new Fence(2);
@@ -267,7 +271,7 @@ public class Board {
 		}
 	}
 
-	private boolean isValidOrientation(String orientation) {
+	public boolean isValidOrientation(String orientation) {
 		if (orientation.toUpperCase().matches("H(ORIZONTALE)?")){
 			return true;
 		}else if(orientation.toUpperCase().matches("V(ERTICAL)?")){

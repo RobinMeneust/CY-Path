@@ -103,18 +103,18 @@ The task's priority is sorted in ascending order
 
 8. Add game sequence:
 	8.1 Be able to move or to place a fence,
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
-		* Real : 
+		* PROGRESS: DONE
+		* Who: David
+		* Start : 2023/05/15 16:30
+		* Estimated : 2023/05/15 19:00
+		* Real : 2023/05/15 20:30
 	8.2 Check if any of these actions is possible,
 		8.2.1 Check if the player can place a fence (there is at least one fence remaining)
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real : 
+			* PROGRESS: DONE
+			* Who: David
+			* Start : 2023/05/15 16:30
+			* Estimated : 2023/05/15 19:00
+			* Real : 2023/05/15 20:30	
 		8.2.2 Get a list of all the available cells the player can to move to (can the player jump?, is there a fence? ...)
 			* PROGRESS: DONE
 			* Who: Thibault
