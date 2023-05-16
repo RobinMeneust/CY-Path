@@ -64,4 +64,9 @@ public class Pawn {
     public void move(Point position){
         this.setPosition(position);
     }
+
+    @Override
+    public String toString(){
+        return("{\nposition:"+this.getPosition()+",\n"+"id:"+this.getId()+",\n"+"availableFences:"+this.getAvailableFences()+",\n"+"startingSide:"+this.getStartingSide()+",\n"+"color:"+this.getColor()+",\n"+"}");
+    }
 }

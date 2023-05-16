@@ -27,9 +27,6 @@ public class Board {
 		for(int i = 0; i < pawns.length; i++){
 			pawns[i] = new Pawn(i, Side.values()[j], Color.values()[j], this);
 			j++;
-			if(game.getNbPlayers() == 2){
-				j++;
-			}
 		}
 	}
 
