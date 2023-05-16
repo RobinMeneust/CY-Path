@@ -50,6 +50,10 @@ public class Board {
 		return game;
 	}
 
+	public Grid getGrid(){
+		return grid;
+	}
+
 	public void choosePosition(Scanner scanner, Point chosenPos){
 		System.out.println();
 		System.out.print("X : ");
@@ -264,7 +268,7 @@ public class Board {
 		}
 	}
 
-	private boolean isValidOrientation(String orientation) {
+	public boolean isValidOrientation(String orientation) {
 		if (orientation.toUpperCase().matches("H(ORIZONTALE)?")){
 			return true;
 		}else if(orientation.toUpperCase().matches("V(ERTICAL)?")){
