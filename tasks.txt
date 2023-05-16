@@ -192,7 +192,7 @@ The task's priority is sorted in ascending order
 
 8. Load a save:
 	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
-		* PROGRESS: TO_DO
+		* PROGRESS: IN_PROGRESS
 		* Who: Yann
 		* Start : 2023/05/16 20:30
 		* Estimated end : 2023/05/16 21:40
