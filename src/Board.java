@@ -234,8 +234,11 @@ public class Board {
 			System.out.println(possibleMoves);
 			
 			System.out.println("Where do you want to go ?");
-			this.choosePosition(scanner, point);
 			
+			while(!possibleMoves.contains(point)){
+				this.choosePosition(scanner, point);
+			}
+		
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.equals("F")) {
 			Fence fence = new Fence(2);
