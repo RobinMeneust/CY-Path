@@ -67,11 +67,11 @@ The task's priority is sorted in ascending order
 			* Real : 2023/05/15 18h
 		3.2.1 The pawn must have a unique color, a position on the grid, a number of fences available and a side from where it starts,
 			3.2.1.1 The number of available fences must be consistent with the global available fences and the number of players,
-				* PROGRESS: 
-				* Who: 
-				* Start : 
-				* Estimated : 
-				* Real : 
+				* PROGRESS:
+				* Who:
+				* Start :
+				* Estimated :
+				* Real :
 		3.2.2 If the pawn place a fence, its available fences must decrease:
 			3.2.2.1 Check if there is enough fence available
 				* PROGRESS: DONE
@@ -80,82 +80,82 @@ The task's priority is sorted in ascending order
 				* Estimated :  2023/05/15 17:40
 				* Real :  2023/05/15 17:45
 
-7. Create fences:
-	7.1 Create a fence with a length, a position and an orientation:
-		7.1.1 Create the base elements of the class
+4. Create fences:
+	4.1 Create a fence with a length, a position and an orientation:
+		4.1.1 Create the base elements of the class
 			* PROGRESS: DONE
 			* Who: Robin
 			* Start : 2023/05/15 18:05
 			* Estimated : 2023/05/15 18:15
 			* Real : 2023/05/15 18:15
-		7.1.1 Check if the starting point of the fence is outside the board
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real : 
-		7.1.3 The end of the fence must be consistent with its starting point and its length
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real : 
+		4.1.1 Check if the starting point of the fence is outside the board
+			* PROGRESS:
+			* Who:
+			* Start :
+			* Estimated :
+			* Real :
+		4.1.3 The end of the fence must be consistent with its starting point and its length
+			* PROGRESS:
+			* Who:
+			* Start :
+			* Estimated :
+			* Real :
 
-8. Add game sequence:
-	8.1 Be able to move or to place a fence,
+5. Add game sequence:
+	5.1 Be able to move or to place a fence,
 		* PROGRESS: DONE
 		* Who: David
 		* Start : 2023/05/15 16:30
 		* Estimated : 2023/05/15 19:00
 		* Real : 2023/05/15 20:30
-	8.2 Check if any of these actions is possible,
-		8.2.1 Check if the player can place a fence (there is at least one fence remaining)
+	5.2 Check if any of these actions is possible,
+		5.2.1 Check if the player can place a fence (there is at least one fence remaining)
 			* PROGRESS: DONE
 			* Who: David
 			* Start : 2023/05/15 16:30
 			* Estimated : 2023/05/15 19:00
-			* Real : 2023/05/15 20:30	
-		8.2.2 Get a list of all the available cells the player can to move to (can the player jump?, is there a fence? ...)
+			* Real : 2023/05/15 20:30
+		5.2.2 Get a list of all the available cells the player can to move to (can the player jump?, is there a fence? ...)
 			* PROGRESS: DONE
 			* Who: Thibault
 			* Start : 2023/05/15 18:45
 			* Estimated : 2023/05/15 19:30
 			* Real : 2023/05/15 : 20:00
 			* Notes: function creation to avoid code repetition took me longer than expected
-		8.2.3 Check if the move give by the player is in that list of available cells
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real : 
-	8.3 Let the next player play and so on,
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
-		* Real : 
-	8.4 Check if anybody wins,
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
-		* Real : 
-	8.5 Check if the game can be played with 2 or 4 players
+		5.2.3 Check if the move give by the player is in that list of available cells
+			* PROGRESS:
+			* Who:
+			* Start :
+			* Estimated :
+			* Real :
+	5.3 Let the next player play and so on,
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
+		* Real :
+	5.4 Check if anybody wins,
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
+		* Real :
+	5.5 Check if the game can be played with 2 or 4 players
 		* PROGRESS: DONE
 		* Who: Romain
 		* Start : 2023/05/16 16:45
-		* Estimated : 2023/05/16 16:50 
+		* Estimated : 2023/05/16 16:50
 		* Real : 2023/05/16 16:49
 
 
-9. Create a console interface to be able to test the game:
-	9.1 Represent the cells of the grid in the console
+6. Create a console interface to be able to test the game:
+	6.1 Represent the cells of the grid in the console
 		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/15 17:30
 		* Estimated : 2023/05/15 17:45
 		* Real : 2023/05/15 17:55
-	9.2 Be able to see the player on the grid,
+	6.2 Be able to see the player on the grid,
 		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/15 17:55
@@ -163,187 +163,187 @@ The task's priority is sorted in ascending order
 		* Real : 2023/05/15 18:05
 	* Notes: The code had to be changed on 2023/05/16, since the areConnected function doesn't take the same type of parameters. It was also simplified.
 
-10. Create a save:
-	10.1 Encode the game in a file to save it,
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
-		* Real : 
-	10.2 Let the player choose the location and the name of the save,
-		* PROGRESS:     
-		* Who: 
-		* Start : 
-		* Estimated : 
+7. Create a save:
+	7.1 Encode the game in a file to save it,
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
+		* Real :
+	7.2 Let the player choose the location and the name of the save,
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
 		* Real :
 
-11. Load a save:
-	11.2 Let the player choose the file containing the save to be loaded,
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
+8. Load a save:
+	8.2 Let the player choose the file containing the save to be loaded,
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
 		* Real :
-	11.2 Decode the file containing the save and load it,
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
+	8.2 Decode the file containing the save and load it,
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
 		* Real :
 
-12. Create a user interface using JavaFX:
-	12.1 Create a window for the application (it might not need to be resizable)
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
+9. Create a user interface using JavaFX:
+	9.1 Create a window for the application (it might not need to be resizable)
+		* PROGRESS:
+		* Who:
+		* Start :
+		* Estimated :
 		* Real :
-	12.2 Create a grid and add it to the window
-		12.2.1 Create images representing empty cells or players
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
+	9.2 Create a grid and add it to the window
+		9.2.1 Create images representing empty cells or players
+			* PROGRESS:
+			* Who:
+			* Start :
+			* Estimated :
 			* Real :
-		12.2.2 Create a GridPane (?) and add images
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
+		9.2.2 Create a GridPane (?) and add images
+			* PROGRESS:
+			* Who:
+			* Start :
+			* Estimated :
 			* Real :
-	12.3 Create and add fences and add it to the window
-		12.3.1 Create fences images or use a border on the cells ?
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
+	9.3 Create and add fences and add it to the window
+		9.3.1 Create fences images or use a border on the cells ?
+			* PROGRESS:
+			* Who:
+			* Start :
+			* Estimated :
 			* Real :
-		12.3.2 Add fences to the grid without breaking the alignement (the size of the grid must not change)
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-
-13. Add events and use CAP (Observers...) to link the "presentation" to the "abstraction" using "controllers"
-	13.1 Add buttons used by the player to choose his next move (place fence or move)
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
-		* Real :
-	13.2 Player movements
-		13.1.1 Show the possible moves by changing the color of the corresponding cells
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-		13.1.2 Add an event that change the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-		13.1.3 Add an event to move the player when a cell is clicked (we can also use drag and drop alternatively) (remove the previous pawn position on the grid)
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-	13.3 Place fences
-		13.1.1 Show the possible places where a fence can be added (if there is any left) by changing the color of the corresponding borders
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-		13.1.2 Add an event that change the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-		13.1.3 Add an event to move the player when a cell is clicked (we can also use drag and drop alternatively)
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-	13.4 Add a fence counter
-		* PROGRESS: 
-		* Who: 
-		* Start : 
-		* Estimated : 
-		* Real :
-	13.5 Add button for the save system
-		13.3.1 Create a load button that opens a FileChoser
-			* PROGRESS: 
-			* Who: 
-			* Start : 
-			* Estimated : 
-			* Real :
-		13.3.2 Create a save button that opens a FileChoser
+		9.3.2 Add fences to the grid without breaking the alignement (the size of the grid must not change)
 			* PROGRESS: 
 			* Who: 
 			* Start : 
 			* Estimated : 
 			* Real :
 
-14. Add a main menu and its button
-	14.1 New game button
+10. Add events and use CAP (Observers...) to link the "presentation" to the "abstraction" using "controllers"
+	10.1 Add buttons used by the player to choose his next move (place fence or move)
 		* PROGRESS: 
 		* Who: 
 		* Start : 
 		* Estimated : 
 		* Real :
-	14.2 Load Game button
+	10.2 Player movements
+		10.1.1 Show the possible moves by changing the color of the corresponding cells
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+		10.1.2 Add an event that change the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+		10.1.3 Add an event to move the player when a cell is clicked (we can also use drag and drop alternatively) (remove the previous pawn position on the grid)
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+	10.3 Place fences
+		10.1.1 Show the possible places where a fence can be added (if there is any left) by changing the color of the corresponding borders
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+		10.1.2 Add an event that change the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+		10.1.3 Add an event to move the player when a cell is clicked (we can also use drag and drop alternatively)
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+	10.4 Add a fence counter
+		* PROGRESS: 
+		* Who: 
+		* Start : 
+		* Estimated : 
+		* Real :
+	10.5 Add button for the save system
+		10.3.1 Create a load button that opens a FileChoser
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+		10.3.2 Create a save button that opens a FileChoser
+			* PROGRESS: 
+			* Who: 
+			* Start : 
+			* Estimated : 
+			* Real :
+
+11. Add a main menu and its button
+	11.1 New game button
+		* PROGRESS: 
+		* Who: 
+		* Start : 
+		* Estimated : 
+		* Real :
+	11.2 Load Game button
 		* PROGRESS: 
 		* Who: 
 		* Start : 
 		* Estimated : 
 		* Real :
 
-15. Optional functionalities
-	15.1 Options button in main menu and options menu
-		15.1.1 Create the option button and an event that change the scene to the options menu
+12. Optional functionalities
+	12.1 Options button in main menu and options menu
+		12.1.1 Create the option button and an event that change the scene to the options menu
 			* PROGRESS: 
 			* Who: 
 			* Start : 
 			* Estimated : 
 			* Real :
-		15.1.2 Add options
-			15.1.2.1 Change controls
+		12.1.2 Add options
+			12.1.2.1 Change controls
 				* PROGRESS: 
 				* Who: 
 				* Start : 
 				* Estimated : 
 				* Real :
-			15.1.2.2 Change screen resolution
+			12.1.2.2 Change screen resolution
 				* PROGRESS: 
 				* Who: 
 				* Start : 
 				* Estimated : 
 				* Real :
-			15.1.2.3 Change size of fences
+			12.1.2.3 Change size of fences
 				* PROGRESS: 
 				* Who: 
 				* Start : 
 				* Estimated : 
 				* Real :
-			15.1.2.4 Change board size
+			12.1.2.4 Change board size
 				* PROGRESS: 
 				* Who: 
 				* Start : 
 				* Estimated : 
 				* Real :
-			15.1.2.5 Change pawn color or image
+			12.1.2.5 Change pawn color or image
 				* PROGRESS: 
 				* Who: 
 				* Start : 
 				* Estimated : 
 				* Real :
-	15.2 Add a singleplayer mode
+	12.2 Add a singleplayer mode
 		* PROGRESS: 
 		* Who: 
 		* Start : 
