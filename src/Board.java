@@ -244,7 +244,7 @@ public class Board {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(scanner, point);
 
-				if(this.isOnTheBoard(point)){
+				if(!(this.isOnTheBoard(point))){
 					System.out.println("Error : fence out of board");
 				}
 
@@ -252,7 +252,7 @@ public class Board {
 					System.out.println("Error : fence is overlapping another fence");
 				}
 
-			} while(this.isOnTheBoard(point) && this.isOverlapped(point.getX()) && this.isOverlapped(point.getX() + 1));
+			} while(!(this.isOnTheBoard(point)) && this.isOverlapped(point.getX()) && this.isOverlapped(point.getX() + 1));
 			
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
 			// methode placer fence 
