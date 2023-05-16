@@ -76,9 +76,9 @@ The task's priority is sorted in ascending order
 			3.2.2.1 Check if there is enough fence available
 				* PROGRESS: DONE
 				* Who: Thibault
-				* Start : 19:30
-				* Estimated : 20:25
-				* Real : 20:30
+				* Start :  2023/05/15 17:10
+				* Estimated :  2023/05/15 17:40
+				* Real :  2023/05/15 17:45
 
 7. Create fences:
 	7.1 Create a fence with a length, a position and an orientation:
@@ -118,9 +118,10 @@ The task's priority is sorted in ascending order
 		8.2.2 Get a list of all the available cells the player can to move to (can the player jump?, is there a fence? ...)
 			* PROGRESS: DONE
 			* Who: Thibault
-			* Start : 2023/05/15 ...:...
-			* Estimated : 2023/05/15 ...:...
-			* Real : 2023/05/15 ...:...
+			* Start : 2023/05/15 18:45
+			* Estimated : 2023/05/15 19:30
+			* Real : 2023/05/15 : 20:00
+			* Notes: function creation to avoid code repetition took me longer than expected
 		8.2.3 Check if the move give by the player is in that list of available cells
 			* PROGRESS: 
 			* Who: 
