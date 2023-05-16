@@ -92,7 +92,7 @@ The task's priority is sorted in ascending order
 			* Who: Romain
 			* Start : 2023/05/16 18:30
 			* Estimated end : 2023/05/16 19:00
-			* Real end : 2023/05/1
+			* Real end : 2023/05/16 19:20
 
 5. Add game sequence:
 	5.1 Be able to move or to place a fence,
@@ -135,7 +135,7 @@ The task's priority is sorted in ascending order
 				* Who: Thibault
 				* Start : 2023/05/16 18:30
 				* Estimated end : 2023/05/16 18:45 
-				* Real end : 2023/05/16 
+				* Real end : 2023/05/16 19:45
 		5.2.3 Check if the move give by the player is in that list of available cells
 			* PROGRESS: DONE
 			* Who: Thibault

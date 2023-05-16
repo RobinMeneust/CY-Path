@@ -92,13 +92,15 @@ public class Board {
 		return false;
 	}
 
-	public Point possibleMove(Point position, Point positionTested, Point positionTested2){
+	public LinkedList<Point> possibleMove(Point position, Point positionTested, Point positionTested2, Point positionTested3, Point positionTested4){
 
 		//we check if the position is on the board
 		System.out.println("_____________");
 		System.out.println(position);
 		System.out.println(positionTested);
 		System.out.println(positionTested2);
+
+		LinkedList<Point> listMove = new LinkedList<Point>();
 
 		if(this.isOnTheBoard(positionTested)){
 			System.out.println("pos1 in board");
@@ -107,24 +109,44 @@ public class Board {
 				System.out.println("no fence");
 				
 				if(this.isPawnAtPos(positionTested)){
-					// There is a pawn so we can't go there, but we can maybe jump above it
+					// There is a pawn so we can't this.isPawnAtPos(positionTested)go there, but we can maybe jump above it
 					System.out.println("there is a pawn here");
 					if(this.isOnTheBoard(positionTested2)){
 						System.out.println("pos2 in board");
-						if(this.grid.areConnected(position,positionTested2)){
+
+						if(this.grid.areConnected(position,positionTested2) && !this.isPawnAtPos(positionTested2)){
 							System.out.println("no fence for pos2");
-							return positionTested2;
+							listMove.add(positionTested2);
+						}
+						else{
+							//If there are a fence behind the pawns we check if we can go leftside or rightside
+							if(this.isOnTheBoard(positionTested3)){
+								if(this.grid.areConnected(positionTested,positionTested3) && !this.isPawnAtPos(positionTested3)){
+									System.out.println("no fence for pos3");
+									listMove.add(positionTested3);
+								}
+							}
+							if(this.isOnTheBoard(positionTested4)){
+								if(this.grid.areConnected(positionTested,positionTested4) && !this.isPawnAtPos(positionTested4)){
+									System.out.println("no fence for pos4");
+									listMove.add(positionTested4);
+								}
+							}
+
 						}
 					}
 				}
 				else{
 					System.out.println("no pawn");
-					return positionTested;
+					listMove.add(positionTested);
 				}
 			}
 		}
+		else{
+			listMove.add(position);
+		}
 
-		return position;
+		return listMove;
 	}
 
 	public LinkedList<Point> listPossibleMoves(Point position){
@@ -132,42 +154,53 @@ public class Board {
 		
 		Point positionTested = null;
 		Point positionTested2 = null;
-		Point trans = null;
+		Point positionTested3 = null;
+		Point positionTested4 = null;
+		LinkedList<Point> trans = null;
 		
 		//We test the bottom position
 		positionTested = new Point(position.getX(), position.getY() + 1);
 		positionTested2 = new Point(position.getX(), position.getY() + 2);
+		positionTested3 = new Point(position.getX() + 1, position.getY() + 1);
+		positionTested4 = new Point(position.getX() - 1, position.getY() + 1);
 		
-		trans = this.possibleMove(position,positionTested,positionTested2);
+		trans = this.possibleMove(position,positionTested,positionTested2,positionTested3,positionTested4);
 		//if we can move to a position other than the initial position in this direction, we add it to the list
-		if(!trans.equals(position)){
-			listPossibleMovements.add(trans);
+		if(!trans.contains(position)){
+			listPossibleMovements.addAll(trans);
 		}
-		
+
 		//We test the top position
 		positionTested = new Point(position.getX(), position.getY() - 1);
 		positionTested2 = new Point(position.getX(), position.getY() - 2);
+		positionTested3 = new Point(position.getX() + 1, position.getY() - 1);
+		positionTested4 = new Point(position.getX() - 1, position.getY() - 1);
 
-		trans = this.possibleMove(position,positionTested,positionTested2);
-		if(!trans.equals(position)){
-			listPossibleMovements.add(trans);
+		trans = this.possibleMove(position,positionTested,positionTested2,positionTested3,positionTested4);
+		if(!trans.contains(position)){
+			listPossibleMovements.addAll(trans);
 		}
 
 		//We test the left position
 		positionTested = new Point(position.getX() - 1, position.getY());
 		positionTested2 = new Point(position.getX() - 2, position.getY());
-		trans = this.possibleMove(position,positionTested,positionTested2);
-		if(!trans.equals(position)){
-			listPossibleMovements.add(trans);
+		positionTested3 = new Point(position.getX() - 1, position.getY() + 1);
+		positionTested4 = new Point(position.getX() - 1, position.getY() - 1);
+
+		trans = this.possibleMove(position,positionTested,positionTested2,positionTested3,positionTested4);
+		if(!trans.contains(position)){
+			listPossibleMovements.addAll(trans);
 		}
 
 		//We test the right position
 		positionTested = new Point(position.getX() + 1, position.getY());
 		positionTested2 = new Point(position.getX() + 2, position.getY());
+		positionTested3 = new Point(position.getX() + 1, position.getY() + 1);
+		positionTested4 = new Point(position.getX() + 1, position.getY() - 1);
 
-		trans = this.possibleMove(position,positionTested,positionTested2);
-		if(!trans.equals(position)){
-			listPossibleMovements.add(trans);
+		trans = this.possibleMove(position,positionTested,positionTested2,positionTested3,positionTested4);
+		if(!trans.contains(position)){
+			listPossibleMovements.addAll(trans);
 		}
 		return listPossibleMovements;
     }
