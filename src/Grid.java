@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.Map.Entry;
 
 public class Grid {
 	private HashMap<Point,HashSet<Point>> adjacencyList;
@@ -34,7 +35,7 @@ public class Grid {
 				}
 				if(j>0) {
 					// Left neighbor
-					neighbor = new Point(j,j-1);
+					neighbor = new Point(i,j-1);
 					neighborsList.add(neighbor);
 				}
 				if(j<nbCols-1) {

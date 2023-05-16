@@ -56,6 +56,8 @@ public class Board {
 
 	public void choosePosition(Scanner scanner, Point chosenPos){
 		System.out.println();
+
+		// TODO : The lines aren't displayed properly here
 		System.out.print("X : ");
 		int x = Integer.parseInt(scanner.nextLine());
 		System.out.println();
