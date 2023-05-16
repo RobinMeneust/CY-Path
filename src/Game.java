@@ -38,12 +38,20 @@ public class Game {
 		return state;
 	}
 
+	public void setState(GameState state){
+		this.state = state;
+	}
+
 	public int getNbPlayers() {
 		return this.players.length;
 	}
 
 	public int getWinner() {
 		return winner;
+	}
+
+	public Player getPlayer(int index){
+		return players[index];
 	}
 
 	public int getNbFences() {

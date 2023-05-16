@@ -1,10 +1,22 @@
+import java.util.Scanner;
+
 public class CYPath {
 	public static void main(String[] args) {
 		try {
-			Player[] players= new Player[2];
-			players[0] = new Player("Anonymous player 1");
-			players[1] = new Player("Anonymous player 2");
-			Game game = new Game(2,players,20, 9, 9);			
+			System.out.println("Welcome to CY-Path.\n");
+			int nbPlayer = 0;
+			Scanner sc = new Scanner(System.in);
+			while(nbPlayer != 2 && nbPlayer != 4){
+				System.out.println("How many player do you want ? (2 or 4)");
+				nbPlayer = Integer.parseInt(sc.nextLine());
+			}
+
+			Player[] players= new Player[nbPlayer];
+			for (int i = 0; i < nbPlayer; i++){
+				players[i] = new Player("Anonymous player" + i);
+			}
+
+			Game game = new Game(nbPlayer,players,20, 9, 9);
 			game.launch();
 		} catch (Exception e) {
 			System.err.println(e);

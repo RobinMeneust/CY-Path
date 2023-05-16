@@ -1,101 +1,376 @@
-Sequence Diagram: BARRE Romain; Estimated: 1h; Reality: 1h15
+The task's priority is sorted in ascending order
 
-Use Case Diagram: ETRILLARD Yann; Estimated: 30 min; Reality: 30 min
+1. Set up the project:
+	1.1 Create each class from the class diagram,
+		* PROGRESS: DONE
+		* Who : MENEUST Robin
+		* Start : 2023/05/15 15:55
+		* Estimated end : 2023/05/15 16:30
+		* Real end : 2023/05/15 16:30
+	1.2 Create scripts for automation (ant)
+		* PROGRESS: DONE
+		* Who: Yann
+		* Start: 2023/05/15 18:30
+		* Estimated end: 2023/05/15 18:50
+		* Real end: 2023/05/15 18:45
 
-Class Diagram: MENEUST Robin, KUSMIDER David, GARCIA-MEGEVAND Thibault; Estimated: 1h30 - 2h; Reality: 2h
+2. Create the data model with an undirected graph:
+	2.1 Get the number of columns and rows,
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start: 2023/05/15 18:30
+		* Estimated end: 2023/05/15 18:50
+		* Real end: 2023/05/15 18:45
+	2.2 Create a graph with an adjacency matrix,
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start: 2023/05/15 18:30
+		* Estimated end: 2023/05/15 18:50
+		* Real end: 2023/05/15 18:45
+	2.3 Be capable to manipulate the edges (create a new one; destroy one),
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start: 2023/05/15 18:30
+		* Estimated end: 2023/05/15 18:50
+		* Real end: 2023/05/15 18:45
+	/!\ The data model changed
+	2.4 Change data model, DESC: Instead of using an adjacency matrix we are now using a adjacency list
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start: 2023/05/16 12:00
+		* Estimated end: 2023/05/16 14:30
+		* Real end: 2023/05/16 15:30
+		* Notes:    Most of the functions needed to be changed, since we don't work with int anymore but with Point.
+					hashCode was forgotten in Point.java, that's mostly why it took more time than expected
 
-Set up the project (classes,...)
-PROGRESS: DONE
-Who : MENEUST Robin
-Start : 15:55
-Estimated : 16:30
-Real : 16:30
 
-Check if a path exists
-PROGRESS: IN-PROGRESS
-Start : 19:00
-Estimated : 21:00
-Real : 20:00 (1st version, not tested)
+3. Create the player:
+	3.1 Create a player with a username and his number of wins,
+		* PROGRESS: DONE
+		* Who: Romain
+		* Start : 2023/05/15 16h
+		* Estimated end : 2023/05/15 17:45
+		* Real end : 2023/05/15 18h
 
-Detect a win
-PROGRESS: TODO
-Start :
-Estimated :
-Real :
+	3.2 Create a pawn associated to a player:
+		3.2.1 Create the basic class Pawn
+			* PROGRESS: DONE
+			* Who: Romain
+			* Start : 2023/05/15 16h
+			* Estimated end : 2023/05/15 17:45
+			* Real end : 2023/05/15 18h
+		3.2.2 If the pawn place a fence, its available fences must decrease:
+			3.2.2.1 Check if there is enough fence available
+				* PROGRESS: DONE
+				* Who: Thibault
+				* Start :  2023/05/15 17:10
+				* Estimated end :  2023/05/15 17:40
+				* Real end :  2023/05/15 17:45
 
-Move the pawn
-PROGRESS: DONE
-Who: Thibault
-Start : 19:30
-Estimated : 20:25
-Real : 20:30
+4. Create fences:
+	4.1 Create a fence with a length, a position and an orientation:
+		4.1.1 Create the main elements of the class
+			* PROGRESS: DONE
+			* Who: Robin
+			* Start : 2023/05/15 18:05
+			* Estimated end : 2023/05/15 18:15
+			* Real end : 2023/05/15 18:15
+		4.1.2 Check if the starting point of the fence is outside the board
+			* PROGRESS: DONE
+			* Who: Romain
+			* Start : 2023/05/15 18:20
+			* Estimated end : 2023/05/15 18:30
+			* Real end : 2023/05/16 18:50
+		4.1.3 The end of the fence must be consistent with its starting point and its length
+			* PROGRESS: DONE
+			* Who: Romain
+			* Start : 2023/05/16 9:00
+			* Estimated end : 2023/05/16 9:30
+			* Real end : 2023/05/16 10:00
+		4.1.4 Check if the ending point of the fence is outside the board
+			* PROGRESS: IN_PROGRESS
+			* Who: Romain
+			* Start : 2023/05/16 18:30
+			* Estimated end : 2023/05/16 19:00
+			* Real end : 2023/05/16 19:20
 
-Add fences Class
-PROGRESS: DONE
-Who: Robin
-Start : 18:05
-Estimated : 18:15
-Real : 18:15
+5. Add game sequence:
+	5.1 Be able to move or to place a fence,
+		* PROGRESS: DONE
+		* Who: David
+		* Start : 2023/05/15 16:30
+		* Estimated end : 2023/05/15 19:00
+		* Real end : 2023/05/15 20:30
+		* Notes : Issues encountered: scanner.close() closed stdin, so we couldn't use it, even with another Scanner
+	5.2 Check if any of these actions is possible,
+		5.2.1 Check if the player can place a fence
+			5.2.1.1 Check if there is at least one fence remaining
+				* PROGRESS: DONE
+				* Who: David
+				* Start : 2023/05/15 16:30
+				* Estimated end : 2023/05/15 19:00
+				* Real end : 2023/05/15 20:30
+			5.2.1.2 Check if 2 fences are intersecting
+				* PROGRESS: IN_PROGRESS
+				* Who: Romain
+				* Start : 2023/05/17 9:00
+				* Estimated end : 2023/05/17 11:00
+				* Real end : 2023/05/1
+			5.2.1.3 Find a path between to points,
+				* PROGRESS: DONE
+				* Who: Robin
+				* Start: 2023/05/15 18:30
+				* Estimated end: 2023/05/15 18:50
+				* Real end: 2023/05/15 18:45
+			5.2.1.4 Add the new fence to the list and to the grid
+				* PROGRESS: DONE
+				* Who: Robin
+				* Start: 2023/05/15 20:30
+				* Estimated end: 2023/05/15 21:00
+				* Real end: 2023/05/15 21:30
+		5.2.2 Get a list of all the available cells the player can to move to (can the player jump?, is there a fence? ...)
+			5.2.2.1 The player can jump above another one
+				* PROGRESS: DONE
+				* Who: Thibault
+				* Start : 2023/05/15 18:45
+				* Estimated end : 2023/05/15 19:30
+				* Real end : 2023/05/15 20:00
+				* Notes: function creation to avoid code repetition took me longer than expected
+			5.2.2.2 If the player can jump above another one but there is a fence behind, he can go diagonally
+				* PROGRESS: IN_PROGRESS
+				* Who: Thibault
+				* Start : 2023/05/16 18:30
+				* Estimated end : 2023/05/16 18:45 
+				* Real end : 2023/05/16 19:45
+		5.2.3 Check if the move give by the player is in that list of available cells
+			* PROGRESS: DONE
+			* Who: Thibault
+			* Start : 2023/05/16 15:00
+			* Estimated end : 2023/05/16 15:10
+			* Real end : 2023/05/16 15:05
+	5.3 Check if anybody wins,
+        * PROGRESS: DONE
+        * Who: Romain
+        * Start : 2023/05/16 16:00
+        * Estimated end : 2023/05/16 17:30
+        * Real end : 2023/05/16 18:00
+	5.4 Ask the player how many players there are and check the number (it must be equals to 2 or 4)
+		* PROGRESS: DONE
+		* Who: Romain
+		* Start : 2023/05/16 16:45
+		* Estimated end : 2023/05/16 16:50
+		* Real end : 2023/05/16 16:49
 
-Display and play in console mode
-PROGRESS: DONE
-Who: Robin
-Start : 23:00
-Estimated : 23:30
-Real : 23:50
+6. Create a console interface to be able to test the game:
+	6.1 Represent the cells of the grid in the console
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/15 17:30
+		* Estimated end : 2023/05/15 17:45
+		* Real end : 2023/05/15 17:55
+	6.2 Be able to see the player on the grid,
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/15 17:55
+		* Estimated end : 2023/05/15 18:05
+		* Real end : 2023/05/15 18:05
+	* Notes: The code had to be changed on 2023/05/16, since the areConnected function doesn't take the same type of parameters. It was also simplified.
 
-Create enums
-PROGRESS: DONE
-Who: David
-Start : 17:30
-Estimated : 18h50
-Real : 18h
+7. Create a save:
+	7.1 Let the player choose the location and the name of the save in the console (check if it already exists),
+		* PROGRESS: DONE
+		* Who: Yann
+		* Start : 2023/05/16 18:35
+		* Estimated end : 2023/05/16 18:45 
+		* Real end : 2023/05/16 18:40
+	7.2 Encode the game in a file to save it,
+		* PROGRESS: IN_PROGRESS
+		* Who: Yann
+		* Start : 2023/05/16 20:00
+		* Estimated end : 2023/05/16 20:20
+		* Real end :
 
-Basic program for testing if the new code is working
-PROGRESS: DONE
-Who: Robin
-Start : 17:30
-Estimated : 18h
-Real : 18h
+8. Load a save:
+	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
+		* PROGRESS: IN_PROGRESS
+		* Who: Yann
+		* Start : 2023/05/16 20:30
+		* Estimated end : 2023/05/16 21:40
+		* Real end :
+	8.2 Decode the file containing the save and load it, check if the format is valid,
+		* PROGRESS: TO_DO
+		* Who: Yann
+		* Start : 2023/05/17 9:30
+		* Estimated end : 2023/05/17 10:00
+		* Real end :
 
-Start of player control
-PROGRESS: DONE
-Who: Romain
-Start : 16h
-Estimated : 17:45
-Real : 18h
+9. Create a user interface using JavaFX:
+	9.0 Update Ant file (build.xml) to link JavaFX libraries
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/16 23:00
+		* Estimated end : 2023/05/16 23:15
+		* Real end : 2023/05/17 01:20
+		* Note : The delay is because we tried to use VSCode and Ant instead of Eclipse, so we had to search for a way to link the libraries of JavaFX to our project
+	9.1 Create a window for the application (it might not need to be resizable)
+		* PROGRESS: TO_DO
+		* Who: David
+		* Start : 2023/05/16 19:40
+		* Estimated end : 2023/05/16 19:50
+		* Real end :
+	9.2 Create a grid and add it to the window
+		9.2.1 Create images (or take existing forms from JavaFX ?) representing empty cells or players
+			* PROGRESS: TO_DO
+			* Who: David
+			* Start : 2023/05/16 19:55
+			* Estimated end : 2023/05/16 20:10
+			* Real end :
+		9.2.2 Create a GridPane (?) and add images
+			* PROGRESS: TO_DO
+			* Who: David
+			* Start : 2023/05/16 20:10
+			* Estimated end : 2023/05/16 20:30
+			* Real end :
+	9.3 Add fences to the window (thick black borders) without breaking the alignement (the size of the grid must not change)
+		* PROGRESS: TO_DO
+		* Who: Robin
+		* Start : 2023/05/17 15:00
+		* Estimated end : 2023/05/17 15:30
+		* Real end :
 
-Ant file
-PROGRESS: DONE
-Who: Yann
-Start: 18:30
-Estimated: 18:50
-Real: 18:45
+10. Add events and use CAP (Observers...) to link the "presentation" to the "abstraction" using "controllers"
+	10.1 Add buttons (and events) used by the player to choose his next move (place fence or move)
+		10.1.1 Create the buttons and add it to the window. The "Place fence" button must be disabled or hidden if the player can't place a fence.
+			We can also just create one button "Place Fence" that becomes "Move" when pressed (it's probably better to do so)
+			* PROGRESS: TO_DO
+			* Who: PERSON_1
+			* Start : 2023/05/17 15:30
+			* Estimated end : 2023/05/17 12:15
+			* Real end :
+		10.1.1 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
+			* PROGRESS: TO_DO
+			* Who: PERSON_1
+			* Start : 2023/05/17 12:15
+			* Estimated end : 2023/05/17 13:00
+			* Real end :
+		
+	10.2 Player movements ("MOVE" mode)
+		10.1.1 Show the possible moves by changing the color of the corresponding cells (e.g greyed)
+			* PROGRESS: TO_DO
+			* Who: PERSON_2
+			* Start : 2023/05/17 12:00
+			* Estimated end : 2023/05/17 12:15
+			* Real end :
+		10.1.2 Add an event that changes the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
+			* PROGRESS: TO_DO
+			* Who: PERSON_2
+			* Start : 2023/05/17 12:15
+			* Estimated end : 2023/05/17 12:25
+			* Real end :
+		10.1.3 Add an event to move the player when a cell is clicked (where he can go) (we can also use drag and drop alternatively) (remove the previous pawn position on the grid)
+			* PROGRESS: TO_DO
+			* Who: PERSON_2
+			* Start : 2023/05/17 12:25
+			* Estimated end : 2023/05/17 13:00
+			* Real end :
+	10.3 Place fences ("PLACE FENCE" mode)
+		10.1.1 Show the possible places where a fence can be added (if there is any left) by changing the color of the corresponding borders
+			* PROGRESS: TO_DO
+			* Who: PERSON_3
+			* Start : 2023/05/17 12:00
+			* Estimated end : 2023/05/17 12:20
+			* Real end :
+		10.1.2 Add an event that changes the borders of the hovered cell (the color/image will be different whether it's a border where the player can palce a fence or not)
+			* PROGRESS: TO_DO
+			* Who: PERSON_3
+			* Start : 2023/05/17 12:20
+			* Estimated end : 2023/05/17 12:40
+			* Real end :
+		10.1.3 Add an event to place the fence when a border (where a fence can be added) is clicked
+			* PROGRESS: TO_DO
+			* Who: PERSON_3
+			* Start : 2023/05/17 12:40
+			* Estimated end : 2023/05/17 13:05
+			* Real end :
+	10.4 Add a fence counter
+		* PROGRESS: TO_DO
+		* Who: PERSON_4
+		* Start : 2023/05/17 12:00
+		* Estimated end : 2023/05/17 12:10
+		* Real end :
+	10.5 Add button for the save system
+		10.3.1 Create a load button that opens a FileChoser
+			* PROGRESS: TO_DO
+			* Who: PERSON_4
+			* Start : 2023/05/17 12:10
+			* Estimated end : 2023/05/17 12:25
+			* Real end :
+		10.3.2 Create a save button that opens a FileChoser
+			* PROGRESS: TO_DO
+			* Who: PERSON_4
+			* Start : 12:25
+			* Estimated end : 12:40
+			* Real end :
 
-Basic check if fences are overlapping
-PROGRESS: DONE
-Who: Romain
-Start : 19:30
-Estimated : 19:50
-Real : 19:50
+11. Add a main menu and its buttons
+	11.1 New game button and its event (launch a new game)
+		* PROGRESS: TO_DO
+		* Who: PERSON_5
+		* Start : 2023/05/17 12:00
+		* Estimated end : 2023/05/17 12:45
+		* Real end :
+	11.2 Load Game button and its event (load and launch a game)
+		* PROGRESS: TO_DO
+		* Who: PERSON_5
+		* Start : 2023/05/17 12:45
+		* Estimated end :  2023/05/17 13:30
+		* Real end :
 
-Gameplay
-PROGRESS: IN_PROGRESS
-Who: David
-Start : 19:30
-Estimated : 20:30
-Real : 20:30
 
-List of possible moves
-PROGRESS: DONE
-Who: Thibault
-Start : 20:00
-Estimated : 20:50
-Real : 20:50
+The following tasks aren't mandatory:
 
-Debug
-PROGRESS: IN_PROGRESS
-Who: Robin
-Start : 21:00
-Estimated : 22:00
-Real : 23:00
+12. Optional functionalities
+	12.1 Options button in main menu and options menu
+		12.1.1 Create the option button and an event that change the scene to the options menu
+			* PROGRESS: TO_DO
+			* Who: 
+			* Start : 
+			* Estimated end : 
+			* Real end :
+		12.1.2 Add options
+			12.1.2.1 Change controls
+				* PROGRESS: TO_DO
+				* Who: 
+				* Start : 
+				* Estimated end : 
+				* Real end :
+			12.1.2.2 Change screen resolution
+				* PROGRESS: TO_DO
+				* Who: 
+				* Start : 
+				* Estimated end : 
+				* Real end :
+			12.1.2.3 Change size of fences
+				* PROGRESS: TO_DO
+				* Who: 
+				* Start : 
+				* Estimated end : 
+				* Real end :
+			12.1.2.4 Change board size
+				* PROGRESS: TO_DO
+				* Who: 
+				* Start : 
+				* Estimated end : 
+				* Real end :
+			12.1.2.5 Change pawn color or image
+				* PROGRESS: TO_DO
+				* Who: 
+				* Start : 
+				* Estimated end : 
+				* Real end :
+	12.2 Add a singleplayer mode
+		* PROGRESS: TO_DO
+		* Who: 
+		* Start : 
+		* Estimated end : 
+		* Real end :

@@ -6,23 +6,31 @@ public class Pawn {
     private Color color;
     private Board board;
 
+    private Player player;
 
-    public Pawn(Point position, int id, int availableFences, Side startingSide, Color color, Board board){
+
+    public Pawn(Point position, int id, int availableFences, Side startingSide, Color color, Board board, Player player){
         this.position = position;
         this.id = id;
         this.availableFences = availableFences;
         this.startingSide = startingSide;
         this.color = color;
         this.board = board;
+        this.player = player;
     }
 
-    public Pawn(int id, Side startingSide, Color color, Board board){
-        this.position = new Point(board.getNbCols()/board.getGame().getNbPlayers(), board.getNbRows()/board.getGame().getNbPlayers());
-        this.id = id;
-        this.availableFences = board.getGame().getNbFences()/board.getGame().getNbPlayers();
-        this.startingSide = startingSide;
-        this.color = color;
-        this.board = board;
+    public Pawn(int id, Side startingSide, Color color, Board board, Player player){
+        try{
+            this.position = board.getGrid().getCenterOfSide(startingSide);
+            this.id = id;
+            this.availableFences = board.getGame().getNbFences()/board.getGame().getNbPlayers();
+            this.startingSide = startingSide;
+            this.color = color;
+            this.board = board;
+            this.player = player;
+        }catch (UnknownSideException e){
+            System.out.println(e);
+        }
     }
     
     public Point getPosition() {
@@ -57,11 +65,20 @@ public class Pawn {
         return board;
     }
 
+    public Player getPlayer(){
+        return player;
+    }
+
     public void placeFence(){
         this.setAvailableFences(this.getAvailableFences()-1);
     }
 
     public void move(Point position){
         this.setPosition(position);
+    }
+
+    @Override
+    public String toString(){
+        return("{\nposition:"+this.getPosition()+",\n"+"id:"+this.getId()+",\n"+"availableFences:"+this.getAvailableFences()+",\n"+"startingSide:"+this.getStartingSide()+",\n"+"color:"+this.getColor()+",\n"+"}");
     }
 }

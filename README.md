@@ -17,11 +17,17 @@ Quoridor can be played by either 2 or 4 players.
 
 ## Installation
 
+- JavaFX must be installed (choose the correct version according to your system (Windows, Linux...))
+- (on Windows : Add it to your PATH environment variable if it isn't already in it)
+- In build.xml, change the value of javafx.dir (at the beginning of the file) to the location of your JavaFX folder
+
+## Compile
+
 `ant compile_src_files` to compile
 
 ## Execution
 
-`ant create_run_jar` to create the exucutable .jar and then `java - jar CY_TECH_Project.jar` to run it
+`ant create_run_jar` to create the executable .jar and then `java --module-path="JAVAFX_PATH" --add-modules javafx.controls -jar CY_TECH_Project.jar` to run it, but replace JAVAFX_PATH by the path to your JavaFX bin folder
 
 or
 
