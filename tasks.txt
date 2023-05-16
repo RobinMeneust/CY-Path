@@ -178,13 +178,13 @@ The task's priority is sorted in ascending order
 
 7. Create a save:
 	7.1 Let the player choose the location and the name of the save in the console (check if it already exists),
-		* PROGRESS: IN_PROGRESS
+		* PROGRESS: DONE
 		* Who: Yann
 		* Start : 2023/05/16 18:35
-		* Estimated end : 2023/05/16 19:00 
-		* Real end :
+		* Estimated end : 2023/05/16 18:45 
+		* Real end : 2023/05/16 18:40
 	7.2 Encode the game in a file to save it,
-		* PROGRESS: TO_DO
+		* PROGRESS: IN_PROGRESS
 		* Who: Yann
 		* Start : 2023/05/16 20:00
 		* Estimated end : 2023/05/16 20:20
@@ -194,14 +194,14 @@ The task's priority is sorted in ascending order
 	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
 		* PROGRESS: TO_DO
 		* Who: Yann
-		* Start : 2023/05/16 20:20
+		* Start : 2023/05/16 20:30
 		* Estimated end : 2023/05/16 21:40
 		* Real end :
 	8.2 Decode the file containing the save and load it, check if the format is valid,
 		* PROGRESS: TO_DO
 		* Who: Yann
-		* Start : 2023/05/17 9:00
-		* Estimated end : 2023/05/17 9:30
+		* Start : 2023/05/17 9:30
+		* Estimated end : 2023/05/17 10:00
 		* Real end :
 
 9. Create a user interface using JavaFX:
