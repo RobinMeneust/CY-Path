@@ -124,10 +124,10 @@ public class Grid {
 
 	public Point getCenterOfSide(Side side) throws UnknownSideException {
 		switch(side){
-			case TOP : return new Point(0,this.getNbCols()/2);
-			case BOTTOM : return new Point(this.getNbRows()-1,this.getNbCols()/2);
-			case LEFT : return new Point(this.getNbRows()/2,0);
-			case RIGHT : return new Point(this.getNbRows()/2,this.getNbCols()-1);
+			case TOP : return new Point(this.getNbCols()/2,0);
+			case BOTTOM : return new Point(this.getNbCols()/2,this.getNbRows()-1);
+			case LEFT : return new Point(0,this.getNbRows()/2);
+			case RIGHT : return new Point(this.getNbCols()-1,this.getNbRows()/2);
 			default: throw new UnknownSideException();
 		}
 	}

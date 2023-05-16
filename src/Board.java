@@ -238,20 +238,25 @@ public class Board {
 		for(int y=0; y<nbRows; y++) {
 			System.out.printf("%3d |",y);
 			for(int x=0; x<nbCols; x++) {
-				System.out.print(getCellContentText(y,x));
-				if(x == nbCols-1 || grid.areConnected(y, x, y, x+1)) {
+				System.out.print(getCellContentText(x,y));
+				if(x == nbCols-1 || grid.areConnected(x, y, x+1, y)) {
 					// It's the left border or there is no fence between (x,y) and (x+1,y)
 					System.out.print(" |");
 				} else {
 					// There is a fence between (x,y) and (x+1,y)
-					System.out.print("||");
+					System.out.print(" █");
 				}
 			}
 			// Bottom border
 			System.out.println();
 			System.out.print("    ");
-			for(int x=0; x<nbCols; x++)
-				System.out.print("|--");
+			for(int x=0; x<nbCols; x++){
+				if(y == nbRows-1 || grid.areConnected(x, y, x, y + 1)) {
+					System.out.print("|--");
+				} else {
+					System.out.print("|██");
+				}
+			}
 			System.out.print("|");
 			System.out.println();
 		}
