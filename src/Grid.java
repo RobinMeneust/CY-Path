@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.Map.*;
 
 public class Grid {
 	private HashMap<Point,HashSet<Point>> adjacencyList;
@@ -73,16 +74,30 @@ public class Grid {
 		this.adjacencyList.get(p2).remove(p1);
 	}
 
+
+	public void displayGrid() {
+		for(int i=0; i<this.getNbRows(); i++) {
+			for(int j=0; j<this.getNbCols(); j++) {
+				System.out.println("Node ("+i+","+j+") : ");
+				for(Point p : this.getListNeighbors(new Point(i,j))) {
+					System.out.print(p+" ");
+				}
+			}
+		}
+	}
+
 	public boolean areConnected(Point p1, Point p2) {
-		return this.adjacencyList.get(p1).contains(p2);
+		displayGrid();
+		if(p1 != null && p2 != null && this.adjacencyList.containsKey(p1))
+			return this.adjacencyList.get(p1).contains(p2);
+		else
+			return false;
 	}
 
 	public boolean areConnected(int x1, int y1, int x2, int y2) {
 		Point p1 = new Point(x1,y1);
-		if(this.adjacencyList.containsKey(p1)){
-			return this.adjacencyList.get(p1).contains(new Point(x1,y1));
-		}
-		return false;
+		Point p2 = new Point(x2,y2);
+		return areConnected(p1,p2);
 	}
 
 	// destination = middle of row or column (e.g if the real destination is (0,0),(0,1),(0,2) then (0,1) is the destination point)
@@ -101,6 +116,13 @@ public class Grid {
 	}
 
 	public HashSet<Point> getListNeighbors(Point node) {
+		for(Entry<Point,HashSet<Point>> p : this.adjacencyList.entrySet()) {
+			if(p.getKey().equals(new Point(0,0))){
+				System.out.println(p.getKey() +" "+p.getValue());
+			}
+		}
+		System.out.println("TEST"+);
+		System.out.println("T2"+this.adjacencyList.get(node));
 		return this.adjacencyList.get(node);
 	}
 

@@ -120,23 +120,22 @@ public class Board {
 	}
 
 	public LinkedList<Point> listPossibleMoves(Point position){
-
 		LinkedList<Point> listPossibleMovements = new LinkedList<Point>();
-	
+		
 		Point positionTested = null;
 		Point positionTested2 = null;
 		Point trans = null;
-
+		
 		//We test the bottom position
 		positionTested = new Point(position.getX(), position.getY() + 1);
 		positionTested2 = new Point(position.getX(), position.getY() + 2);
-
+		
 		trans = this.possibleMove(position,positionTested,positionTested2);
 		//if we can move to a position other than the initial position in this direction, we add it to the list
 		if(!trans.equals(position)){
 			listPossibleMovements.add(trans);
 		}
-
+		
 		//We test the top position
 		positionTested = new Point(position.getX(), position.getY() - 1);
 		positionTested2 = new Point(position.getX(), position.getY() - 2);
@@ -162,7 +161,6 @@ public class Board {
 		if(!trans.equals(position)){
 			listPossibleMovements.add(trans);
 		}
-
 		return listPossibleMovements;
     }
 
@@ -231,9 +229,8 @@ public class Board {
 
 		if(response.equals("M")){
 			LinkedList<Point> possibleMoves = listPossibleMoves(this.pawns[pawnId].getPosition());
-
 			System.out.println("Those are the possible moves you can do:");
-			System.out.println(possibleMoves.toString());
+			System.out.println(possibleMoves);
 			
 			System.out.println("Where do you want to go ?");
 			this.choosePosition(scanner, point);
