@@ -25,7 +25,7 @@ public class Board {
 		this.pawns = new Pawn[game.getNbPlayers()];
 		int j = 0;
 		for(int i = 0; i < pawns.length; i++){
-			pawns[i] = new Pawn(i, Side.values()[j], Color.values()[j], this);
+			pawns[i] = new Pawn(i, Side.values()[j], Color.values()[j], this, this.game.getPlayer(i));
 			j++;
 		}
 	}
@@ -220,6 +220,21 @@ public class Board {
 		String response;
 		String orientation = "";
 
+		int winner = this.checkWin();
+		System.out.println(winner);
+		System.out.println(pawns[pawnId]);
+		if(winner != -1){
+			Player playerWinner = null;
+			for (int i = 0; i < this.game.getNbPlayers(); i++){
+				if(pawns[winner].getId() == winner){
+					playerWinner = pawns[winner].getPlayer();
+				}
+			}
+			System.out.println("The winner is "+playerWinner);
+			this.game.setState(GameState.FINISHED);
+		}
+
+		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
 		if(this.pawns[pawnId].getAvailableFences() == 0){
 			response = "move";
 		} else{
@@ -280,5 +295,35 @@ public class Board {
 			return true;
 		}
 		return false;
+	}
+
+	public int checkWin(){
+		for(int i = 0; i < this.game.getNbPlayers(); i++){
+			switch (this.pawns[i].getStartingSide()){
+				case BOTTOM:
+					if(this.pawns[i].getPosition().getX() == 0){
+						return this.pawns[i].getId();
+					}
+					break;
+				case TOP:
+					if(this.pawns[i].getPosition().getX() == this.getNbCols()-1){
+						return this.pawns[i].getId();
+					}
+					break;
+				case LEFT:
+					if(this.pawns[i].getPosition().getY() == this.getNbRows()-1){
+						return this.pawns[i].getId();
+					}
+					break;
+				case RIGHT:
+					if(this.pawns[i].getPosition().getY() == 0){
+						return this.pawns[i].getId();
+					}
+					break;
+				default:
+					return -1;
+			}
+		}
+		return -1;
 	}
 }

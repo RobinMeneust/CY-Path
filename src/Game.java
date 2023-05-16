@@ -38,6 +38,10 @@ public class Game {
 		return state;
 	}
 
+	public void setState(GameState state){
+		this.state = state;
+	}
+
 	public int getNbPlayers() {
 		return this.players.length;
 	}
