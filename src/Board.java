@@ -65,6 +65,11 @@ public class Board {
 		chosenPos.setY(y);
 	}
 
+	public String chooseOrientation(Scanner scanner){
+		String orientation = scanner.next();
+		return orientation;
+	}
+
 	public boolean isOnTheBoard(Point position){
         return position.getX() <= this.getNbCols() && position.getX() >= 0 && position.getY() >= 0 && position.getY() <= this.getNbRows();
     }
@@ -211,6 +216,7 @@ public class Board {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
 		String response;
+		String orientation = "";
 
 		if(this.pawns[pawnId].getAvailableFences() == 0){
 			response = "move";
@@ -233,26 +239,42 @@ public class Board {
 			
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.equals("F")) {
+			Fence fence = new Fence(2);
 			do {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(scanner, point);
-
 				if(!(this.isOnTheBoard(point))){
-					System.out.println("Error : fence out of board");
+					System.out.println("The fence is out of the board.\nTry again.");
 				}
-				// TODO : Need to be changed : isOverlapped arguments aren't of the correct type (It wasn't changed here to avoid conflicts with other not pushed updates)
-				if(this.isOverlapped(point.getX()) && this.isOverlapped(point.getX() + 1)){
-					System.out.println("Error : fence is overlapping another fence");
-				}
+			} while(!(this.isOnTheBoard(point)));
 
-			} while(!(this.isOnTheBoard(point)) && this.isOverlapped(point.getX()) && this.isOverlapped(point.getX() + 1));
-			
+			fence.setStart(point);
+
+			do {
+				System.out.println("What is the orientaion of your fence ? (H(ORIZONTAL) or V(ERTICAL))");
+				orientation = this.chooseOrientation(scanner);
+				if(!(this.isValidOrientation(orientation))){
+					System.out.println("The fence is in the wrong orientation.\nTry again.");
+				}
+			}while(!(this.isValidOrientation(orientation)));
+
+			fence.setOrientation(orientation);
+			fence.setEnd(fence.getStart());
+
+			System.out.println(fence);
+
+
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
 			// methode placer fence 
 		}
 	}
 
-	public boolean isOverlapped(Point node){
-		return grid.getDegree(node) < 3;
+	private boolean isValidOrientation(String orientation) {
+		if (orientation.toUpperCase().matches("H(ORIZONTALE)?")){
+			return true;
+		}else if(orientation.toUpperCase().matches("V(ERTICAL)?")){
+			return true;
+		}
+		return false;
 	}
 }
