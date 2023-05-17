@@ -346,13 +346,10 @@ public class Board {
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-				System.out.println(this.isFenceOnTheBoard(fence));
-				if(!(this.isFenceOnTheBoard(fence))){
-					System.out.println("The fence is out of the board.\nTry again.");
+				if(!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
+					System.out.println("The fence can't be placed here (Starting point:"+fence.getStart()+").\nTry again.");
 				}
-			} while(!(this.isFenceOnTheBoard(fence)));
-
-			System.out.println(fence);
+			} while(!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence)));
 
 			this.addFenceToData(fence);
 
@@ -398,4 +395,57 @@ public class Board {
 		}
 		return -1;
 	}
+
+    public boolean isValidFencePosition(Fence fenceToBePlaced) {
+        //System.out.println("fenceToBePlaced:\n"+fenceToBePlaced);
+        if (this.fences != null) {
+            for (Fence fence : this.fences) {
+                //System.out.println("fence:\n"+fence);
+                // over each other
+                if (fenceToBePlaced.getStart().equals(fence.getStart()) && fenceToBePlaced.getOrientation().equals(fence.getOrientation())) {
+                    return false;
+                } else {
+                    switch (fenceToBePlaced.getOrientation()) {
+                        case HORIZONTAL:
+                            if (fence.getOrientation() == Orientation.HORIZONTAL && fence.getStart().getY() == fenceToBePlaced.getStart().getY()) {
+                                for (int i = 0; i < fence.getLength(); i++) {
+                                    if (fenceToBePlaced.getStart().getX() + i == fence.getStart().getX()) {
+                                        return false;
+                                    } else if (fenceToBePlaced.getEnd().getX() - 1 - i == fence.getEnd().getX() - 1) {
+                                        return false;
+                                    }
+                                }
+                            } else if (fence.getOrientation() == Orientation.VERTICAL) {
+                                if(fenceToBePlaced.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceToBePlaced.getEnd().getX()){
+                                    if(fence.getStart().getY() < fenceToBePlaced.getStart().getY() && fenceToBePlaced.getStart().getY() < fence.getEnd().getY()){
+                                        return false;
+                                    }
+                                }
+                            }
+                            break;
+                        case VERTICAL:
+                            if (fence.getOrientation() == Orientation.VERTICAL && fence.getStart().getX() == fenceToBePlaced.getStart().getX()) {
+                                for (int i = 0; i < fence.getLength(); i++) {
+                                    if (fenceToBePlaced.getStart().getY() + i == fence.getStart().getY()) {
+                                        return false;
+                                    } else if (fenceToBePlaced.getEnd().getY() - 1 - i == fence.getEnd().getY() - 1) {
+                                        return false;
+                                    }
+                                }
+                            } else if (fence.getOrientation() == Orientation.HORIZONTAL) {
+                                if(fence.getStart().getX() < fenceToBePlaced.getStart().getX() && fenceToBePlaced.getStart().getX() < fence.getEnd().getX()){
+                                    if(fenceToBePlaced.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceToBePlaced.getEnd().getY()){
+                                        return false;
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }
