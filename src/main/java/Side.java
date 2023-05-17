@@ -1,5 +1,3 @@
-package main.java;
-
 public enum Side {
 	BOTTOM, TOP, LEFT, RIGHT;
 

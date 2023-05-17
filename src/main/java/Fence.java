@@ -1,5 +1,3 @@
-package main.java;
-
 public class Fence {
 	private int length;
 	private Orientation orientation;

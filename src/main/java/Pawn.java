@@ -1,5 +1,3 @@
-package main.java;
-
 public class Pawn {
 	private Point position;
     private int id;

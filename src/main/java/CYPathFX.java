@@ -1,15 +1,13 @@
-package main.java;
 import java.util.Scanner;
 
+/*/=
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
-
-public class CYPathFX extends Application {
-
+*/
+public class CYPathFX /*extends Application*/ {
+/*
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("CY Path : the Game");
         primaryStage.setResizable(false);
@@ -28,11 +26,11 @@ public class CYPathFX extends Application {
 
         return gPane;
     }
-
+*/
     public static void main(String[] args) {
 
-        launch(args);
-        /* 
+        //launch(args);
+         
         try {
             System.out.println("Welcome to CY-Path.\n");
             int nbPlayer = 0;
@@ -52,7 +50,5 @@ public class CYPathFX extends Application {
         } catch (Exception e) {
             System.err.println(e);
         }
-        */
-
     }
 }

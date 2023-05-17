@@ -5,50 +5,60 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>tld.group</groupId>
-    <artifactId>artifact</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <groupId>cytech.cypath</groupId>
+    <artifactId>CYPath</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>artifact</name>
-    <description>My artifact</description>
+    <name>CYPath</name>
+    <description>CYPath Project</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>19</java.version>
-        <javafx.main.class>main.java.CYPathFX</javafx.main.class>
-        <main.class>main.java.CYPath</main.class>
+        <javafx.version>17.0.7</javafx.version>
+        <javafx.main.class>CYPathFX</javafx.main.class>
+        <main.class>CYPath</main.class>
     </properties>
     
     <dependencies>
+        <!-- For JavaFX -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.7</version>
+            <version>${java.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>17.0.7</version>
+            <version>${java.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17.0.7</version>
+            <version>${java.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
-            <version>17.0.7</version>
+            <version>${java.version}</version>
         </dependency>
     </dependencies>
     
     <build>
         <!-- Jar's final name -->
         <finalName>${project.artifactId}</finalName>
+
         <plugins>
-            <!-- Build source and target -->
+             <!-- Generate Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.5.0</version>
+            </plugin>
+
+            <!-- Build src -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -70,10 +80,48 @@
                 </configuration>
             </plugin>
 
+            <!-- Add dependencies -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Distributable archive building -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                    <finalName>CYPathStandalone</finalName>
                     <archive>
                         <manifest>
                             <!-- Main class -->

@@ -20,13 +20,26 @@ Quoridor can be played by either 2 or 4 players.
 - JavaFX must be installed (JDK)
 - Maven is required
 
+Change `19` to your JDK version in prom.xml at the line :
+`<java.version>19</java.version>`
+
+Change `17.0.7` to your JavaFX version in prom.xml at the line :
+`<javafx.version>17.0.7</javafx.version>`
+
+
+## Compile and generate jar executable
+
+`mvn clean prepare-package jar:jar package` to create the executables .jar (CYPathStandalone has the .java of JavaFX classes inside it, but we still haven't checked if it's really standalone)
+
+or just `mvn clean prepare-package jar:jar` to create the not standalone executable .jar
+
 ## Execution
 
-`mvn clean package` to create the executable .jar and then `java -jar target\artifact.jar` to run it
+`mvn clean javafx:run`
 
 or
 
-`mvn clean javafx:run`
+`java -jar target/CYPath.jar` if you have the executable jar file
 
 ## How to play
 
@@ -58,7 +71,7 @@ NOTE: There might be some issues concerning how the user input is taken here (in
     - Press H if you want to place a horizontal fence
     - Press V if you want to place a vertical one
 - "Where do you want to put your fence ? (X,Y)"
-    - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your fence.
+    - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your fence
     - "Y" : Give a number between 0 and 8. It's the y (vertical) coordinate of the position where you want to move your pawn
     - Here we consider that (0,0) will place a fence going from (0,0) to (0,2) if it's vertical or (0,0) to (2,0) if it's horizontal. So the coordinates given here correspond to leftmost and uppermost point of the fence
 - If any of the given input are incorrect the
@@ -66,4 +79,10 @@ NOTE: There might be some issues concerning how the user input is taken here (in
 
 ## Documentation
 
-(IN PTOGRESS) : It was working with Ant but since we switched to Maven, it needs to be rewritten
+Use `mvn javadoc:javadoc` to generate the Javadoc
+
+The doc will be generated in `target/site`
+
+## Clean generated binaries and files
+
+To clean the `target` folder, use `mvn clean`

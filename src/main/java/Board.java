@@ -1,5 +1,3 @@
-package main.java;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -101,42 +99,28 @@ public class Board {
 	}
 
 	public LinkedList<Point> possibleMove(Point position, Point positionTested, Point positionTested2, Point positionTested3, Point positionTested4){
-
-		//we check if the position is on the board
-		System.out.println("_____________");
-		System.out.println(position);
-		System.out.println(positionTested);
-		System.out.println(positionTested2);
-
 		LinkedList<Point> listMove = new LinkedList<Point>();
 
 		if(this.isOnTheBoard(positionTested)){
-			System.out.println("pos1 in board");
 			//We check if the current position and the tested position are not separated by a fence
 			if(this.grid.areConnected(position,positionTested)){
-				System.out.println("no fence");
 				
 				if(this.isPawnAtPos(positionTested)){
 					// There is a pawn so we can't this.isPawnAtPos(positionTested)go there, but we can maybe jump above it
-					System.out.println("there is a pawn here");
 					if(this.isOnTheBoard(positionTested2)){
-						System.out.println("pos2 in board");
 
 						if(this.grid.areConnected(positionTested,positionTested2) && !this.isPawnAtPos(positionTested2)){
-							System.out.println("no fence for pos2");
 							listMove.add(positionTested2);
 						}
 						else{
 							//If there are a fence behind the pawns we check if we can go leftside or rightside
 							if(this.isOnTheBoard(positionTested3)){
 								if(this.grid.areConnected(positionTested,positionTested3) && !this.isPawnAtPos(positionTested3)){
-									System.out.println("no fence for pos3");
 									listMove.add(positionTested3);
 								}
 							}
 							if(this.isOnTheBoard(positionTested4)){
 								if(this.grid.areConnected(positionTested,positionTested4) && !this.isPawnAtPos(positionTested4)){
-									System.out.println("no fence for pos4");
 									listMove.add(positionTested4);
 								}
 							}
@@ -144,7 +128,6 @@ public class Board {
 					}
 				}
 				else{
-					System.out.println("no pawn");
 					listMove.add(positionTested);
 				}
 			}
@@ -230,7 +213,6 @@ public class Board {
 	}
 
 	public void displayBoard() {
-		// TODO : Display is incorrect here : For instance a H fence at (0,0) will be displayed on the line 0 and not the top border of this line
 		System.out.println();
 		System.out.print("    ");
 		for(int i=0; i<nbCols; i++) {
@@ -244,8 +226,7 @@ public class Board {
 		System.out.print("|");
 		System.out.println();
 
-		// TODO : Check if it's nbRows-1 or nbRows here 
-		for(int y=0; y<nbRows-1; y++) {
+		for(int y=0; y<nbRows; y++) {
 			System.out.printf("%3d | ",y);
 
 			for(int x=0; x<nbCols; x++) {
@@ -288,6 +269,20 @@ public class Board {
 				this.grid.removeEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
 			}
 		}
+	}
+
+	public boolean existPathFromPlayerToWin() {
+		for(Pawn p : pawns) {
+			try {
+				if(!this.getGrid().existPath(p.getPosition(),p.getStartingSide().getOpposite())) {
+					return false;
+				}
+			} catch (UnknownSideException e) {
+				System.err.println(e);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void play(int pawnId) {
@@ -339,19 +334,24 @@ public class Board {
 				orientation = this.chooseOrientation(scanner);
 				if(!(this.isValidOrientation(orientation))){
 					System.out.println("The fence is in the wrong orientation.\nTry again.");
+				} else {
+					fence.setOrientation(orientation);
+					break;
 				}
-				fence.setOrientation(orientation);
-			}while(!(this.isValidOrientation(orientation)));
+			}while(true);
 
 			do {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-				if(!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
+				// TODO: remove the comments after existPathFromPlayerToWin is corrected
+				if(/*!this.existPathFromPlayerToWin() ||*/ !(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
 					System.out.println("The fence can't be placed here (Starting point:"+fence.getStart()+").\nTry again.");
+				} else {
+					break;
 				}
-			} while(!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence)));
+			} while(true);
 
 			this.addFenceToData(fence);
 
