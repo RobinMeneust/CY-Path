@@ -243,15 +243,15 @@ The task's priority is sorted in ascending order
 		10.1.1 Create the buttons and add it to the window. The "Place fence" button must be disabled or hidden if the player can't place a fence.
 			We can also just create one button "Place Fence" that becomes "Move" when pressed (it's probably better to do so)
 			* PROGRESS: TO_DO
-			* Who: PERSON_1
-			* Start : 2023/05/17 15:30
+			* Who: Thibault
+			* Start : 
 			* Estimated end : 2023/05/17 12:15
 			* Real end :
 		10.1.1 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
 			* PROGRESS: TO_DO
-			* Who: PERSON_1
-			* Start : 2023/05/17 12:15
-			* Estimated end : 2023/05/17 13:00
+			* Who: Thibault
+			* Start :
+			* Estimated end : 
 			* Real end :
 		
 	10.2 Player movements ("MOVE" mode)
