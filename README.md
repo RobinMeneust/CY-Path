@@ -79,7 +79,7 @@ NOTE: There might be some issues concerning how the user input is taken here (in
     - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your fence
     - "Y" : Give a number between 0 and 8. It's the y (vertical) coordinate of the position where you want to move your pawn
     - Here we consider that (0,0) will place a fence going from (0,0) to (0,2) if it's vertical or (0,0) to (2,0) if it's horizontal. So the coordinates given here correspond to leftmost and uppermost point of the fence
-- If any of the given input are incorrect the
+- If any of the given input are incorrect we ask the same question to the user over and over again
 
 
 ## Documentation
