@@ -135,7 +135,8 @@ The task's priority is sorted in ascending order
 				* Start : 2023/05/15 18:45
 				* Estimated end : 2023/05/15 19:30
 				* Real end : 2023/05/15 20:00
-				* Notes: function creation to avoid code repetition took me longer than expected
+				* Notes: function creation to avoid code repetition took me longer than expected.
+				* Update: 2023/05/17, Bug fix after changement in  the areConnected function
 			5.2.2.2 If the player can jump above another one but there is a fence behind, he can go diagonally
 				* PROGRESS: IN_PROGRESS
 				* Who: Thibault

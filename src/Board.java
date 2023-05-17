@@ -120,7 +120,7 @@ public class Board {
 					if(this.isOnTheBoard(positionTested2)){
 						System.out.println("pos2 in board");
 
-						if(this.grid.areConnected(position,positionTested2) && !this.isPawnAtPos(positionTested2)){
+						if(this.grid.areConnected(positionTested,positionTested2) && !this.isPawnAtPos(positionTested2)){
 							System.out.println("no fence for pos2");
 							listMove.add(positionTested2);
 						}
@@ -138,7 +138,6 @@ public class Board {
 									listMove.add(positionTested4);
 								}
 							}
-
 						}
 					}
 				}
