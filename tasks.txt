@@ -206,13 +206,14 @@ The task's priority is sorted in ascending order
 		* Real end :
 
 9. Create a user interface using JavaFX:
-	9.0 Update Ant file (build.xml) to link JavaFX libraries
+	9.0 Set up Maven to build the executable JAR that includes JavaFX
 		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/16 23:00
 		* Estimated end : 2023/05/16 23:15
-		* Real end : 2023/05/17 01:20
+		* Real end : 2023/05/17 22:30
 		* Note : The delay is because we tried to use VSCode and Ant instead of Eclipse, so we had to search for a way to link the libraries of JavaFX to our project
+				And it got delayed even more because we didn't know how to create a standalone JAR with Ant, and so we used Maven
 	9.1 Create a window for the application (it might not need to be resizable)
 		* PROGRESS: TO_DO
 		* Who: David
