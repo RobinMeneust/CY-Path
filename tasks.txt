@@ -26,7 +26,8 @@ The task's priority is sorted in ascending order
 		* Who: Robin
 		* Start: 2023/05/15 18:30
 		* Estimated end: 2023/05/15 18:50
-		* Real end: 2023/05/15 18:45
+		* Real end: 
+		* NOTE: It's not finished yet because it couldn't get tested before 2023/05/18, and after testing it we noticed that it didn't worked properly (it doesn't find a path even when there is one)
 	2.3 Be capable to manipulate the edges (create a new one; destroy one),
 		* PROGRESS: DONE
 		* Who: Robin
@@ -150,11 +151,11 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/16 15:10
 			* Real end : 2023/05/16 15:05
 	5.3 Check if anybody wins,
-        * PROGRESS: DONE
-        * Who: Romain
-        * Start : 2023/05/16 16:00
-        * Estimated end : 2023/05/16 17:30
-        * Real end : 2023/05/16 18:00
+		* PROGRESS: DONE
+		* Who: Romain
+		* Start : 2023/05/16 16:00
+		* Estimated end : 2023/05/16 17:30
+		* Real end : 2023/05/16 18:00
 	5.4 Ask the player how many players there are and check the number (it must be equals to 2 or 4)
 		* PROGRESS: DONE
 		* Who: Romain
@@ -236,8 +237,8 @@ The task's priority is sorted in ascending order
 	9.3 Add fences to the window (thick black borders) without breaking the alignement (the size of the grid must not change)
 		* PROGRESS: TO_DO
 		* Who: Robin
-		* Start : 2023/05/17 15:00
-		* Estimated end : 2023/05/17 15:30
+		* Start : 2023/05/18 15:00
+		* Estimated end : 2023/05/18 15:30
 		* Real end :
 
 10. Add events and use CAP (Observers...) to link the "presentation" to the "abstraction" using "controllers"
