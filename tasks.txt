@@ -184,11 +184,11 @@ The task's priority is sorted in ascending order
 		* Estimated end : 2023/05/16 18:45 
 		* Real end : 2023/05/16 18:40
 	7.2 Encode the game in a file to save it,
-		* PROGRESS: IN_PROGRESS
+		* PROGRESS: DONE
 		* Who: Yann
 		* Start : 2023/05/16 20:00
 		* Estimated end : 2023/05/16 20:20
-		* Real end :
+		* Real end : 2023/05/17 11:00
 
 8. Load a save:
 	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
@@ -198,7 +198,7 @@ The task's priority is sorted in ascending order
 		* Estimated end : 2023/05/16 21:40
 		* Real end :
 	8.2 Decode the file containing the save and load it, check if the format is valid,
-		* PROGRESS: TO_DO
+		* PROGRESS: IN PROGRESS
 		* Who: Yann
 		* Start : 2023/05/17 9:30
 		* Estimated end : 2023/05/17 10:00
