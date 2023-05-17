@@ -20,10 +20,10 @@ Quoridor can be played by either 2 or 4 players.
 - JavaFX must be installed (JDK)
 - Maven is required
 
-Change `19` to your JDK version in prom.xml at the line :
+Change `19` to your JDK version in pom.xml at the line :
 `<java.version>19</java.version>`
 
-Change `17.0.7` to your JavaFX version in prom.xml at the line :
+Change `17.0.7` to your JavaFX version in pom.xml at the line :
 `<javafx.version>17.0.7</javafx.version>`
 
 
