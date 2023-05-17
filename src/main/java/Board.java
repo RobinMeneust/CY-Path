@@ -99,51 +99,35 @@ public class Board {
 	}
 
 	public LinkedList<Point> possibleMove(Point position, Point positionTested, Point positionTested2, Point positionTested3, Point positionTested4){
-
-		//we check if the position is on the board
-		System.out.println("_____________");
-		System.out.println(position);
-		System.out.println(positionTested);
-		System.out.println(positionTested2);
-
 		LinkedList<Point> listMove = new LinkedList<Point>();
 
 		if(this.isOnTheBoard(positionTested)){
-			System.out.println("pos1 in board");
 			//We check if the current position and the tested position are not separated by a fence
 			if(this.grid.areConnected(position,positionTested)){
-				System.out.println("no fence");
 				
 				if(this.isPawnAtPos(positionTested)){
 					// There is a pawn so we can't this.isPawnAtPos(positionTested)go there, but we can maybe jump above it
-					System.out.println("there is a pawn here");
 					if(this.isOnTheBoard(positionTested2)){
-						System.out.println("pos2 in board");
 
-						if(this.grid.areConnected(position,positionTested2) && !this.isPawnAtPos(positionTested2)){
-							System.out.println("no fence for pos2");
+						if(this.grid.areConnected(positionTested,positionTested2) && !this.isPawnAtPos(positionTested2)){
 							listMove.add(positionTested2);
 						}
 						else{
 							//If there are a fence behind the pawns we check if we can go leftside or rightside
 							if(this.isOnTheBoard(positionTested3)){
 								if(this.grid.areConnected(positionTested,positionTested3) && !this.isPawnAtPos(positionTested3)){
-									System.out.println("no fence for pos3");
 									listMove.add(positionTested3);
 								}
 							}
 							if(this.isOnTheBoard(positionTested4)){
 								if(this.grid.areConnected(positionTested,positionTested4) && !this.isPawnAtPos(positionTested4)){
-									System.out.println("no fence for pos4");
 									listMove.add(positionTested4);
 								}
 							}
-
 						}
 					}
 				}
 				else{
-					System.out.println("no pawn");
 					listMove.add(positionTested);
 				}
 			}
@@ -229,7 +213,6 @@ public class Board {
 	}
 
 	public void displayBoard() {
-		// TODO : Display is incorrect here : For instance a H fence at (0,0) will be displayed on the line 0 and not the top border of this line
 		System.out.println();
 		System.out.print("    ");
 		for(int i=0; i<nbCols; i++) {
@@ -243,7 +226,7 @@ public class Board {
 		System.out.print("|");
 		System.out.println();
 
-		for(int y=0; y<nbRows-1; y++) {
+		for(int y=0; y<nbRows; y++) {
 			System.out.printf("%3d | ",y);
 
 			for(int x=0; x<nbCols; x++) {
@@ -286,6 +269,20 @@ public class Board {
 				this.grid.removeEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
 			}
 		}
+	}
+
+	public boolean existPathFromPlayerToWin() {
+		for(Pawn p : pawns) {
+			try {
+				if(!this.getGrid().existPath(p.getPosition(),p.getStartingSide().getOpposite())) {
+					return false;
+				}
+			} catch (UnknownSideException e) {
+				System.err.println(e);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public void play(int pawnId) {
@@ -333,26 +330,28 @@ public class Board {
 			Fence fence = new Fence(2);
 
 			do {
-				System.out.println("What is the orientaion of your fence ? (H(ORIZONTAL) or V(ERTICAL))");
+				System.out.println("What is the orientation of your fence ? (H(ORIZONTAL) or V(ERTICAL))");
 				orientation = this.chooseOrientation(scanner);
 				if(!(this.isValidOrientation(orientation))){
 					System.out.println("The fence is in the wrong orientation.\nTry again.");
+				} else {
+					fence.setOrientation(orientation);
+					break;
 				}
-				fence.setOrientation(orientation);
-			}while(!(this.isValidOrientation(orientation)));
+			}while(true);
 
 			do {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-				System.out.println(this.isFenceOnTheBoard(fence));
-				if(!(this.isFenceOnTheBoard(fence))){
-					System.out.println("The fence is out of the board.\nTry again.");
+				// TODO: remove the comments after existPathFromPlayerToWin is corrected
+				if(/*!this.existPathFromPlayerToWin() ||*/ !(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
+					System.out.println("The fence can't be placed here (Starting point:"+fence.getStart()+").\nTry again.");
+				} else {
+					break;
 				}
-			} while(!(this.isFenceOnTheBoard(fence)));
-
-			System.out.println(fence);
+			} while(true);
 
 			this.addFenceToData(fence);
 
@@ -398,4 +397,57 @@ public class Board {
 		}
 		return -1;
 	}
+
+    public boolean isValidFencePosition(Fence fenceToBePlaced) {
+        //System.out.println("fenceToBePlaced:\n"+fenceToBePlaced);
+        if (this.fences != null) {
+            for (Fence fence : this.fences) {
+                //System.out.println("fence:\n"+fence);
+                // over each other
+                if (fenceToBePlaced.getStart().equals(fence.getStart()) && fenceToBePlaced.getOrientation().equals(fence.getOrientation())) {
+                    return false;
+                } else {
+                    switch (fenceToBePlaced.getOrientation()) {
+                        case HORIZONTAL:
+                            if (fence.getOrientation() == Orientation.HORIZONTAL && fence.getStart().getY() == fenceToBePlaced.getStart().getY()) {
+                                for (int i = 0; i < fence.getLength(); i++) {
+                                    if (fenceToBePlaced.getStart().getX() + i == fence.getStart().getX()) {
+                                        return false;
+                                    } else if (fenceToBePlaced.getEnd().getX() - 1 - i == fence.getEnd().getX() - 1) {
+                                        return false;
+                                    }
+                                }
+                            } else if (fence.getOrientation() == Orientation.VERTICAL) {
+                                if(fenceToBePlaced.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceToBePlaced.getEnd().getX()){
+                                    if(fence.getStart().getY() < fenceToBePlaced.getStart().getY() && fenceToBePlaced.getStart().getY() < fence.getEnd().getY()){
+                                        return false;
+                                    }
+                                }
+                            }
+                            break;
+                        case VERTICAL:
+                            if (fence.getOrientation() == Orientation.VERTICAL && fence.getStart().getX() == fenceToBePlaced.getStart().getX()) {
+                                for (int i = 0; i < fence.getLength(); i++) {
+                                    if (fenceToBePlaced.getStart().getY() + i == fence.getStart().getY()) {
+                                        return false;
+                                    } else if (fenceToBePlaced.getEnd().getY() - 1 - i == fence.getEnd().getY() - 1) {
+                                        return false;
+                                    }
+                                }
+                            } else if (fence.getOrientation() == Orientation.HORIZONTAL) {
+                                if(fence.getStart().getX() < fenceToBePlaced.getStart().getX() && fenceToBePlaced.getStart().getX() < fence.getEnd().getX()){
+                                    if(fenceToBePlaced.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceToBePlaced.getEnd().getY()){
+                                        return false;
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }

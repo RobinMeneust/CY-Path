@@ -1,8 +1,8 @@
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.LinkedList;
 import java.util.Set;
-import java.util.Map.Entry;
 
 public class Grid {
 	private HashMap<Point,HashSet<Point>> adjacencyList;
@@ -104,7 +104,7 @@ public class Grid {
 		return Point.getDistance(node,destination);
 	}
 
-	public static Point getMinPoint(PriorityQueue<Point> queue, HashMap<Point,Integer> cost) {
+	public static Point getMinPoint(LinkedList<Point> queue, HashMap<Point,Integer> cost) {
 		Point minPoint = queue.peek();
 		for(Point p : queue) {
 			if(cost.get(minPoint) > cost.get(p)) {
@@ -132,17 +132,48 @@ public class Grid {
 		}
 	}
 
-	public boolean existPath(Point start, Point end, Side sideDest) throws UnknownSideException{
-		PriorityQueue<Point> nodesToBeExpanded = new PriorityQueue<Point>();
+	public HashSet<Point> getPointsSetFromSide(Side sideDest) throws UnknownSideException {
+		HashSet<Point> pointsSet = new HashSet<Point>(9);
+		switch(sideDest) {
+			case LEFT:
+				for(int i=0; i<this.getNbRows(); i++) {
+					pointsSet.add(new Point(0,i));
+				}
+				break;
+			case RIGHT:
+				for(int i=0; i<this.getNbRows(); i++) {
+					pointsSet.add(new Point(this.getNbCols()-1,i));
+				}
+				break;
+			case TOP:
+				for(int i=0; i<this.getNbRows(); i++) {
+					pointsSet.add(new Point(i,0));
+				}
+				break;
+			case BOTTOM:
+				for(int i=0; i<this.getNbRows(); i++) {
+					pointsSet.add(new Point(i,this.getNbRows()));
+				}
+				break;
+			default: throw new UnknownSideException();
+		}
+		return pointsSet;
+	}
+
+	// TODO : Doesn't work for now. e.g : adding a horizontal fence to (1,1) is making this function return false
+	public boolean existPath(Point start, Side sideDest) throws UnknownSideException{
+		LinkedList<Point> nodesToBeExpanded = new LinkedList<Point>();
 		HashMap<Point,Point> parents = new HashMap<Point,Point>();
 		HashMap<Point,Integer> distTo = new HashMap<Point,Integer>();
 		HashMap<Point,Integer> cost = new HashMap<Point,Integer>();
 		Point currentNode = start;
-		Point destination = null;
+		Point destinationApprox = null;
 		int distToNeighbor = 0;
+		HashSet<Point> pointsOnSideDest = null;
 
 		try {
-			destination = this.getCenterOfSide(sideDest);
+			pointsOnSideDest = getPointsSetFromSide(sideDest);
+			destinationApprox = this.getCenterOfSide(sideDest);
 		} catch(UnknownSideException e) {
 			throw e;
 		}
@@ -155,11 +186,11 @@ public class Grid {
 
 		nodesToBeExpanded.add(start);
 		distTo.replace(start,0);
-		cost.replace(start,costFunctionPath(start, destination));
-
+		cost.replace(start,costFunctionPath(start, destinationApprox));
+		
 		while(!nodesToBeExpanded.isEmpty()) {
 			currentNode = getMinPoint(nodesToBeExpanded, cost);
-			if(currentNode == end) {
+			if(pointsOnSideDest.contains(currentNode)) {
 				return true;
 			}
 
@@ -170,7 +201,7 @@ public class Grid {
 					// Update distTo and path if the new distance is smaller
 					parents.replace(neighbor, currentNode);
 					distTo.replace(neighbor, distToNeighbor);
-					cost.replace(neighbor, distToNeighbor + costFunctionPath(neighbor, destination));
+					cost.replace(neighbor, distToNeighbor + costFunctionPath(neighbor, destinationApprox));
 					
 					if(!nodesToBeExpanded.contains(neighbor)) {
 						nodesToBeExpanded.add(neighbor);
