@@ -164,6 +164,12 @@ public class CYPathFX extends Application {
                 rec.setFill(cellColor);
                 this.previousPossibleCells.add(rec);
 
+                Point previousPosition = this.game.getBoard().getPawns(pawnId).getPosition();
+
+                rec.setOnMouseClicked(e -> {
+                    this.game.getBoard().getPawns(pawnId).setPosition(new Point(GridPane.getColumnIndex(rec) / 2, GridPane.getRowIndex(rec) / 2));
+                });
+
                 rec.setOnMouseEntered(e -> rec.setFill(cellColorHover));
                 rec.setOnMouseExited(e -> rec.setFill(cellColor));
             }
@@ -182,10 +188,25 @@ public class CYPathFX extends Application {
     public void resetPossibleCells(int pawnId){
         Color cellColor = Color.rgb(230, 230, 230);
 
-        for(Rectangle rec : this.previousPossibleCells){
+        disableCellEvents();
+
+        while (!previousPossibleCells.isEmpty()) {
+            Rectangle rec = previousPossibleCells.getFirst();
             rec.setFill(cellColor);
+            previousPossibleCells.removeFirst();
         }
+
+        
+
         System.out.println("Reset des couleurs");
+    }
+
+    public void disableCellEvents() {
+        for (Rectangle rec : previousPossibleCells) {
+            rec.setOnMouseClicked(null);
+            rec.setOnMouseEntered(null);
+            rec.setOnMouseExited(null);
+        }
     }
     /*//JavaFX
     private void runInJavaFX(){
