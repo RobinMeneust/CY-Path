@@ -189,21 +189,21 @@ The task's priority is sorted in ascending order
 		* PROGRESS: DONE
 		* Who: Yann
 		* Start : 2023/05/16 20:00
-		* Estimated end : 2023/05/16 20:20
-		* Real end : 2023/05/17 11:00
+		* Estimated end : 2023/05/16 20:30
+		* Real end : 2023/05/18 23:00
 
 8. Load a save:
 	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
-		* PROGRESS: IN_PROGRESS
+		* PROGRESS: IN PROGRESS
 		* Who: Yann
-		* Start : 2023/05/16 20:30
-		* Estimated end : 2023/05/16 21:40
-		* Real end :
+		* Start : 2023/05/19 10:00
+		* Estimated end : 2023/05/19 10:10
+		* Real end : 
 	8.2 Decode the file containing the save and load it, check if the format is valid,
 		* PROGRESS: IN PROGRESS
 		* Who: Yann
-		* Start : 2023/05/17 9:30
-		* Estimated end : 2023/05/17 10:00
+		* Start : 2023/05/19 10:15
+		* Estimated end : 2023/05/19 11:30
 		* Real end :
 
 9. Create a user interface using JavaFX:
@@ -252,44 +252,44 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/18 13:30
 			* Real end : 2023/05/18 15h05
 			* Notes : This step took longer than expected because we had to link the interface to the progress of the game in the terminal
-		10.1.1 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
-			* PROGRESS: TO_DO
+		10.1.2 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
+			* PROGRESS: Done
 			* Who: Thibault
-			* Start :
-			* Estimated end : 
-			* Real end :
+			* Start : 2023/05/18 16h30
+			* Estimated end : 2023/05/18 18h00
+			* Real end : 2023/05/18 20h30
 		
 	10.2 Player movements ("MOVE" mode)
 		10.1.1 Show the possible moves by changing the color of the corresponding cells (e.g greyed)
-			* PROGRESS: TO_DO
+			* PROGRESS: Done
 			* Who: David
-			* Start : 2023/05/17 12:00
-			* Estimated end : 2023/05/17 12:15
-			* Real end :
+			* Start : 2023/05/18 15:00
+			* Estimated end : 2023/05/17 15:30
+			* Real end :2023/05/17 16:00
 		10.1.2 Add an event that changes the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
-			* PROGRESS: TO_DO
+			* PROGRESS: Done
 			* Who: David
-			* Start : 2023/05/17 12:15
-			* Estimated end : 2023/05/17 12:25
-			* Real end :
-		10.1.3 Add an event to move the player when a cell is clicked (where he can go) (we can also use drag and drop alternatively) (remove the previous pawn position on the grid)
-			* PROGRESS: TO_DO
+			* Start : 2023/05/18 16:00
+			* Estimated end : 2023/05/18 16:10
+			* Real end :2023/05/18 16:20
+		10.1.3 Add an event to move the player when a cell is clicked (where he can go) (remove the previous pawn position on the grid)
+			* PROGRESS: Done
 			* Who: David
-			* Start : 2023/05/17 12:25
-			* Estimated end : 2023/05/17 13:00
-			* Real end :
+			* Start : 2023/05/18 16:30
+			* Estimated end : 2023/05/18 16:50
+			* Real end : 2023/05/18 17:00
 	10.3 Place fences ("PLACE FENCE" mode)
 		10.1.1 Add an event that changes the borders of the hovered cell (the color/image will be different whether it's a border where the player can place a fence or not)
-			* PROGRESS: IN_PROGRESS
+			* PROGRESS: DONE
 			* Who: Robin
 			* Start : 2023/05/18 20:30
 			* Estimated end : 2023/05/18 21:00
-			* Real end :
+			* Real end : 2023/05/18 23:20
 		10.1.2 Add an event to place the fence when a border (where a fence can be added) is clicked
 			* PROGRESS: TO_DO
 			* Who: Robin
-			* Start : 2023/05/18 21:00
-			* Estimated end : 2023/05/18 21:45
+			* Start : 2023/05/19 11:00
+			* Estimated end : 2023/05/19 14:00
 			* Real end :
 	10.4 Add a fence counter
 		* PROGRESS: TO_DO

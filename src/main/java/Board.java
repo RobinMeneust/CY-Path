@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Board {
 	private int nbCols;
 	private int nbRows;
@@ -13,6 +17,7 @@ public class Board {
 	private Pawn[] pawns;
 	private int pawnIdTurn;
 	private int fenceLength;
+	private StringProperty action;
 	
 	public Board(int nbCols, int nbRows, Game game) {
 		this.nbCols = nbCols;
@@ -23,6 +28,7 @@ public class Board {
 		this.fences = null;
 		this.pawnIdTurn = 0;
 		this.fenceLength = 2;
+		this.action = new SimpleStringProperty("Move");
 
 		if(game != null && game.getNbFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbFences());
@@ -84,6 +90,14 @@ public class Board {
 	public void setPawnidTurn(int id){
 		this.pawnIdTurn = id;
 	}
+
+	public StringProperty getAction() {
+        return this.action;
+    }
+	public void setAction(String a){
+		this.action.set(a);
+	}
+
 
 	public void choosePosition(Scanner scanner, Point chosenPos){
 		System.out.println();
@@ -353,7 +367,6 @@ public class Board {
 	public int play(int pawnId) {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
-		String response;
 		String orientation = "";
 		this.setPawnidTurn(pawnId);
 
@@ -371,19 +384,22 @@ public class Board {
 		}
 
 		this.displayBoard(DisplayType.NO_COORD);
+		Platform.runLater(() -> this.setAction("Move"));
 
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
-		if(this.pawns[pawnId].getAvailableFences() == 0){
-			response = "move";
-		} else{
-			do {
-				System.out.println("You have "+this.pawns[pawnId].getAvailableFences()+" fence(s) remaining.");
-				System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
-				response = scanner.nextLine();
-			}while(!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
+		if(this.pawns[pawnId].getAvailableFences() != 0){
+			while (true) {
+				System.out.println("To choose your next action, click on the button so that its text correpsonds to what you want to do.\n Press 'yes' in the terminal to confirm your selection");
+				String userInput = scanner.nextLine();
+				
+				if (userInput.equals("yes")) {
+					break;
+				}
+			}
 		}
 
-		if(response.toUpperCase().matches("M(OVE)?")){
+		//If button set Move
+		if("Move".equals(this.getAction().get())){
 			this.displayBoard(DisplayType.COORD_CELL);
 
 			if (this.pawns[pawnId].getAvailableFences() == 0) {
@@ -400,7 +416,9 @@ public class Board {
 			}while(!possibleMoves.contains(point));
 		
 			this.pawns[pawnId].setPosition(point);
-		} else if(response.toUpperCase().matches("F(ENCE)?")) {
+		} 
+		//If button set Place Fence
+		else if("Place fence".equals(this.getAction().get())) {
 			this.displayBoard(DisplayType.COORD_LINE);
 
 			Fence fence = new Fence(this.getFenceLength());
@@ -428,7 +446,6 @@ public class Board {
 				}
 			} while(!isFenceValid);
 
-			this.addFenceToData(fence);
 			this.pawns[pawnId].placeFence();
 		}
 		return winner;
