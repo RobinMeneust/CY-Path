@@ -43,9 +43,6 @@ or
 
 ## Known Bugs/Issues to be fixed
 
-- Some fences can't be placed even though they are valid. To reproduce: Place 4 horieontal fences (0,1), (2,1), (4,1) and (6,1). The vertical fence (8,1) can't be placed even though it should be a valid position for a fence.
-- The function used to find a path isn't working properly so it wasn't added to the detection of valid fence position. So, we can place fences that prevent someone from winning, even though it should be forbidden.
-
 ## How to play
 
 For now there is only a console mode:

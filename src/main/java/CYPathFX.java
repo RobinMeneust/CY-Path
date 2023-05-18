@@ -7,7 +7,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import javafx.event.ActionEvent;
@@ -66,54 +68,63 @@ public class CYPathFX extends Application {
         GridPane gPane = new GridPane();
         int sizeBoardRows = 9;
         int sizeBoardColumns = 9;
-        ImageView imageView = null;
-        Image emptyCellImage = new Image(getClass().getResource("images/emptyCell.jpg").toExternalForm());
+        Rectangle cell = null;
         Line border = null;
+        int lineLength = 50;
+        int cellSize = 50;
+        int lineWidth = 8;
+        int lineLengthBorders = lineLength + lineWidth;
+        Color borderColor = Color.LIGHTGRAY;
+        Color cellColor = Color.rgb(230, 230, 230);
         
-        for(int i=0; i<2*sizeBoardRows; i+=2) {
-            for(int j=0; j<2*sizeBoardColumns; j+=2) {
-                // Vertical borders
-                border = new Line(0,0,0,50);
-                border.setStrokeWidth(2);
-                gPane.add(border,i,j);
 
+        // First horizontal border (top)
+        for(int j=1; j<=2*sizeBoardColumns; j+=2) {
+            border = new Line(0,0,lineLengthBorders,0);
+            border.setStrokeWidth(lineWidth);
+            border.setStroke(borderColor);
+            gPane.add(border,j,0);
+        }
+        gPane.getRowConstraints().add(new RowConstraints(lineWidth));
+        
+        for(int i=1; i<=2*sizeBoardRows; i+=2) {
+            // First vertical border (left)
+            border = new Line(0,0,0,lineLengthBorders);
+            border.setStrokeWidth(lineWidth);
+            border.setStroke(borderColor);
+            gPane.add(border,0,i);
+            
+            for(int j=1; j<=2*sizeBoardColumns; j+=2) {
                 // Cells
-                imageView = new ImageView(emptyCellImage);
-                imageView.setFitWidth(50);
-                imageView.setFitHeight(50);
-                gPane.add(imageView,i,2*sizeBoardColumns);
+                cell = new Rectangle(cellSize,cellSize);
+                cell.setFill(cellColor);
+                gPane.add(cell,j,i);
+                
+                // Vertical borders
+                border = new Line(0,0,0,lineLength);
+                border.setStrokeWidth(lineWidth);
+                border.setStroke(borderColor);
+                gPane.add(border,j+1,i);
             }
-
-            // Last vertical border (right)
-            border = new Line(0,0,0,50);
-            border.setStrokeWidth(2);
-            gPane.add(border,i,2*sizeBoardColumns);
-
+            
             // Horizontal borders
             for(int j=1; j<2*sizeBoardColumns; j+=2) {
-                border = new Line(0,0,50,0);
-                border.setStrokeWidth(2);
-                gPane.add(border,i,j);
+                border = new Line(0,0,lineLength,0);
+                border.setStrokeWidth(lineWidth);
+                border.setStroke(borderColor);
+                gPane.add(border,j,i+1);
             }
             // Horizontal borders
-            gPane.getRowConstraints().add(new RowConstraints(2));
-            gPane.getRowConstraints().add(new RowConstraints(50));
+            gPane.getRowConstraints().add(new RowConstraints(cellSize));
+            gPane.getRowConstraints().add(new RowConstraints(lineWidth));
         }
-
-        // Last horizontal border (bottom)
-        for(int j=1; j<=2*sizeBoardRows; j+=2) {
-            border = new Line(0,0,50,0);
-            border.setStrokeWidth(2);
-            gPane.add(border,sizeBoardRows,j);
-        }
-        gPane.getRowConstraints().add(new RowConstraints(2));
         
-        for(int i=0; i<2*sizeBoardColumns; i+=2) {
-            gPane.getColumnConstraints().add(new ColumnConstraints(2));
-            gPane.getColumnConstraints().add(new ColumnConstraints(40));
+        gPane.getColumnConstraints().add(new ColumnConstraints(lineWidth));
+        for(int i=0; i<sizeBoardColumns; i++) {
+            gPane.getColumnConstraints().add(new ColumnConstraints(cellSize));
+            gPane.getColumnConstraints().add(new ColumnConstraints(lineWidth));
         }
-        gPane.getColumnConstraints().add(new ColumnConstraints(2));
-
+        
         return gPane;
     }
 

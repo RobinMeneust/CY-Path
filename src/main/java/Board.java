@@ -30,7 +30,7 @@ public class Board {
 		this.pawns = new Pawn[game.getNbPlayers()];
 		int j = 0;
 		for(int i = 0; i < pawns.length; i++){
-			pawns[i] = new Pawn(i, Side.values()[j], Color.values()[j], this, this.game.getPlayer(i));
+			pawns[i] = new Pawn(i, Side.values()[j], ColorPawn.values()[j], this, this.game.getPlayer(i));
 			j++;
 		}
 	}

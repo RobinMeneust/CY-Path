@@ -3,13 +3,13 @@ public class Pawn {
     private int id;
     private int availableFences;
     private Side startingSide;
-    private Color color;
+    private ColorPawn color;
     private Board board;
 
     private Player player;
 
 
-    public Pawn(Point position, int id, int availableFences, Side startingSide, Color color, Board board, Player player){
+    public Pawn(Point position, int id, int availableFences, Side startingSide, ColorPawn color, Board board, Player player){
         this.position = position;
         this.id = id;
         this.availableFences = availableFences;
@@ -19,7 +19,7 @@ public class Pawn {
         this.player = player;
     }
 
-    public Pawn(int id, Side startingSide, Color color, Board board, Player player){
+    public Pawn(int id, Side startingSide, ColorPawn color, Board board, Player player){
         try{
             this.position = board.getGrid().getCenterOfSide(startingSide);
             this.id = id;
@@ -57,7 +57,7 @@ public class Pawn {
         return startingSide;
     }
 
-    public Color getColor() {
+    public ColorPawn getColor() {
         return color;
     }
 
