@@ -285,7 +285,7 @@ public class Board {
 		return true;
 	}
 
-	public void play(int pawnId) {
+	public int play(int pawnId) {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
 		String response;
@@ -301,6 +301,7 @@ public class Board {
 			}
 			System.out.println("The winner is "+playerWinner);
 			this.game.setState(GameState.FINISHED);
+			return winner;
 		}
 
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
@@ -321,9 +322,9 @@ public class Board {
 			
 			System.out.println("Where do you want to go ?");
 			
-			while(!possibleMoves.contains(point)){
+			do {
 				this.choosePosition(scanner, point);
-			}
+			}while(!possibleMoves.contains(point));
 		
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.equals("F")) {
@@ -357,6 +358,7 @@ public class Board {
 
 			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
 		}
+		return winner;
 	}
 
 	public boolean isValidOrientation(String orientation) {
@@ -372,22 +374,22 @@ public class Board {
 		for(int i = 0; i < this.game.getNbPlayers(); i++){
 			switch (this.pawns[i].getStartingSide()){
 				case BOTTOM:
-					if(this.pawns[i].getPosition().getX() == 0){
+					if(this.pawns[i].getPosition().getY() == 0){
 						return this.pawns[i].getId();
 					}
 					break;
 				case TOP:
-					if(this.pawns[i].getPosition().getX() == this.getNbCols()-1){
+					if(this.pawns[i].getPosition().getY() == this.getNbCols()-1){
 						return this.pawns[i].getId();
 					}
 					break;
 				case LEFT:
-					if(this.pawns[i].getPosition().getY() == this.getNbRows()-1){
+					if(this.pawns[i].getPosition().getX() == this.getNbRows()-1){
 						return this.pawns[i].getId();
 					}
 					break;
 				case RIGHT:
-					if(this.pawns[i].getPosition().getY() == 0){
+					if(this.pawns[i].getPosition().getX() == 0){
 						return this.pawns[i].getId();
 					}
 					break;
