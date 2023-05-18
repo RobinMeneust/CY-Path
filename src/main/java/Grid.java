@@ -1,7 +1,6 @@
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.LinkedList;
 import java.util.Set;
 
 public class Grid {
@@ -122,17 +121,17 @@ public class Grid {
 		return this.getListNeighbors(node).size();
 	}
 
-	public Point getCenterOfSide(Side side) throws UnknownSideException {
+	public Point getCenterOfSide(Side side) {
 		switch(side){
 			case TOP : return new Point(this.getNbCols()/2,0);
 			case BOTTOM : return new Point(this.getNbCols()/2,this.getNbRows()-1);
 			case LEFT : return new Point(0,this.getNbRows()/2);
 			case RIGHT : return new Point(this.getNbCols()-1,this.getNbRows()/2);
-			default: throw new UnknownSideException();
+			default: return null;
 		}
 	}
 
-	public HashSet<Point> getPointsSetFromSide(Side sideDest) throws UnknownSideException {
+	public HashSet<Point> getPointsSetFromSide(Side sideDest) {
 		HashSet<Point> pointsSet = new HashSet<Point>(9);
 		switch(sideDest) {
 			case LEFT:
@@ -152,16 +151,15 @@ public class Grid {
 				break;
 			case BOTTOM:
 				for(int i=0; i<this.getNbRows(); i++) {
-					pointsSet.add(new Point(i,this.getNbRows()));
+					pointsSet.add(new Point(i,this.getNbRows()-1));
 				}
 				break;
-			default: throw new UnknownSideException();
+			default:;
 		}
 		return pointsSet;
 	}
 
-	// TODO : Doesn't work for now. e.g : adding a horizontal fence to (1,1) is making this function return false
-	public boolean existPath(Point start, Side sideDest) throws UnknownSideException{
+	public boolean existPath(Point start, Side sideDest) {
 		LinkedList<Point> nodesToBeExpanded = new LinkedList<Point>();
 		HashMap<Point,Point> parents = new HashMap<Point,Point>();
 		HashMap<Point,Integer> distTo = new HashMap<Point,Integer>();
@@ -170,13 +168,9 @@ public class Grid {
 		Point destinationApprox = null;
 		int distToNeighbor = 0;
 		HashSet<Point> pointsOnSideDest = null;
-
-		try {
-			pointsOnSideDest = getPointsSetFromSide(sideDest);
-			destinationApprox = this.getCenterOfSide(sideDest);
-		} catch(UnknownSideException e) {
-			throw e;
-		}
+		
+		pointsOnSideDest = getPointsSetFromSide(sideDest);
+		destinationApprox = this.getCenterOfSide(sideDest);
 
 		for(Point p : this.getNodesList()) {
 			parents.put(p,null);

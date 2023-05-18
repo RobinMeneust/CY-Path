@@ -43,12 +43,17 @@ or
 
 ## Known Bugs/Issues to be fixed
 
-- Some fences can't be placed even though they are valid. To reproduce: Place 4 horieontal fences (0,1), (2,1), (4,1) and (6,1). The vertical fence (8,1) can't be placed even though it should be a valid position for a fence.
-- The function used to find a path isn't working properly so it wasn't added to the detection of valid fence position. So, we can place fences that prevent someone from winning, even though it should be forbidden.
+- In the JavaFX window, the movement of the player is not finished : in this version you have to click twice the button (used to change modes), to update the board, and a player can move twice and there is not pawn displayed
+- Fences can't be placed yet
 
 ## How to play
 
-For now there is only a console mode:
+For now this is mainly in console mode.
+The JavaFX application window is opening, but it's just used to show the current progress of this project, it's still not finished.
+As we are currently migrating from console mode to JavaFX, this version is not very ergonomic, since we need both the console and the application window.
+
+In the console mode display:
+
 `@` : represents a fence
 `-` : represents a cell border (without fence)
 `0, 1, 2, or 3` : represent the player (player 1, player 2, ...).
@@ -65,9 +70,7 @@ To play you must write in the console your answer when question is asked to you.
 
 NOTE: There might be some issues concerning how the user input is taken here (input not displayed, question displayed after the answer, ...), it will be fixed in a future update
 
-- "What is your next action ? ('m' (move) or 'f' (place fence))"
-    - Press m if you want to move your pawn
-    - Press f if you want to place a fence
+- Select the next action you want to do by clicking the button and type 'yes' in the terminal
 - "Where do you want to go ?"
     - Here, you can only move to the positions given in the list after "Those are the possible moves you can do"
     - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your pawn
@@ -82,11 +85,22 @@ NOTE: There might be some issues concerning how the user input is taken here (in
 - If any of the given input are incorrect we ask the same question to the user over and over again
 
 
+### Concerning the JavaFX application
+
+The window opens after you entered the number of player (so when the game really start)
+It's still under developement so all functionalities aren't available and it needs more testing
+
+For now you can only:
+- Choose your mode by clicking the button: Placing fences or moving your pawn
+- See the possible moves your pawn can do
+- Move the pawn by clicking an available cell, but in this version you have to click twice the button (used to change modes), to update the board, and a player can move twice and there is not pawn displayed
+- See where a fence can be placed on the board by moving your mouse above the cells (green = it can be placed and red = it's not a valid position)
+
+
 ## Documentation
 
-Use `mvn javadoc:javadoc` to generate the Javadoc
-
-The doc will be generated in `target/site`
+Use `mvn javadoc:jar` to generate the Javadoc in `target/`.
+Extract the jar archive and open index.html to read the documentation.
 
 ## Clean generated binaries and files
 

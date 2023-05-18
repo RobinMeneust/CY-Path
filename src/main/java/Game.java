@@ -17,17 +17,22 @@ public class Game {
 	}
 
 	public void launch() {
+		// Which player starts
 		int playerId = 0;
-		while(getState() != GameState.FINISHED){
-			if(playerId>=this.getNbPlayers()){
-				playerId = 0;
+		// No winner at the start
+		int winner = -1;
+		// The game is now in progress
+		this.state = GameState.IN_PROGRESS;
+
+		while(true){
+			if(this.getState() == GameState.FINISHED){
+				break;
 			}
-			board.displayBoard();
-			board.play(playerId);
+			playerId = playerId % this.getNbPlayers();
+			winner = board.play(playerId);
 			playerId++;
 		}
-		playerId--;
-		setWinner(playerId);
+		setWinner(winner);
 	}
 
 	private void setWinner(int idPlayer) {
@@ -58,4 +63,7 @@ public class Game {
 		return nbFences;
 	}
 	
+	public Board getBoard() {
+		return this.board;
+	}
 }

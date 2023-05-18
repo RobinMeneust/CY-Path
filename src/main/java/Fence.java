@@ -11,6 +11,15 @@ public class Fence {
 		this.end = end;
 	}
 
+	public Fence(int length, Orientation orientation, Point start){
+		this(length,orientation,new Point(start),new Point(start));
+		if(orientation == Orientation.HORIZONTAL) {
+			end.setX(start.getX()+length);
+		} else {
+			end.setY(start.getY()+length);
+		}
+	}
+
 	public Fence(int length){
 		this(length,Orientation.HORIZONTAL,new Point(0,0),new Point(2,0));
 	}
