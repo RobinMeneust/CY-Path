@@ -19,6 +19,7 @@ public class Game {
 	public void launch() {
 		int playerId = 0;
 		int winner = 0;
+
 		while(true){
 			if(this.getState() == GameState.FINISHED){
 				break;
@@ -26,7 +27,6 @@ public class Game {
 			if(playerId>=this.getNbPlayers()){
 				playerId = 0;
 			}
-			board.displayBoard();
 			winner = board.play(playerId);
 			playerId++;
 		}

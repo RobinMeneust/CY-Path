@@ -224,14 +224,30 @@ public class Board {
 		return " ";
 	}
 
-	public void displayBoard() {
+	public void displayBoard(DisplayType type) {
 		System.out.println();
-		System.out.print("    ");
-		for(int i=0; i<nbCols; i++) {
-			System.out.printf("%3d ",i);
+		
+		switch(type){
+			case COORD_CELL:
+				System.out.print("    ");
+				for(int i=0; i<nbCols; i++) {
+					System.out.printf("%3d ",i);
+				}
+				break;
+			case COORD_LINE:
+				System.out.print("  ");
+				for(int i=0; i<=nbCols; i++) {
+					System.out.printf("%3d ",i);
+				}
+				break;
+			default:;
 		}
 		System.out.println();
-		System.out.print("    ");
+		if(type == DisplayType.COORD_LINE){
+			System.out.print("  0 ");
+		} else {
+			System.out.print("    ");
+		}
 		for(int x=0; x<nbCols; x++){
 			System.out.print("|---");
 		}
@@ -239,7 +255,11 @@ public class Board {
 		System.out.println();
 
 		for(int y=0; y<nbRows; y++) {
-			System.out.printf("%3d | ",y);
+			if(type == DisplayType.COORD_CELL){
+				System.out.printf("%3d | ",y);
+			} else {
+				System.out.printf("    | ",y);
+			}
 
 			for(int x=0; x<nbCols; x++) {
 				System.out.print(getCellContentText(x,y));
@@ -254,7 +274,11 @@ public class Board {
 
 			// bottom border
 			System.out.println();
-			System.out.print("    ");
+			if(type == DisplayType.COORD_LINE){
+				System.out.printf("%3d ", y+1);
+			} else {
+				System.out.print("    ");
+			}
 			for(int x=0; x<nbCols; x++){
 				if(y == nbRows-1 || grid.areConnected(x, y, x, y+1)) {
 					System.out.print("|---");
@@ -285,12 +309,7 @@ public class Board {
 
 	public boolean existPathFromPlayerToWin() {
 		for(Pawn p : pawns) {
-			try {
-				if(!this.getGrid().existPath(p.getPosition(),p.getStartingSide().getOpposite())) {
-					return false;
-				}
-			} catch (UnknownSideException e) {
-				System.err.println(e);
+			if(!this.getGrid().existPath(p.getPosition(),p.getStartingSide().getOpposite())) {
 				return false;
 			}
 		}
@@ -317,6 +336,8 @@ public class Board {
 			return winner;
 		}
 
+		this.displayBoard(DisplayType.NO_COORD);
+
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
 		if(this.pawns[pawnId].getAvailableFences() == 0){
 			response = "move";
@@ -328,6 +349,8 @@ public class Board {
 		}
 
 		if(response.toUpperCase().matches("M(OVE)?")){
+			this.displayBoard(DisplayType.COORD_CELL);
+
 			LinkedList<Point> possibleMoves = listPossibleMoves(this.pawns[pawnId].getPosition());
 			System.out.println("Those are the possible moves you can do:");
 			System.out.println(possibleMoves);
@@ -340,6 +363,8 @@ public class Board {
 		
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.toUpperCase().matches("F(ENCE)?")) {
+			this.displayBoard(DisplayType.COORD_LINE);
+
 			Fence fence = new Fence(2);
 
 			do {
