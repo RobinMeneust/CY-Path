@@ -11,6 +11,7 @@ public class Board {
 	private ArrayList<Fence> fences;
 	private int nbPlacedFences;
 	private Pawn[] pawns;
+	private int pawnIdTurn;
 	
 	public Board(int nbCols, int nbRows, Game game) {
 		this.nbCols = nbCols;
@@ -19,7 +20,8 @@ public class Board {
 		this.grid = new Grid(nbRows, nbCols);
 		this.game = game;
 		this.fences = null;
-		
+		this.pawnIdTurn = 0;
+
 		if(game != null && game.getNbFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbFences());
 		}
@@ -55,6 +57,17 @@ public class Board {
 
 	public Grid getGrid(){
 		return grid;
+	}
+
+	public Pawn getPawns(int i){
+		return pawns[i];
+	}
+
+	public int getPawnIdTurn(){
+		return this.pawnIdTurn;
+	}
+	public void setPawnidTurn(int id){
+		this.pawnIdTurn = id;
 	}
 
 	public void choosePosition(Scanner scanner, Point chosenPos){
@@ -290,6 +303,7 @@ public class Board {
 		Point point = new Point();
 		String response;
 		String orientation = "";
+		this.setPawnidTurn(pawnId);
 
 		int winner = this.checkWin();
 		if(winner != -1){
