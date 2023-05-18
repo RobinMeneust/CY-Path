@@ -139,6 +139,7 @@ public class CYPathFX extends Application {
         @Override
         public void handle(ActionEvent event){
             //If the actual player have fence
+            CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn()); // à régler avec le PAC pour prendre en compte le suivi du jeu
             
             if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawns(CYPathFX.this.game.getBoard().getPawnIdTurn()).getAvailableFences() > 0){
                 actionButton.setText("Place fence");
@@ -147,7 +148,6 @@ public class CYPathFX extends Application {
             else{
                 actionButton.setText("Move");
                 CYPathFX.this.showPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn());
-                CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn());
             }
         }
     }
@@ -155,6 +155,7 @@ public class CYPathFX extends Application {
     public void showPossibleCells(int pawnId){
         LinkedList<Point> possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawns(pawnId).getPosition());
         Color cellColor = Color.rgb(172, 255, 214);
+        Color cellColorHover = Color.rgb(239,255,172);
         for( Point p : possibleMoves){
             Node node = (Rectangle) getNodeFromGridPane(gPane, p.getX()*2+1, p.getY()*2+1);
             System.out.println(p.getX() + "," + p.getY());
@@ -162,6 +163,9 @@ public class CYPathFX extends Application {
                 Rectangle rec = (Rectangle) node;
                 rec.setFill(cellColor);
                 this.previousPossibleCells.add(rec);
+
+                rec.setOnMouseEntered(e -> rec.setFill(cellColorHover));
+                rec.setOnMouseExited(e -> rec.setFill(cellColor));
             }
         }
     }
