@@ -339,6 +339,7 @@ public class Board {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
 		String response;
+		String backOrContinue;
 		String orientation = "";
 		this.setPawnidTurn(pawnId);
 
@@ -362,10 +363,17 @@ public class Board {
 			response = "move";
 		} else{
 			do {
-				System.out.println("You have "+this.pawns[pawnId].getAvailableFences()+" fence(s) remaining.");
-				System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
-				response = scanner.nextLine();
-			}while(!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
+				do {
+					System.out.println("You have " + this.pawns[pawnId].getAvailableFences() + " fence(s) remaining.");
+					System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
+					response = scanner.nextLine();
+				} while (!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
+
+				do {
+					System.out.println("Do you want to go back to change your action or continue ? (B(ACK) or C(ONTINUE))");
+					backOrContinue = scanner.nextLine();
+				} while (!backOrContinue.toUpperCase().matches("B(ACK)?") && !backOrContinue.toUpperCase().matches("C(ONTINUE)?"));
+			}while(backOrContinue.toUpperCase().matches("B(ACK)?"));
 		}
 
 		if(response.toUpperCase().matches("M(OVE)?")){
