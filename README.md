@@ -41,6 +41,11 @@ or
 
 `java -jar target/CYPath.jar` if you have the executable jar file
 
+## Known Bugs/Issues to be fixed
+
+- Some fences can't be placed even though they are valid. To reproduce: Place 4 horieontal fences (0,1), (2,1), (4,1) and (6,1). The vertical fence (8,1) can't be placed even though it should be a valid position for a fence.
+- The function used to find a path isn't working properly so it wasn't added to the detection of valid fence position. So, we can place fences that prevent someone from winning, even though it should be forbidden.
+
 ## How to play
 
 For now there is only a console mode:
@@ -67,7 +72,7 @@ NOTE: There might be some issues concerning how the user input is taken here (in
     - Here, you can only move to the positions given in the list after "Those are the possible moves you can do"
     - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your pawn
     - "Y" : Give a number between 0 and 8. It's the y (vertical) coordinate of the position where you want to move your pawn
-- "What is the orientaion of your fence ? (H(ORIZONTAL) or V(ERTICAL))" : 
+- "What is the orientation of your fence ? (H(ORIZONTAL) or V(ERTICAL))" : 
     - Press H if you want to place a horizontal fence
     - Press V if you want to place a vertical one
 - "Where do you want to put your fence ? (X,Y)"
