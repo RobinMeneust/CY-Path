@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -65,10 +66,15 @@ public class CYPathFX extends Application {
 
         //Create a thread to run in the terminal
         Thread terminalThread = new Thread(() -> runInTerminal());
+        terminalThread.setDaemon(true);
         terminalThread.start();
 
         // Open the window
-        primaryStage.show(); 
+        primaryStage.show();
+        primaryStage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     public GridPane createBoard() {
