@@ -16,6 +16,10 @@ public class Game {
 		this.board = new Board(nbCols,nbRows, this);
 	}
 
+	public Board getBoard(){
+		return board;
+	}
+
 	public void launch() {
 		int playerId = 0;
 		int winner = 0;
