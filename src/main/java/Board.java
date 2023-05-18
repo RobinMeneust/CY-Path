@@ -224,14 +224,30 @@ public class Board {
 		return " ";
 	}
 
-	public void displayBoard() {
+	public void displayBoard(DisplayType type) {
 		System.out.println();
-		System.out.print("    ");
-		for(int i=0; i<nbCols; i++) {
-			System.out.printf("%3d ",i);
+		
+		switch(type){
+			case COORD_CELL:
+				System.out.print("    ");
+				for(int i=0; i<nbCols; i++) {
+					System.out.printf("%3d ",i);
+				}
+				break;
+			case COORD_LINE:
+				System.out.print("  ");
+				for(int i=0; i<=nbCols; i++) {
+					System.out.printf("%3d ",i);
+				}
+				break;
+			default:;
 		}
 		System.out.println();
-		System.out.print("    ");
+		if(type == DisplayType.COORD_LINE){
+			System.out.print("  0 ");
+		} else {
+			System.out.print("    ");
+		}
 		for(int x=0; x<nbCols; x++){
 			System.out.print("|---");
 		}
@@ -239,7 +255,11 @@ public class Board {
 		System.out.println();
 
 		for(int y=0; y<nbRows; y++) {
-			System.out.printf("%3d | ",y);
+			if(type == DisplayType.COORD_CELL){
+				System.out.printf("%3d | ",y);
+			} else {
+				System.out.printf("    | ",y);
+			}
 
 			for(int x=0; x<nbCols; x++) {
 				System.out.print(getCellContentText(x,y));
@@ -254,7 +274,11 @@ public class Board {
 
 			// bottom border
 			System.out.println();
-			System.out.print("    ");
+			if(type == DisplayType.COORD_LINE){
+				System.out.printf("%3d ", y+1);
+			} else {
+				System.out.print("    ");
+			}
 			for(int x=0; x<nbCols; x++){
 				if(y == nbRows-1 || grid.areConnected(x, y, x, y+1)) {
 					System.out.print("|---");
@@ -283,16 +307,30 @@ public class Board {
 		}
 	}
 
+	public void removeFenceFromData(Fence fence) {
+		this.fences.remove(fence);
+		Point start = fence.getStart();
+		Point end = fence.getEnd();
+
+		if(fence.getOrientation() == Orientation.HORIZONTAL) {
+			for(int i=start.getX(); i<end.getX(); i++) {
+				this.grid.addEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
+			}
+		} else {
+			for(int i=start.getY(); i<end.getY(); i++) {
+				this.grid.addEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
+			}
+		}
+	}
+
 	public boolean existPathFromPlayerToWin() {
-		for(Pawn p : pawns) {
-			try {
-				if(!this.getGrid().existPath(p.getPosition(),p.getStartingSide().getOpposite())) {
+		if(this.pawns != null) {
+			for (Pawn p : pawns) {
+				if (!this.getGrid().existPath(p.getPosition(), p.getStartingSide().getOpposite())) {
 					return false;
 				}
-			} catch (UnknownSideException e) {
-				System.err.println(e);
-				return false;
 			}
+			return true;
 		}
 		return true;
 	}
@@ -317,17 +355,25 @@ public class Board {
 			return winner;
 		}
 
+		this.displayBoard(DisplayType.NO_COORD);
+
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
 		if(this.pawns[pawnId].getAvailableFences() == 0){
 			response = "move";
 		} else{
 			do {
+				System.out.println("You have "+this.pawns[pawnId].getAvailableFences()+" fence(s) remaining.");
 				System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
 				response = scanner.nextLine();
 			}while(!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
 		}
 
 		if(response.toUpperCase().matches("M(OVE)?")){
+			this.displayBoard(DisplayType.COORD_CELL);
+
+			if (this.pawns[pawnId].getAvailableFences() == 0) {
+				System.out.println("You have "+this.pawns[pawnId].getAvailableFences()+ "fence remaining.\nYou can only move.");
+			}
 			LinkedList<Point> possibleMoves = listPossibleMoves(this.pawns[pawnId].getPosition());
 			System.out.println("Those are the possible moves you can do:");
 			System.out.println(possibleMoves);
@@ -340,6 +386,8 @@ public class Board {
 		
 			this.pawns[pawnId].setPosition(point);
 		} else if(response.toUpperCase().matches("F(ENCE)?")) {
+			this.displayBoard(DisplayType.COORD_LINE);
+
 			Fence fence = new Fence(2);
 
 			do {
@@ -358,11 +406,19 @@ public class Board {
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-				
-				if(!this.existPathFromPlayerToWin() || !(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
-					System.out.println("The fence can't be placed here (Starting point:"+fence.getStart()+").\nTry again.");
-				} else {
-					break;
+
+				this.addFenceToData(fence);
+				System.out.println(this.existPathFromPlayerToWin());
+				if (!this.existPathFromPlayerToWin()) {
+					this.removeFenceFromData(fence);
+					System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+				}else{
+					this.removeFenceFromData(fence);
+					if (!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))) {
+						System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+					} else {
+						break;
+					}
 				}
 			} while(true);
 
@@ -412,10 +468,8 @@ public class Board {
 	}
 
     public boolean isValidFencePosition(Fence fenceToBePlaced) {
-        //System.out.println("fenceToBePlaced:\n"+fenceToBePlaced);
         if (this.fences != null) {
             for (Fence fence : this.fences) {
-                //System.out.println("fence:\n"+fence);
                 // over each other
                 if (fenceToBePlaced.getStart().equals(fence.getStart()) && fenceToBePlaced.getOrientation().equals(fence.getOrientation())) {
                     return false;
