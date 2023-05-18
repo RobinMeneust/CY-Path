@@ -309,13 +309,12 @@ public class Board {
 			response = "move";
 		} else{
 			do {
-				System.out.println("What is your next action ? ('m' (move) or 'f' (place fence))");
+				System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
 				response = scanner.nextLine();
-				response = response.toUpperCase();
-			}while(!response.equals("M") && !response.equals("F"));
+			}while(!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
 		}
 
-		if(response.equals("M")){
+		if(response.toUpperCase().matches("M(OVE)?")){
 			LinkedList<Point> possibleMoves = listPossibleMoves(this.pawns[pawnId].getPosition());
 			System.out.println("Those are the possible moves you can do:");
 			System.out.println(possibleMoves);
@@ -327,7 +326,7 @@ public class Board {
 			}while(!possibleMoves.contains(point));
 		
 			this.pawns[pawnId].setPosition(point);
-		} else if(response.equals("F")) {
+		} else if(response.toUpperCase().matches("F(ENCE)?")) {
 			Fence fence = new Fence(2);
 
 			do {
@@ -355,8 +354,7 @@ public class Board {
 			} while(true);
 
 			this.addFenceToData(fence);
-
-			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
+			this.pawns[pawnId].placeFence();
 		}
 		return winner;
 	}
