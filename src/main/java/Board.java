@@ -345,8 +345,8 @@ public class Board {
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-				// TODO: remove the comments after existPathFromPlayerToWin is corrected
-				if(/*!this.existPathFromPlayerToWin() ||*/ !(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
+				
+				if(!this.existPathFromPlayerToWin() || !(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
 					System.out.println("The fence can't be placed here (Starting point:"+fence.getStart()+").\nTry again.");
 				} else {
 					break;

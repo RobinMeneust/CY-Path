@@ -152,7 +152,7 @@ public class Grid {
 				break;
 			case BOTTOM:
 				for(int i=0; i<this.getNbRows(); i++) {
-					pointsSet.add(new Point(i,this.getNbRows()));
+					pointsSet.add(new Point(i,this.getNbRows()-1));
 				}
 				break;
 			default: throw new UnknownSideException();
@@ -160,7 +160,6 @@ public class Grid {
 		return pointsSet;
 	}
 
-	// TODO : Doesn't work for now. e.g : adding a horizontal fence to (1,1) is making this function return false
 	public boolean existPath(Point start, Side sideDest) throws UnknownSideException{
 		LinkedList<Point> nodesToBeExpanded = new LinkedList<Point>();
 		HashMap<Point,Point> parents = new HashMap<Point,Point>();
@@ -170,7 +169,7 @@ public class Grid {
 		Point destinationApprox = null;
 		int distToNeighbor = 0;
 		HashSet<Point> pointsOnSideDest = null;
-
+		
 		try {
 			pointsOnSideDest = getPointsSetFromSide(sideDest);
 			destinationApprox = this.getCenterOfSide(sideDest);
