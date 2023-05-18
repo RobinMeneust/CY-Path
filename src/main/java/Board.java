@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Board {
 	private int nbCols;
 	private int nbRows;
@@ -12,6 +16,7 @@ public class Board {
 	private int nbPlacedFences;
 	private Pawn[] pawns;
 	private int pawnIdTurn;
+	private StringProperty action;
 	
 	public Board(int nbCols, int nbRows, Game game) {
 		this.nbCols = nbCols;
@@ -21,6 +26,7 @@ public class Board {
 		this.game = game;
 		this.fences = null;
 		this.pawnIdTurn = 0;
+		this.action = new SimpleStringProperty("Move");
 
 		if(game != null && game.getNbFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbFences());
@@ -69,6 +75,14 @@ public class Board {
 	public void setPawnidTurn(int id){
 		this.pawnIdTurn = id;
 	}
+
+	public StringProperty getAction() {
+        return this.action;
+    }
+	public void setAction(String a){
+		this.action.set(a);
+	}
+
 
 	public void choosePosition(Scanner scanner, Point chosenPos){
 		System.out.println();
@@ -357,6 +371,7 @@ public class Board {
 		}
 
 		this.displayBoard(DisplayType.NO_COORD);
+		Platform.runLater(() -> this.setAction("Move"));
 
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
 		if(this.pawns[pawnId].getAvailableFences() == 0){
@@ -368,7 +383,7 @@ public class Board {
 					System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
 					response = scanner.nextLine();
 				} while (!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
-
+				
 				do {
 					System.out.println("Do you want to go back to change your action or continue ? (B(ACK) or C(ONTINUE))");
 					backOrContinue = scanner.nextLine();
@@ -376,7 +391,8 @@ public class Board {
 			}while(backOrContinue.toUpperCase().matches("B(ACK)?"));
 		}
 
-		if(response.toUpperCase().matches("M(OVE)?")){
+		//If button set Move
+		if("Move".equals(this.getAction().get())){
 			this.displayBoard(DisplayType.COORD_CELL);
 
 			if (this.pawns[pawnId].getAvailableFences() == 0) {
@@ -393,7 +409,9 @@ public class Board {
 			}while(!possibleMoves.contains(point));
 		
 			this.pawns[pawnId].setPosition(point);
-		} else if(response.toUpperCase().matches("F(ENCE)?")) {
+		} 
+		//If button set Place Fence
+		else if("Place fence".equals(this.getAction().get())) {
 			this.displayBoard(DisplayType.COORD_LINE);
 
 			Fence fence = new Fence(2);
@@ -415,22 +433,19 @@ public class Board {
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
 
-				this.addFenceToData(fence);
-				System.out.println(this.existPathFromPlayerToWin());
-				if (!this.existPathFromPlayerToWin()) {
-					this.removeFenceFromData(fence);
-					System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
-				}else{
-					this.removeFenceFromData(fence);
-					if (!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))) {
-						System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
-					} else {
-						break;
-					}
-				}
+				if (!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
+                    System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+                }else{
+                    this.addFenceToData(fence);
+                    if (!this.existPathFromPlayerToWin()) {
+                        System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+                        this.removeFenceFromData(fence);
+                    } else {
+                        break;
+                    }
+                }
 			} while(true);
 
-			this.addFenceToData(fence);
 			this.pawns[pawnId].placeFence();
 		}
 		return winner;

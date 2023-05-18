@@ -252,12 +252,12 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/18 13:30
 			* Real end : 2023/05/18 15h05
 			* Notes : This step took longer than expected because we had to link the interface to the progress of the game in the terminal
-		10.1.1 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
-			* PROGRESS: TO_DO
+		10.1.2 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
+			* PROGRESS: Done
 			* Who: Thibault
-			* Start :
-			* Estimated end : 
-			* Real end :
+			* Start : 2023/05/18 16h30
+			* Estimated end : 2023/05/18 18h00
+			* Real end : 2023/05/18 20h30
 		
 	10.2 Player movements ("MOVE" mode)
 		10.1.1 Show the possible moves by changing the color of the corresponding cells (e.g greyed)

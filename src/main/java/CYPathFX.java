@@ -61,7 +61,7 @@ public class CYPathFX extends Application {
         }
 
         this.game = new Game(nbPlayer,players,20, 9, 9);
-
+        actionButton.textProperty().bind(CYPathFX.this.game.getBoard().getAction());
 
         //Create a thread to run in the terminal
         Thread terminalThread = new Thread(() -> runInTerminal());
@@ -142,12 +142,11 @@ public class CYPathFX extends Application {
             CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn()); // à régler avec le PAC pour prendre en compte le suivi du jeu
             
             if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawns(CYPathFX.this.game.getBoard().getPawnIdTurn()).getAvailableFences() > 0){
-                actionButton.setText("Place fence");
-                
+                CYPathFX.this.game.getBoard().setAction("Place fence");
             }
             else{
-                actionButton.setText("Move");
                 CYPathFX.this.showPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn());
+                CYPathFX.this.game.getBoard().setAction("Move");
             }
         }
     }
