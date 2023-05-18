@@ -60,7 +60,6 @@ public class Board {
 	public void choosePosition(Scanner scanner, Point chosenPos){
 		System.out.println();
 
-		// TODO : The lines aren't displayed properly here
 		System.out.print("X : ");
 		int x = Integer.parseInt(scanner.next());
 		System.out.println();
@@ -78,9 +77,9 @@ public class Board {
 
 	public boolean isFenceOnTheBoard(Fence fence){
 		if(fence.getOrientation() == Orientation.HORIZONTAL){
-			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols()-1 && fence.getStart().getY() > 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() > 0 && fence.getEnd().getY() < this.getNbCols()-1));
+			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols()-1 && fence.getStart().getY() > 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() > 0 && fence.getEnd().getY() < this.getNbCols()));
 		} else {
-			return ((fence.getStart().getX() < this.getNbRows()-1 && fence.getStart().getX() > 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() >= 0) && (fence.getEnd().getX() > 0 && fence.getEnd().getX() < this.getNbRows()-1) && (fence.getEnd().getY() >= 0 && fence.getEnd().getY() < this.getNbCols()));
+			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() > 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() >= 0) && (fence.getEnd().getX() > 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() >= 0 && fence.getEnd().getY() < this.getNbCols()));
 		}
     }
 	public boolean isOnTheBoard(Point point){
@@ -96,6 +95,10 @@ public class Board {
 			}
 		}
 		return false;
+	}
+
+	public Pawn getPawns(int i) {
+		return this.pawns[i];
 	}
 
 	public LinkedList<Point> possibleMove(Point position, Point positionTested, Point positionTested2, Point positionTested3, Point positionTested4){

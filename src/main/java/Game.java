@@ -58,4 +58,7 @@ public class Game {
 		return nbFences;
 	}
 	
+	public Board getBoard() {
+		return this.board;
+	}
 }
