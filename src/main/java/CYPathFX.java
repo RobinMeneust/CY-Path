@@ -1,7 +1,12 @@
 import java.util.Scanner;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,6 +26,8 @@ import javafx.scene.image.ImageView;
 public class CYPathFX extends Application {
     private Button actionButton;
     private Game game;
+    private GridPane gPane;
+    private LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
 
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
@@ -28,12 +35,12 @@ public class CYPathFX extends Application {
         primaryStage.setTitle("CY Path : the Game");
         primaryStage.setResizable(false);
 
-        GridPane gridPane = createBoard();
+        this.gPane = createBoard();
         actionButton = new Button("Move");
         actionButton.setOnAction(new actionButtonHandler());
         BorderPane root = new BorderPane();
 
-        root.setCenter(gridPane);
+        root.setCenter(this.gPane);
         root.setTop(actionButton);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -132,13 +139,49 @@ public class CYPathFX extends Application {
         @Override
         public void handle(ActionEvent event){
             //If the actual player have fence
+            
             if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawns(CYPathFX.this.game.getBoard().getPawnIdTurn()).getAvailableFences() > 0){
                 actionButton.setText("Place fence");
+                
             }
             else{
                 actionButton.setText("Move");
+                CYPathFX.this.showPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn());
+                CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn());
             }
         }
+    }
+
+    public void showPossibleCells(int pawnId){
+        LinkedList<Point> possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawns(pawnId).getPosition());
+        Color cellColor = Color.rgb(172, 255, 214);
+        for( Point p : possibleMoves){
+            Node node = (Rectangle) getNodeFromGridPane(gPane, p.getX()*2+1, p.getY()*2+1);
+            System.out.println(p.getX() + "," + p.getY());
+            if( node instanceof Rectangle){
+                Rectangle rec = (Rectangle) node;
+                rec.setFill(cellColor);
+                this.previousPossibleCells.add(rec);
+            }
+        }
+    }
+
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public void resetPossibleCells(int pawnId){
+        Color cellColor = Color.rgb(230, 230, 230);
+
+        for(Rectangle rec : this.previousPossibleCells){
+            rec.setFill(cellColor);
+        }
+        System.out.println("Reset des couleurs");
     }
     /*//JavaFX
     private void runInJavaFX(){
