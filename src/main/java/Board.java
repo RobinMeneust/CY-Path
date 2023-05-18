@@ -352,8 +352,6 @@ public class Board {
 	public int play(int pawnId) {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
-		String response;
-		String backOrContinue;
 		String orientation = "";
 		this.setPawnidTurn(pawnId);
 
@@ -374,21 +372,16 @@ public class Board {
 		Platform.runLater(() -> this.setAction("Move"));
 
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
-		if(this.pawns[pawnId].getAvailableFences() == 0){
-			response = "move";
-		} else{
-			do {
-				do {
-					System.out.println("You have " + this.pawns[pawnId].getAvailableFences() + " fence(s) remaining.");
-					System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
-					response = scanner.nextLine();
-				} while (!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
+		if(this.pawns[pawnId].getAvailableFences() != 0){
+
+			while (true) {
+				System.out.print("I you are ok with the actual action on the button write 'yes' on the terminal\n");
+				String userInput = scanner.nextLine();
 				
-				do {
-					System.out.println("Do you want to go back to change your action or continue ? (B(ACK) or C(ONTINUE))");
-					backOrContinue = scanner.nextLine();
-				} while (!backOrContinue.toUpperCase().matches("B(ACK)?") && !backOrContinue.toUpperCase().matches("C(ONTINUE)?"));
-			}while(backOrContinue.toUpperCase().matches("B(ACK)?"));
+				if (userInput.equals("yes")) {
+					break;
+				}
+			}
 		}
 
 		//If button set Move
