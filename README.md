@@ -79,9 +79,8 @@ NOTE: There might be some issues concerning how the user input is taken here (in
 
 ## Documentation
 
-Use `mvn javadoc:javadoc` to generate the Javadoc
-
-The doc will be generated in `target/site`
+Use `mvn javadoc:jar` to generate the Javadoc in `target/`.
+Extract the jar archive and open index.html to read the documentation.
 
 ## Clean generated binaries and files
 

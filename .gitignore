@@ -9,4 +9,5 @@ target/maven-status
 target/test-classes
 target/javadoc-bundle-options
 target/maven-javadoc-plugin-stale-data.txt
+target/apidocs
 .vscode/
