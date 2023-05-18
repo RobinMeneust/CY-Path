@@ -11,6 +11,7 @@ public class Board {
 	private ArrayList<Fence> fences;
 	private int nbPlacedFences;
 	private Pawn[] pawns;
+	private int pawnIdTurn;
 	
 	public Board(int nbCols, int nbRows, Game game) {
 		this.nbCols = nbCols;
@@ -19,7 +20,8 @@ public class Board {
 		this.grid = new Grid(nbRows, nbCols);
 		this.game = game;
 		this.fences = null;
-		
+		this.pawnIdTurn = 0;
+
 		if(game != null && game.getNbFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbFences());
 		}
@@ -57,6 +59,17 @@ public class Board {
 		return grid;
 	}
 
+	public Pawn getPawns(int i){
+		return pawns[i];
+	}
+
+	public int getPawnIdTurn(){
+		return this.pawnIdTurn;
+	}
+	public void setPawnidTurn(int id){
+		this.pawnIdTurn = id;
+	}
+
 	public void choosePosition(Scanner scanner, Point chosenPos){
 		System.out.println();
 
@@ -77,7 +90,7 @@ public class Board {
 
 	public boolean isFenceOnTheBoard(Fence fence){
 		if(fence.getOrientation() == Orientation.HORIZONTAL){
-			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols()-1 && fence.getStart().getY() > 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() > 0 && fence.getEnd().getY() < this.getNbCols()));
+			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() >= 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() > 0) && (fence.getEnd().getX() >= 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() > 0 && fence.getEnd().getY() < this.getNbCols()));
 		} else {
 			return ((fence.getStart().getX() < this.getNbRows() && fence.getStart().getX() > 0) && (fence.getStart().getY() < this.getNbCols() && fence.getStart().getY() >= 0) && (fence.getEnd().getX() > 0 && fence.getEnd().getX() < this.getNbRows()) && (fence.getEnd().getY() >= 0 && fence.getEnd().getY() < this.getNbCols()));
 		}
@@ -95,10 +108,6 @@ public class Board {
 			}
 		}
 		return false;
-	}
-
-	public Pawn getPawns(int i) {
-		return this.pawns[i];
 	}
 
 	public LinkedList<Point> possibleMove(Point position, Point positionTested, Point positionTested2, Point positionTested3, Point positionTested4){
@@ -288,11 +297,12 @@ public class Board {
 		return true;
 	}
 
-	public void play(int pawnId) {
+	public int play(int pawnId) {
 		Scanner scanner = new Scanner(System.in);
 		Point point = new Point();
 		String response;
 		String orientation = "";
+		this.setPawnidTurn(pawnId);
 
 		int winner = this.checkWin();
 		if(winner != -1){
@@ -304,6 +314,7 @@ public class Board {
 			}
 			System.out.println("The winner is "+playerWinner);
 			this.game.setState(GameState.FINISHED);
+			return winner;
 		}
 
 		System.out.println("Turn of player: " + this.pawns[pawnId].getPlayer());
@@ -311,25 +322,24 @@ public class Board {
 			response = "move";
 		} else{
 			do {
-				System.out.println("What is your next action ? ('m' (move) or 'f' (place fence))");
+				System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
 				response = scanner.nextLine();
-				response = response.toUpperCase();
-			}while(!response.equals("M") && !response.equals("F"));
+			}while(!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
 		}
 
-		if(response.equals("M")){
+		if(response.toUpperCase().matches("M(OVE)?")){
 			LinkedList<Point> possibleMoves = listPossibleMoves(this.pawns[pawnId].getPosition());
 			System.out.println("Those are the possible moves you can do:");
 			System.out.println(possibleMoves);
 			
 			System.out.println("Where do you want to go ?");
 			
-			while(!possibleMoves.contains(point)){
+			do {
 				this.choosePosition(scanner, point);
-			}
+			}while(!possibleMoves.contains(point));
 		
 			this.pawns[pawnId].setPosition(point);
-		} else if(response.equals("F")) {
+		} else if(response.toUpperCase().matches("F(ENCE)?")) {
 			Fence fence = new Fence(2);
 
 			do {
@@ -357,9 +367,9 @@ public class Board {
 			} while(true);
 
 			this.addFenceToData(fence);
-
-			this.pawns[pawnId].setAvailableFences(this.getAvailableFences() - 1);
+			this.pawns[pawnId].placeFence();
 		}
+		return winner;
 	}
 
 	public boolean isValidOrientation(String orientation) {
@@ -375,22 +385,22 @@ public class Board {
 		for(int i = 0; i < this.game.getNbPlayers(); i++){
 			switch (this.pawns[i].getStartingSide()){
 				case BOTTOM:
-					if(this.pawns[i].getPosition().getX() == 0){
+					if(this.pawns[i].getPosition().getY() == 0){
 						return this.pawns[i].getId();
 					}
 					break;
 				case TOP:
-					if(this.pawns[i].getPosition().getX() == this.getNbCols()-1){
+					if(this.pawns[i].getPosition().getY() == this.getNbCols()-1){
 						return this.pawns[i].getId();
 					}
 					break;
 				case LEFT:
-					if(this.pawns[i].getPosition().getY() == this.getNbRows()-1){
+					if(this.pawns[i].getPosition().getX() == this.getNbRows()-1){
 						return this.pawns[i].getId();
 					}
 					break;
 				case RIGHT:
-					if(this.pawns[i].getPosition().getY() == 0){
+					if(this.pawns[i].getPosition().getX() == 0){
 						return this.pawns[i].getId();
 					}
 					break;

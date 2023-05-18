@@ -3,9 +3,9 @@ import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
@@ -27,8 +27,13 @@ public class CYPathFX extends Application {
         primaryStage.setResizable(false);
 
         GridPane gridPane = createBoard();
+        actionButton = new Button("Move");
+        actionButton.setOnAction(new actionButtonHandler());
+        BorderPane root = new BorderPane();
 
-        Scene scene = new Scene(gridPane);
+        root.setCenter(gridPane);
+        root.setTop(actionButton);
+        Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         
 
@@ -112,7 +117,22 @@ public class CYPathFX extends Application {
         return gPane;
     }
 
-
+    class actionButtonHandler implements EventHandler<ActionEvent>{
+        @Override
+        public void handle(ActionEvent event){
+            //If the actual player have fence
+            if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawns(CYPathFX.this.game.getBoard().getPawnIdTurn()).getAvailableFences() > 0){
+                actionButton.setText("Place fence");
+            }
+            else{
+                actionButton.setText("Move");
+            }
+        }
+    }
+    /*//JavaFX
+    private void runInJavaFX(){
+        
+    }*/
     //Terminal
     private void runInTerminal() {
         try {

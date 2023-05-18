@@ -235,21 +235,22 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/16 20:30
 			* Real end :
 	9.3 Add fences to the window (thick black borders) without breaking the alignement (the size of the grid must not change)
-		* PROGRESS: TO_DO
+		* PROGRESS: IN_PROGRESS
 		* Who: Robin
-		* Start : 2023/05/18 15:00
-		* Estimated end : 2023/05/18 15:30
+		* Start : 2023/05/18 16:00
+		* Estimated end : 2023/05/18 18:00
 		* Real end :
 
 10. Add events and use CAP (Observers...) to link the "presentation" to the "abstraction" using "controllers"
 	10.1 Add buttons (and events) used by the player to choose his next move (place fence or move)
 		10.1.1 Create the buttons and add it to the window. The "Place fence" button must be disabled or hidden if the player can't place a fence.
 			We can also just create one button "Place Fence" that becomes "Move" when pressed (it's probably better to do so)
-			* PROGRESS: TO_DO
+			* PROGRESS: DONE
 			* Who: Thibault
-			* Start : 
-			* Estimated end : 2023/05/17 12:15
-			* Real end :
+			* Start : 2023/05/18 12:00
+			* Estimated end : 2023/05/18 13:30
+			* Real end : 2023/05/18 15h05
+			* Notes : This step took longer than expected because we had to link the interface to the progress of the game in the terminal
 		10.1.1 Add events and controllers to switch player mode to "PLACE FENCE" or "MOVE" when a button is clicked,
 			* PROGRESS: TO_DO
 			* Who: Thibault

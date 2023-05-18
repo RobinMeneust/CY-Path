@@ -18,12 +18,16 @@ public class Game {
 
 	public void launch() {
 		int playerId = 0;
-		while(getState() != GameState.FINISHED){
+		int winner = 0;
+		while(true){
+			if(this.getState() == GameState.FINISHED){
+				break;
+			}
 			if(playerId>=this.getNbPlayers()){
 				playerId = 0;
 			}
 			board.displayBoard();
-			board.play(playerId);
+			winner = board.play(playerId);
 			playerId++;
 		}
 		playerId--;
