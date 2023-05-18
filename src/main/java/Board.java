@@ -307,11 +307,30 @@ public class Board {
 		}
 	}
 
-	public boolean existPathFromPlayerToWin() {
-		for(Pawn p : pawns) {
-			if(!this.getGrid().existPath(p.getPosition(),p.getStartingSide().getOpposite())) {
-				return false;
+	public void removeFenceFromData(Fence fence) {
+		this.fences.remove(fence);
+		Point start = fence.getStart();
+		Point end = fence.getEnd();
+
+		if(fence.getOrientation() == Orientation.HORIZONTAL) {
+			for(int i=start.getX(); i<end.getX(); i++) {
+				this.grid.addEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
 			}
+		} else {
+			for(int i=start.getY(); i<end.getY(); i++) {
+				this.grid.addEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
+			}
+		}
+	}
+
+	public boolean existPathFromPlayerToWin() {
+		if(this.pawns != null) {
+			for (Pawn p : pawns) {
+				if (!this.getGrid().existPath(p.getPosition(), p.getStartingSide().getOpposite())) {
+					return false;
+				}
+			}
+			return true;
 		}
 		return true;
 	}
@@ -343,6 +362,7 @@ public class Board {
 			response = "move";
 		} else{
 			do {
+				System.out.println("You have "+this.pawns[pawnId].getAvailableFences()+" fence(s) remaining.");
 				System.out.println("What is your next action ? (M(OVE) or place F(ENCE))");
 				response = scanner.nextLine();
 			}while(!response.toUpperCase().matches("M(OVE)?") && !response.toUpperCase().matches("F(ENCE)?"));
@@ -351,6 +371,9 @@ public class Board {
 		if(response.toUpperCase().matches("M(OVE)?")){
 			this.displayBoard(DisplayType.COORD_CELL);
 
+			if (this.pawns[pawnId].getAvailableFences() == 0) {
+				System.out.println("You have "+this.pawns[pawnId].getAvailableFences()+ "fence remaining.\nYou can only move.");
+			}
 			LinkedList<Point> possibleMoves = listPossibleMoves(this.pawns[pawnId].getPosition());
 			System.out.println("Those are the possible moves you can do:");
 			System.out.println(possibleMoves);
@@ -383,11 +406,19 @@ public class Board {
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-				
-				if(!this.existPathFromPlayerToWin() || !(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))){
-					System.out.println("The fence can't be placed here (Starting point:"+fence.getStart()+").\nTry again.");
-				} else {
-					break;
+
+				this.addFenceToData(fence);
+				System.out.println(this.existPathFromPlayerToWin());
+				if (!this.existPathFromPlayerToWin()) {
+					this.removeFenceFromData(fence);
+					System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+				}else{
+					this.removeFenceFromData(fence);
+					if (!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))) {
+						System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+					} else {
+						break;
+					}
 				}
 			} while(true);
 
@@ -437,10 +468,8 @@ public class Board {
 	}
 
     public boolean isValidFencePosition(Fence fenceToBePlaced) {
-        //System.out.println("fenceToBePlaced:\n"+fenceToBePlaced);
         if (this.fences != null) {
             for (Fence fence : this.fences) {
-                //System.out.println("fence:\n"+fence);
                 // over each other
                 if (fenceToBePlaced.getStart().equals(fence.getStart()) && fenceToBePlaced.getOrientation().equals(fence.getOrientation())) {
                     return false;
