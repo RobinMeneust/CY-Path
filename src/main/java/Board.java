@@ -12,6 +12,7 @@ public class Board {
 	private int nbPlacedFences;
 	private Pawn[] pawns;
 	private int pawnIdTurn;
+	private int fenceLength;
 	
 	public Board(int nbCols, int nbRows, Game game) {
 		this.nbCols = nbCols;
@@ -21,6 +22,7 @@ public class Board {
 		this.game = game;
 		this.fences = null;
 		this.pawnIdTurn = 0;
+		this.fenceLength = 2;
 
 		if(game != null && game.getNbFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbFences());
@@ -34,6 +36,19 @@ public class Board {
 			j++;
 		}
 	}
+
+	
+	public int getFenceLength() {
+		return fenceLength;
+	}
+
+
+	public void setFenceLength(int fenceLength) {
+		if(fenceLength>0 && fenceLength < nbCols && fenceLength < nbRows) {
+			this.fenceLength = fenceLength;
+		}
+	}
+
 
 	public int getSize() {
 		return this.size;
@@ -388,7 +403,7 @@ public class Board {
 		} else if(response.toUpperCase().matches("F(ENCE)?")) {
 			this.displayBoard(DisplayType.COORD_LINE);
 
-			Fence fence = new Fence(2);
+			Fence fence = new Fence(this.getFenceLength());
 
 			do {
 				System.out.println("What is the orientation of your fence ? (H(ORIZONTAL) or V(ERTICAL))");
@@ -401,31 +416,35 @@ public class Board {
 				}
 			}while(true);
 
+			boolean isFenceValid = false;
 			do {
 				System.out.println("Where do you want to put your fence ? (X,Y)");
 				this.choosePosition(scanner, point);
 				fence.setStart(point);
 				fence.setEnd(fence.getStart());
-
-				this.addFenceToData(fence);
-				System.out.println(this.existPathFromPlayerToWin());
-				if (!this.existPathFromPlayerToWin()) {
-					this.removeFenceFromData(fence);
+				isFenceValid = isFencePositionValid(fence);
+				if(!isFenceValid) {
 					System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
-				}else{
-					this.removeFenceFromData(fence);
-					if (!(this.isFenceOnTheBoard(fence)) || !(this.isValidFencePosition(fence))) {
-						System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
-					} else {
-						break;
-					}
 				}
-			} while(true);
+			} while(!isFenceValid);
 
 			this.addFenceToData(fence);
 			this.pawns[pawnId].placeFence();
 		}
 		return winner;
+	}
+
+	public boolean isFencePositionValid(Fence fence) {
+		if(this.isFenceOnTheBoard(fence) && !this.isFenceOverlapping(fence)) {
+			this.addFenceToData(fence);
+			if(this.existPathFromPlayerToWin()) {
+				this.removeFenceFromData(fence);
+				return true;
+			} else {
+				this.removeFenceFromData(fence);
+			}
+		}
+		return false;
 	}
 
 	public boolean isValidOrientation(String orientation) {
@@ -467,27 +486,27 @@ public class Board {
 		return -1;
 	}
 
-    public boolean isValidFencePosition(Fence fenceToBePlaced) {
+    public boolean isFenceOverlapping(Fence fenceToBePlaced) {
         if (this.fences != null) {
             for (Fence fence : this.fences) {
                 // over each other
                 if (fenceToBePlaced.getStart().equals(fence.getStart()) && fenceToBePlaced.getOrientation().equals(fence.getOrientation())) {
-                    return false;
+                    return true;
                 } else {
                     switch (fenceToBePlaced.getOrientation()) {
                         case HORIZONTAL:
                             if (fence.getOrientation() == Orientation.HORIZONTAL && fence.getStart().getY() == fenceToBePlaced.getStart().getY()) {
                                 for (int i = 0; i < fence.getLength(); i++) {
                                     if (fenceToBePlaced.getStart().getX() + i == fence.getStart().getX()) {
-                                        return false;
+                                        return true;
                                     } else if (fenceToBePlaced.getEnd().getX() - 1 - i == fence.getEnd().getX() - 1) {
-                                        return false;
+                                        return true;
                                     }
                                 }
                             } else if (fence.getOrientation() == Orientation.VERTICAL) {
                                 if(fenceToBePlaced.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceToBePlaced.getEnd().getX()){
                                     if(fence.getStart().getY() < fenceToBePlaced.getStart().getY() && fenceToBePlaced.getStart().getY() < fence.getEnd().getY()){
-                                        return false;
+                                        return true;
                                     }
                                 }
                             }
@@ -496,15 +515,15 @@ public class Board {
                             if (fence.getOrientation() == Orientation.VERTICAL && fence.getStart().getX() == fenceToBePlaced.getStart().getX()) {
                                 for (int i = 0; i < fence.getLength(); i++) {
                                     if (fenceToBePlaced.getStart().getY() + i == fence.getStart().getY()) {
-                                        return false;
+                                        return true;
                                     } else if (fenceToBePlaced.getEnd().getY() - 1 - i == fence.getEnd().getY() - 1) {
-                                        return false;
+                                        return true;
                                     }
                                 }
                             } else if (fence.getOrientation() == Orientation.HORIZONTAL) {
                                 if(fence.getStart().getX() < fenceToBePlaced.getStart().getX() && fenceToBePlaced.getStart().getX() < fence.getEnd().getX()){
                                     if(fenceToBePlaced.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceToBePlaced.getEnd().getY()){
-                                        return false;
+                                        return true;
                                     }
                                 }
                             }
@@ -515,6 +534,6 @@ public class Board {
                 }
             }
         }
-        return true;
+        return false;
     }
 }
