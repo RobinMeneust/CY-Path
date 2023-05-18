@@ -303,6 +303,11 @@ public class CYPathFX extends Application {
 
                 rec.setOnMouseClicked(e -> {
                     this.game.getBoard().getPawns(pawnId).setPosition(new Point(GridPane.getColumnIndex(rec) / 2, GridPane.getRowIndex(rec) / 2));
+                    if(this.game.getBoard().getPawnIdTurn() == 0){
+                        this.game.getBoard().setPawnidTurn(1);
+                    } else {
+                        this.game.getBoard().setPawnidTurn(0);
+                    }
                 });
 
                 rec.setOnMouseEntered(e -> rec.setFill(cellColorHover));
