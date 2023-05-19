@@ -62,10 +62,10 @@ In the console mode display:
 `0, 1, 2, or 3` : represent the player (player 1, player 2, ...).
 
 In this representation:
-- the top left corner is at (0,0)
-- the top right corner is at (8,0)
-- the bottom left corner is at (0,8)
-- the bottom right corner is at (8,8)
+- the top left cell is at (0,0)
+- the top right cell is at (8,0)
+- the bottom left cell is at (0,8)
+- the bottom right cell is at (8,8)
 
 The cells coordinates are given on the left side and the top side of the board
 
