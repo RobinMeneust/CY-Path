@@ -23,7 +23,7 @@ import javafx.scene.input.ScrollEvent;
 
 public class CYPathFX extends Application {
     private Button actionButton;
-    private Game game;
+    private GameFX game;
     private GridPane gPane;
     private HBox buttonsHBox;
     private Orientation fenceOrientation;
@@ -33,6 +33,8 @@ public class CYPathFX extends Application {
 
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
+        this.prevHighlightedFencesList = new LinkedList<Line>();
+        this.moveMode = true;
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
         primaryStage.setResizable(false);
@@ -65,8 +67,8 @@ public class CYPathFX extends Application {
             players[i] = new Player("Anonymous player" + i);
         }
 
-        this.game = new Game(nbPlayer,players,20, 9, 9);
-        actionButton.textProperty().bind(CYPathFX.this.game.getBoard().getAction());
+        this.game = new GameFX(nbPlayer,players,20, 9, 9);
+        actionButton.textProperty().bind(CYPathFX.this.game.getAction());
 
         //Create a thread to run in the terminal
         Thread terminalThread = new Thread(() -> runInTerminal());
@@ -272,23 +274,33 @@ public class CYPathFX extends Application {
     class ActionButtonHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event){
-            //If the actual player have fence
-            CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn()); // à régler avec le PAC pour prendre en compte le suivi du jeu
-            
-            if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawns(CYPathFX.this.game.getBoard().getPawnIdTurn()).getAvailableFences() > 0){
-                CYPathFX.this.game.getBoard().setAction("Place fence");
-                CYPathFX.this.setMoveMode(false);
-            }
-            else{
-                CYPathFX.this.showPossibleCells(CYPathFX.this.game.getBoard().getPawnIdTurn());
-                CYPathFX.this.game.getBoard().setAction("Move");
-                CYPathFX.this.setMoveMode(true);
+            //If the current player have fence
+            CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getCurrentPlayerIndex()); // Use PAC model to consider the game tracking
+            try {
+                if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex()).getAvailableFences() > 0){
+                    CYPathFX.this.game.setAction("Place fence");
+                    CYPathFX.this.setMoveMode(false);
+                }
+                else{
+                    CYPathFX.this.showPossibleCells(CYPathFX.this.game.getCurrentPlayerIndex());
+                    CYPathFX.this.game.setAction("Move");
+                    CYPathFX.this.setMoveMode(true);
+                }
+            } catch(IncorrectPawnIndexException e) {
+                System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
+                System.exit(-1);
             }
         }
     }
 
     public void showPossibleCells(int pawnId){
-        LinkedList<Point> possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawns(pawnId).getPosition());
+        LinkedList<Point> possibleMoves = null;
+        try {
+            possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
+        } catch(IncorrectPawnIndexException err) {
+            System.err.println(err);
+            System.exit(-1);
+        }
         Color cellColor = Color.rgb(172, 255, 214);
         Color cellColorHover = Color.rgb(239,255,172);
         for( Point p : possibleMoves){
@@ -299,14 +311,19 @@ public class CYPathFX extends Application {
                 rec.setFill(cellColor);
                 this.previousPossibleCells.add(rec);
 
-                //Point previousPosition = this.game.getBoard().getPawns(pawnId).getPosition();
+                //Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
 
                 rec.setOnMouseClicked(e -> {
-                    this.game.getBoard().getPawns(pawnId).setPosition(new Point(GridPane.getColumnIndex(rec) / 2, GridPane.getRowIndex(rec) / 2));
-                    if(this.game.getBoard().getPawnIdTurn() == 0){
-                        this.game.getBoard().setPawnidTurn(1);
-                    } else {
-                        this.game.getBoard().setPawnidTurn(0);
+                    try {
+                        this.game.getBoard().getPawn(pawnId).setPosition(new Point(GridPane.getColumnIndex(rec) / 2, GridPane.getRowIndex(rec) / 2));
+                        if(CYPathFX.this.game.getCurrentPlayerIndex() == 0){
+                            this.game.setCurrentPlayer(1);
+                        } else {
+                            this.game.setCurrentPlayer(0);
+                        }
+                    } catch(IncorrectPawnIndexException err) {
+                        System.err.println(err);
+                        System.exit(-1);
                     }
                 });
 
@@ -350,14 +367,7 @@ public class CYPathFX extends Application {
         }
     }
 
-    public CYPathFX() {
-        this.prevHighlightedFencesList = new LinkedList<Line>();
-        this.moveMode = true;
-    }
-
     public static void main(String[] args) {
-
         launch(args);
-
     }
 }

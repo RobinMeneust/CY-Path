@@ -94,7 +94,7 @@ For now you can only:
 - Choose your mode by clicking the button: Placing fences or moving your pawn
 - See the possible moves your pawn can do
 - Move the pawn by clicking an available cell, but in this version you have to click twice the button (used to change modes), to update the board, and a player can move twice and there is not pawn displayed
-- See where a fence can be placed on the board by moving your mouse above the cells (green = it can be placed and red = it's not a valid position)
+- See where a fence can be placed on the board by moving your mouse above the cells (green = it can be placed and red = it's not a valid position) to rotate the fence use the mouse wheel on the board
 
 
 ## Documentation
