@@ -15,6 +15,10 @@ Quoridor can be played by either 2 or 4 players.
 * KUSMIDER David
 * MENEUST Robin
 
+## Important
+
+Please note that CYPath.jar needs to be with the lib directory in target whereas CYPathStandalone.jar doesn't
+
 ## Installation
 
 - JavaFX must be installed (JDK)
@@ -43,14 +47,13 @@ or
 
 ## Known Bugs/Issues to be fixed
 
-- In the JavaFX window, the movement of the player is not finished : in this version you have to click twice the button (used to change modes), to update the board, and a player can move twice and there is not pawn displayed
-- Fences can't be placed yet
+- In the JavaFX window, there is no pawn for now and fences can't be placed yet
+- The fence can't be placed here (Starting point:(1,1)) at the first round even though it should be possible
 
 ## How to play
 
 For now this is mainly in console mode.
-The JavaFX application window is opening, but it's just used to show the current progress of this project, it's still not finished.
-As we are currently migrating from console mode to JavaFX, this version is not very ergonomic, since we need both the console and the application window.
+The JavaFX application window can be openend, but it's just used to show the current progress of this project, it's still not finished.
 
 In the console mode display:
 
@@ -66,11 +69,14 @@ In this representation:
 
 The cells coordinates are given on the left side and the top side of the board
 
-To play you must write in the console your answer when question is asked to you. We have the following questions/answers :
+To play you must write in the console your answer when a question is asked to you. We have the following questions/answers :
 
-NOTE: There might be some issues concerning how the user input is taken here (input not displayed, question displayed after the answer, ...), it will be fixed in a future update
-
-- Select the next action you want to do by clicking the button and type 'yes' in the terminal
+- "How many players do you want ? (2 or 4)"
+    - Type either 2 or 4
+- Select the next action you want to do by clicking the button and type 'yes' in the terminal if you are in JavaFX mode
+- "What is your next action ? ('m' (move) or 'f' (place fence))"
+    - "m" : Move your pawn to the position that you will provide just after
+    - "f" : place a fence to the position that you will provide just after along with its orientation
 - "Where do you want to go ?"
     - Here, you can only move to the positions given in the list after "Those are the possible moves you can do"
     - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your pawn
