@@ -223,24 +223,17 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/16 19:00
 			* Real end : 2023/05/17 21:30
 	9.1 Create a window for the application (it might not need to be resizable)
-		* PROGRESS: TO_DO
+		* PROGRESS: DONE
 		* Who: David
 		* Start : 2023/05/16 19:40
 		* Estimated end : 2023/05/16 19:50
-		* Real end :
+		* Real end :2023/05/16 20:00
 	9.2 Create a grid and add it to the window
-		9.2.1 Create images (or take existing forms from JavaFX ?) representing empty cells or players
-			* PROGRESS: TO_DO
-			* Who: David
-			* Start : 2023/05/16 19:55
-			* Estimated end : 2023/05/16 20:10
-			* Real end :
-		9.2.2 Create a GridPane (?) and add images
-			* PROGRESS: TO_DO
-			* Who: David
-			* Start : 2023/05/16 20:10
-			* Estimated end : 2023/05/16 20:30
-			* Real end :
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/18 19:55
+		* Estimated end : 2023/05/18 20:10
+		* Real end : 2023/05/18 20:25
 	9.3 Add fences to the window (thick black borders) without breaking the alignement (the size of the grid must not change)
 		* PROGRESS: DONE
 		* Who: Robin
@@ -297,12 +290,12 @@ The task's priority is sorted in ascending order
 			* Who: Robin
 			* Start : 2023/05/20 13:00
 			* Estimated end : 2023/05/20 16:30
-			* Real end :
+			* Real end : 2023/05/20 16:35
 	10.4 Add a fence counter
-		* PROGRESS: TO_DO
-		* Who: PERSON_4
-		* Start : 2023/05/17 12:00
-		* Estimated end : 2023/05/17 12:10
+		* PROGRESS: IN_PROGRESS
+		* Who: Thibault
+		* Start : 2023/05/20 16:40
+		* Estimated end : 2023/05/17 17:20
 		* Real end :
 	10.5 Add button for the save system
 		10.3.1 Create a load button that opens a FileChoser
@@ -319,13 +312,19 @@ The task's priority is sorted in ascending order
 			* Real end : 2023/05/20 14:00
 
 11. Add a main menu and its buttons
-	11.1 New game button and its event (launch a new game)
+	11.1 Create the menu Scene
+		* PROGRESS: IN_PROGRESS
+		* Who: Robin
+		* Start : 2023/05/20 16:40
+		* Estimated end : 2023/05/20 17:10
+		* Real end :
+	11.2 New game button and its event (launch a new game)
 		* PROGRESS: TO_DO
 		* Who: PERSON_5
 		* Start : 2023/05/17 12:00
 		* Estimated end : 2023/05/17 12:45
 		* Real end :
-	11.2 Load Game button and its event (load and launch a game)
+	11.3 Load Game button and its event (load and launch a game)
 		* PROGRESS: TO_DO
 		* Who: PERSON_5
 		* Start : 2023/05/17 12:45
