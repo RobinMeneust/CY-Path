@@ -309,14 +309,14 @@ The task's priority is sorted in ascending order
 			* PROGRESS: In progress
 			* Who: David
 			* Start : 2023/05/20 13:10
-			* Estimated end : 2023/05/17 14:00
-			* Real end :
+			* Estimated end : 2023/05/20 14:00
+			* Real end :2023/05/20 13:30
 		10.3.2 Create a save button that opens a FileChoser
 			* PROGRESS: In progress
 			* Who: David
-			* Start : 2023/05/20 14:05
+			* Start : 2023/05/20 13:30
 			* Estimated end : 2023/05/20 14:40
-			* Real end :
+			* Real end : 2023/05/20 14:00
 
 11. Add a main menu and its buttons
 	11.1 New game button and its event (launch a new game)

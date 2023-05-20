@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -13,8 +14,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -23,6 +25,8 @@ import javafx.scene.input.ScrollEvent;
 
 public class CYPathFX extends Application {
     private Button actionButton;
+    private Button loadButton;
+    private Button saveButton;
     private GameFX game;
     private GridPane gPane;
     private HBox buttonsHBox;
@@ -41,11 +45,15 @@ public class CYPathFX extends Application {
 
         fenceOrientation = Orientation.HORIZONTAL;
         this.gPane = createBoard();
-        this.buttonsHBox = new HBox();
+        this.buttonsHBox = new HBox(3);
         actionButton = new Button("Move");
         actionButton.setOnAction(new ActionButtonHandler());
+        this.loadButton = new Button("Load");
+        this.saveButton = new Button("Save");
+        loadButton.setOnAction(e -> openFileChooser(primaryStage, "Load"));
+        saveButton.setOnAction(e -> openFileChooser(primaryStage, "Save"));
         BorderPane root = new BorderPane();
-        buttonsHBox.getChildren().add(actionButton);
+        buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton);
 
         root.setCenter(this.gPane);
         root.setTop(buttonsHBox);
@@ -239,6 +247,16 @@ public class CYPathFX extends Application {
         }
     }
 
+
+    /**
+	 * Get a specific node from the GridPane.
+	 * 
+	 * @param gridPane is the main pane.
+	 * @param row the row from the node we want.
+     * @param col the column from the node we want.
+	 * @return The specific node from the GridPane we were looking for.
+	 * 
+	 */
     private Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
@@ -271,6 +289,9 @@ public class CYPathFX extends Application {
         
     }
 
+    /**
+	 * Event that determined the player's choice between "Place a fence" and "Move".
+	 */
     class ActionButtonHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event){
@@ -293,6 +314,12 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+	 * Color all the cells that the player can move to.
+     * Change the cell's color if the player hover.
+	 * 
+	 * @param pawnId Int representing the ID of the Player.
+	 */
     public void showPossibleCells(int pawnId){
         LinkedList<Point> possibleMoves = null;
         try {
@@ -333,6 +360,11 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+	 * Reset previous possible cells to be updated with the game.
+	 * @param pawnId Int represanting the ID of the player.
+	 * 
+	 */
     public void resetPossibleCells(int pawnId){
         Color cellColor = Color.rgb(230, 230, 230);
 
@@ -347,12 +379,39 @@ public class CYPathFX extends Application {
         //System.out.println("Reset des couleurs");
     }
 
+
+    /**
+	 * Reset previous possible cell's event.
+	 */
     public void disableCellEvents() {
         for (Rectangle rec : previousPossibleCells) {
             rec.setOnMouseClicked(null);
             rec.setOnMouseEntered(null);
             rec.setOnMouseExited(null);
         }
+    }
+
+/**
+	 * Open a file chooser to save or load a game.
+	 * @param primaryStage Main stage
+     * @param action "Load" or "Save" to dertermine what the file chooser has to do.
+	 */
+    private void openFileChooser(Stage primaryStage, String action) {
+        FileChooser fileChooser = new FileChooser();
+
+         fileChooser.setTitle("Select Some Files");
+
+         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if (action.equals("Load")) {
+            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
+            fileChooser.showOpenDialog(primaryStage);
+            
+        } else if (action.equals("Save")) {
+            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
+            fileChooser.showSaveDialog(primaryStage);
+        }
+
+        System.out.println("Action: " + action);
     }
     /*//JavaFX
     private void runInJavaFX(){
