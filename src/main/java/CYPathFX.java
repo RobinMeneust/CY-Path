@@ -36,6 +36,7 @@ public class CYPathFX extends Application {
     private Color possibleCellColor;
     private Color cellColorHover;
     private boolean moveMode;
+    private TextField fenceCounter;
 
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
@@ -49,7 +50,7 @@ public class CYPathFX extends Application {
 
         fenceOrientation = Orientation.HORIZONTAL;
         this.gPane = createBoard();
-        this.buttonsHBox = new HBox(3);
+        this.buttonsHBox = new HBox(4);
         actionButton = new Button("Move");
         actionButton.setOnAction(new ActionButtonHandler());
         this.loadButton = new Button("Load");
@@ -57,8 +58,13 @@ public class CYPathFX extends Application {
         loadButton.setOnAction(e -> openFileChooser(primaryStage, "Load"));
         saveButton.setOnAction(e -> openFileChooser(primaryStage, "Save"));
         BorderPane root = new BorderPane();
-        buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton);
+        //fenceCounter
+        this.fenceCounter = new TextField("test");
+        this.fenceCounter.setEditable(false);
+        this.fenceCounter.setPrefColumnCount(2);
 
+        buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton, fenceCounter);
+        
         root.setCenter(this.gPane);
         root.setTop(buttonsHBox);
         Scene scene = new Scene(root);
@@ -420,6 +426,12 @@ public class CYPathFX extends Application {
                     CYPathFX.this.game.setAction("Move");
                     CYPathFX.this.setMoveMode(true);
                 }
+
+                //Update fenceCounter
+                CYPathFX.this.fenceCounter.setEditable(true);
+                CYPathFX.this.fenceCounter.setText(""+CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex()).getAvailableFences());
+                CYPathFX.this.fenceCounter.setEditable(false);
+                
             } catch(IncorrectPawnIndexException e) {
                 System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
                 System.exit(-1);

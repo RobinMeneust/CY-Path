@@ -292,11 +292,11 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/20 16:30
 			* Real end : 2023/05/20 16:35
 	10.4 Add a fence counter
-		* PROGRESS: IN_PROGRESS
-		* Who: Thibault
-		* Start : 2023/05/20 16:40
-		* Estimated end : 2023/05/17 17:20
-		* Real end :
+		* PROGRESS: DONE
+		* Who: Thibaut
+		* Start : 2023/05/20 16h40
+		* Estimated end : 2023/05/20 17h20
+		* Real end : 2023/05/20 17h07
 	10.5 Add button for the save system
 		10.3.1 Create a load button that opens a FileChoser
 			* PROGRESS: In progress
