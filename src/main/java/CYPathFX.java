@@ -180,7 +180,7 @@ public class CYPathFX extends Application {
     public void createGameScene(int nbPlayers) {
         BorderPane rootGameScene = new BorderPane();
         this.gPane = createBoard();
-        buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton);
+        buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton, fenceCounter);
 
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
