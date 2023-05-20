@@ -293,10 +293,10 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/18 21:00
 			* Real end : 2023/05/18 23:20
 		10.1.2 Add an event to place the fence when a border (where a fence can be added) is clicked
-			* PROGRESS: TO_DO
+			* PROGRESS: IN_PROGRESS
 			* Who: Robin
-			* Start : 2023/05/19 11:00
-			* Estimated end : 2023/05/19 14:00
+			* Start : 2023/05/20 13:00
+			* Estimated end : 2023/05/20 16:30
 			* Real end :
 	10.4 Add a fence counter
 		* PROGRESS: TO_DO
