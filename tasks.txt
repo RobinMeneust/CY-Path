@@ -271,8 +271,8 @@ The task's priority is sorted in ascending order
 			* PROGRESS: Done
 			* Who: David
 			* Start : 2023/05/18 15:00
-			* Estimated end : 2023/05/17 15:30
-			* Real end :2023/05/17 16:00
+			* Estimated end : 2023/05/18 15:30
+			* Real end :2023/05/18 16:00
 		10.1.2 Add an event that changes the content of the hovered cell (the color/image will be different whether it's a cell where the player can move or not)
 			* PROGRESS: Done
 			* Who: David
@@ -306,16 +306,16 @@ The task's priority is sorted in ascending order
 		* Real end :
 	10.5 Add button for the save system
 		10.3.1 Create a load button that opens a FileChoser
-			* PROGRESS: TO_DO
-			* Who: PERSON_4
-			* Start : 2023/05/17 12:10
-			* Estimated end : 2023/05/17 12:25
+			* PROGRESS: In progress
+			* Who: David
+			* Start : 2023/05/20 13:10
+			* Estimated end : 2023/05/17 14:00
 			* Real end :
 		10.3.2 Create a save button that opens a FileChoser
-			* PROGRESS: TO_DO
-			* Who: PERSON_4
-			* Start : 12:25
-			* Estimated end : 12:40
+			* PROGRESS: In progress
+			* Who: David
+			* Start : 2023/05/20 14:05
+			* Estimated end : 2023/05/20 14:40
 			* Real end :
 
 11. Add a main menu and its buttons
