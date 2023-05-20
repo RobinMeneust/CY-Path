@@ -320,13 +320,13 @@ The task's priority is sorted in ascending order
 		* Real end : 2023/05/20 17:45
 	11.2 New game button and its event (launch a new game)
 		* PROGRESS: DONE
-		* Who: PERSON_5
+		* Who: Robin
 		* Start : 2023/05/20 17:45
 		* Estimated end : 2023/05/20 18:15
 		* Real end : 2023/05/20 18:30
 	11.3 Load Game button and its event (load and launch a game)
 		* PROGRESS: TO_DO
-		* Who: PERSON_5
+		* Who: Robin
 		* Start : 2023/05/21 12:45
 		* Estimated end :  2023/05/21 13:45
 		* Real end :
