@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This enum represents the different display types for the board coordinates
  */

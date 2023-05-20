@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This enum represents the different states a game can have
  * 

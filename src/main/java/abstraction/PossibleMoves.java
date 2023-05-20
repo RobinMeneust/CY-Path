@@ -1,5 +1,5 @@
-/**
- * Importing java classes needed for the PossibleMoves class
+package abstraction; /**
+ * Importing java classes needed for the abstrac.PossibleMoves class
  * 
  * Importing classes from the java.util package
  */
@@ -14,7 +14,7 @@ import java.util.LinkedList;
 
 public class PossibleMoves {
     /**
-	 * State the Board's class attributes
+	 * State the abstrac.Board's class attributes
 	 */
 
     private Point currentPosition;
@@ -23,8 +23,8 @@ public class PossibleMoves {
     /**
 	 * Create possibles moves from the current position of the pawn of the playern and the list of all possible moves
 	 * 
-	 * @param currentPosition (Point)
-     * @param possibleMovesList (LinkedList<Point>)
+	 * @param currentPosition (abstrac.Point)
+     * @param possibleMovesList (LinkedList<abstrac.Point>)
 	 */
 
     public PossibleMoves(Point currentPosition, LinkedList<Point> possibleMovesList) {
@@ -35,7 +35,7 @@ public class PossibleMoves {
     /**
 	 * Create possibles moves from the current position of the pawn of the playern
 	 * 
-	 * @param currentPosition (Point)
+	 * @param currentPosition (abstrac.Point)
 	 */
 
     public PossibleMoves(Point currentPosition) {
@@ -45,7 +45,7 @@ public class PossibleMoves {
     /**
      * Accessor to recover the current position of a pawn
      * 
-     * @return currentPosition (Point)
+     * @return currentPosition (abstrac.Point)
      */
     public Point getCurrentPosition() {
         return currentPosition;
@@ -54,7 +54,7 @@ public class PossibleMoves {
     /**
      * Accessor to assign the current position of a pawn
      * 
-     * @param currentPosition (Point)
+     * @param currentPosition (abstrac.Point)
      */
 
     public void setCurrentPosition(Point currentPosition) {
@@ -64,7 +64,7 @@ public class PossibleMoves {
     /**
      * Accessor to recover the list of all possible moves of a pawn
      * 
-     * @return possibleMovesList (LinkedList<Point>)
+     * @return possibleMovesList (LinkedList<abstrac.Point>)
      */
 
     public LinkedList<Point> getPossibleMovesList() {
@@ -74,7 +74,7 @@ public class PossibleMoves {
     /**
      * Accessor to assign the list of all possible moves for a pawn
      * 
-     * @param possibleMovesList (LinkedList<Point>)
+     * @param possibleMovesList (LinkedList<abstrac.Point>)
      */
 
     public void setPossibleMovesList(LinkedList<Point> possibleMovesList) {

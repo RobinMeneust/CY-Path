@@ -16,10 +16,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>18</java.version>
-        <javafx.version>20</javafx.version>
-        <javafx.main.class>CYPathFX</javafx.main.class>
-        <main.class>CYPath</main.class>
+        <java.version>11</java.version>
+        <javafx.version>17</javafx.version>
+        <javafx.main.class>presentation.CYPathFX</javafx.main.class>
+        <main.class>presentation.CYPath</main.class>
     </properties>
     
     <dependencies>

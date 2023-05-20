@@ -1,13 +1,16 @@
-/**
- * Importing java classes needed for the CYPath class
+package presentation; /**
+ * Importing java classes needed for the presentation.CYPath class
  * 
  * Importing classes from the java.util package
  */
 
+import abstraction.GameConsole;
+import abstraction.Player;
+
 import java.util.Scanner;
 
 /**
- * Main class of the CYPath project
+ * Main class of the presentation.CYPath project
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */

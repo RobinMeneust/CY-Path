@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This enum represents the different sides of the board
  * 
@@ -6,22 +8,22 @@
 
 public enum Side {
 	/**
-	 * Side where y is at its maximum value
+	 * abstrac.Side where y is at its maximum value
 	 */
 	BOTTOM,
 
 	/**
-	 * Side where y = 0
+	 * abstrac.Side where y = 0
 	 */
 	TOP,
 
 	/**
-	 * Side where x = 0
+	 * abstrac.Side where x = 0
 	 */
 	LEFT,
 
 	/**
-	 * Side where x is at its maximum value
+	 * abstrac.Side where x is at its maximum value
 	 */
 	RIGHT;
 

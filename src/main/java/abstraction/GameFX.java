@@ -1,18 +1,13 @@
-/**
- * Importing java classes needed for the GameFX class
+package abstraction; /**
+ * Importing java classes needed for the abstrac.GameFX class
  * 
  * Importing classes from the java.util package
  */
 
-import java.text.BreakIterator;
-import java.util.List;
-import java.util.Scanner;
-
 /**
- * Importing javafx classes needed for the CYPathFX class
+ * Importing javafx classes needed for the presentation.CYPathFX class
  */
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -27,7 +22,7 @@ public class GameFX extends GameAbstract {
     private boolean isEndTurn;
 
     /**
-	 * Create a GameFX object by giving all of its attributes
+	 * Create a abstrac.GameFX object by giving all of its attributes
      * 
 	 * @param players Array of the players
 	 * @param nbFences Maximum number of fences that can be placed in total
@@ -102,7 +97,7 @@ public class GameFX extends GameAbstract {
                 if("Move".equals(this.getAction().get())){
                     System.out.println("Move in : " + currentPawn.getPosition());
                 } else if("Place fence".equals(this.getAction().get())) {
-                    System.out.println("Fence have been placed");
+                    System.out.println("abstrac.Fence have been placed");
                 }   
                 this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
                 this.getBoard().checkWin();
@@ -112,7 +107,7 @@ public class GameFX extends GameAbstract {
             System.out.println("The winner is "+pawnWinner.getPlayer());
             this.setState(GameState.FINISHED);
         } catch (IncorrectPawnIndexException e) {
-            System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
+            System.err.println("ERROR: abstrac.Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
             System.exit(-1);
         }
     }

@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This enum represents the two orientations a fence can have
  */
