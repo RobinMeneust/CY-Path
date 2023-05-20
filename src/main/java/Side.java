@@ -1,5 +1,31 @@
+/**
+ * This enum represents the different sides of the board
+ * 
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
+
 public enum Side {
-	BOTTOM, TOP, LEFT, RIGHT;
+	/**
+	 * Side where y is at its maximum value
+	 */
+	BOTTOM, 
+	/**
+	 * Side where y = 0
+	 */
+	TOP,
+	/**
+	 * Side where x = 0
+	 */
+	LEFT,
+	/**
+	 * Side where y is at its maximum value
+	 */
+	RIGHT;
+
+	/**
+	 * Get the opposite side on the board
+	 * @return Opposite side
+	 */
 
 	public Side getOpposite() {
 		switch(this) {

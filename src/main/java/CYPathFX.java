@@ -67,7 +67,7 @@ public class CYPathFX extends Application {
             players[i] = new Player("Anonymous player" + i);
         }
 
-        this.game = new GameFX(nbPlayer,players,20, 9, 9);
+        this.game = new GameFX(players,20, 9, 9);
         actionButton.textProperty().bind(CYPathFX.this.game.getAction());
 
         //Create a thread to run in the terminal
@@ -317,9 +317,9 @@ public class CYPathFX extends Application {
                     try {
                         this.game.getBoard().getPawn(pawnId).setPosition(new Point(GridPane.getColumnIndex(rec) / 2, GridPane.getRowIndex(rec) / 2));
                         if(CYPathFX.this.game.getCurrentPlayerIndex() == 0){
-                            this.game.setCurrentPlayer(1);
+                            this.game.setCurrentPlayerIndex(1);
                         } else {
-                            this.game.setCurrentPlayer(0);
+                            this.game.setCurrentPlayerIndex(0);
                         }
                     } catch(IncorrectPawnIndexException err) {
                         System.err.println(err);

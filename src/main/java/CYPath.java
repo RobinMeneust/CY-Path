@@ -1,6 +1,20 @@
 import java.util.Scanner;
 
+/**
+ * Main class of the CYPath project
+ * 
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
+
 public class CYPath {
+    
+    /** 
+     * Main method
+     * Launch the game in console mode or window mode
+     * 
+     * @param args Command line arguments
+     */
+
     public static void main(String[] args) {
         // Initialize game
         System.out.println("Welcome to CY-Path.\n");
@@ -30,7 +44,7 @@ public class CYPath {
                 players[i] = new Player("Anonymous player" + i);
             }
             try {
-                GameConsole game = new GameConsole(nbPlayer,players,20, 9, 9);
+                GameConsole game = new GameConsole(players,20, 9, 9);
                 game.launch();
             } catch (Exception e) {
                 System.err.println(e);

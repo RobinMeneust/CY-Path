@@ -1,12 +1,30 @@
 import java.util.Scanner;
 import java.util.List;
 
-public class GameConsole extends GameAbstract {
+/**
+ * Current game launched in console mode
+ * 
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
 
-    public GameConsole(int nbPlayers, Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
-        super(nbPlayers, players, nbFences, nbRows, nbCols);
+public class GameConsole extends GameAbstract {
+    /**
+	 * Create a GameConsole object by giving all of its attributes
+	 * @param players Array of the players
+	 * @param nbFences Maximum number of fences that can be placed in total
+	 * @param nbRows Number of rows of the board
+	 * @param nbCols Number of columns of the board
+	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 */
+
+    public GameConsole(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
+        super(players, nbFences, nbRows, nbCols);
     }
     
+    /**
+     * Launch the current game in console mode
+     */
+
     public void launch() {
 		// The game is now in progress
 		this.setState(GameState.IN_PROGRESS);
@@ -73,16 +91,15 @@ public class GameConsole extends GameAbstract {
 
                     do {
                         System.out.println("Where do you want to put your fence ? (X,Y)");
-                        point = this.getBoard().choosePosition();
+                        point = Board.choosePosition();
                         fence.setStart(point);
-                        fence.setEnd(fence.getStart());
                         isFenceValid = this.getBoard().placeFence(this.getCurrentPlayerIndex(), fence);
                         if(!isFenceValid) {
                             System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
                         }
                     } while(!isFenceValid);
                 }
-                this.setCurrentPlayer(this.getCurrentPlayerIndex()+1);
+                this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
             }
 
             Player playerWinner = this.getBoard().getPawn(this.getBoard().getWinner()).getPlayer();

@@ -5,18 +5,33 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Current game launched in window mode with JavaFX
+ * 
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
+
 public class GameFX extends GameAbstract {
     private StringProperty action;
 
-    public GameFX(int nbPlayers, Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
-        super(nbPlayers, players, nbFences, nbRows, nbCols);
+    /**
+	 * Create a GameFX object by giving all of its attributes
+	 * @param players Array of the players
+	 * @param nbFences Maximum number of fences that can be placed in total
+	 * @param nbRows Number of rows of the board
+	 * @param nbCols Number of columns of the board
+	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 */
+
+    public GameFX(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
+        super(players, nbFences, nbRows, nbCols);
         this.action = new SimpleStringProperty("Move");
     }
 
     /**
 	 * Get a string that corresponds to a type of action to perform
 	 *
-	 * @return (StringProperty) action : a string property
+	 * @return Action : a string property
 	 */
 
     public StringProperty getAction() {
@@ -26,12 +41,16 @@ public class GameFX extends GameAbstract {
     /**
 	 * Set a type of action to perform
 	 * 
-	 * @param a (StringProperty) : string that corresponds to a type of action
+	 * @param a String that corresponds to a type of action (move,...)
 	 */
 
 	public void setAction(String a){
 		this.action.set(a);
 	}
+
+    /**
+     * Launch the current game for window mode
+     */
 
     public void launch() {
 		// The game is now in progress
@@ -105,14 +124,13 @@ public class GameFX extends GameAbstract {
                         System.out.println("Where do you want to put your fence ? (X,Y)");
                         point = Board.choosePosition();
                         fence.setStart(point);
-                        fence.setEnd(fence.getStart());
                         isFenceValid = this.getBoard().placeFence(this.getCurrentPlayerIndex(), fence);
                         if(!isFenceValid) {
                             System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
                         }
                     } while(!isFenceValid);
                 }   
-                this.setCurrentPlayer(this.getCurrentPlayerIndex()+1);
+                this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
             }
         
             Pawn pawnWinner = this.getBoard().getPawn(this.getBoard().getWinner());

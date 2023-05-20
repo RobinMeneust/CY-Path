@@ -690,7 +690,7 @@ public class Board {
 	 */
 
 	public boolean isValidOrientation(String orientation) {
-		if (orientation.toUpperCase().matches("H(ORIZONTALE)?")){
+		if (orientation.toUpperCase().matches("H(ORIZONTAL)?")){
 			return true;
 		}else if(orientation.toUpperCase().matches("V(ERTICAL)?")){
 			return true;
