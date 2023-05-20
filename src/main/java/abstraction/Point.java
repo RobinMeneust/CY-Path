@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This class corresponds to all elements that are related to a point in a CY-PATH game.
  * 
@@ -7,7 +9,7 @@
 public class Point {
 
     /**
-     * State the Point's class attributes
+     * State the abstrac.Point's class attributes
      */
 
     private int x;
@@ -36,7 +38,7 @@ public class Point {
     /**
      * Create a point by taking another point as an argument
      * 
-     * @param p (Point)
+     * @param p (abstrac.Point)
      */
 
     public Point(Point p) {
@@ -88,8 +90,8 @@ public class Point {
     /**
      * Accessor to recover the distance between two points
      * 
-     * @param p1 (Point) : First point coordinates
-     * @param p2 (Point) : Second point coordinates
+     * @param p1 (abstrac.Point) : First point coordinates
+     * @param p2 (abstrac.Point) : Second point coordinates
      * @return (int) : Distance between two points
      */
 

@@ -1,12 +1,14 @@
+package abstraction;
+
 /**
- * Fence placed on the board of the Quoridor's game
+ * abstrac.Fence placed on the board of the Quoridor's game
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
 public class Fence {
 	/**
-	 * State the Fence's class attributes
+	 * State the abstrac.Fence's class attributes
 	 */
 	
 	private int length;
@@ -15,10 +17,10 @@ public class Fence {
 	private Point end;
 	
 	/**
-	 * Create a Fence by giving all of its attributes
+	 * Create a abstrac.Fence by giving all of its attributes
 	 * 
 	 * @param length Length of the fence
-	 * @param orientation  Orientation of the fence
+	 * @param orientation  abstrac.Orientation of the fence
 	 * @param start Starting point of the fence
 	 * @param end Ending point of the fence
 	 */
@@ -31,11 +33,11 @@ public class Fence {
 	}
 
 	/**
-	 * Create a Fence by giving a length, an orientation and its starting point
+	 * Create a abstrac.Fence by giving a length, an orientation and its starting point
 	 * The ending point is deduced here.
 	 * 
 	 * @param length Length of the fence
-	 * @param orientation  Orientation of the fence
+	 * @param orientation  abstrac.Orientation of the fence
 	 * @param start Starting point of the fence
 	 */
 
@@ -49,7 +51,7 @@ public class Fence {
 	}
 
 	/**
-	 * Create a Fence by giving only its length
+	 * Create a abstrac.Fence by giving only its length
 	 * It's the default constructor here
 	 * 
 	 * @param length Length of the fence
@@ -74,7 +76,7 @@ public class Fence {
 	/** 
 	 * Get the orientation of the fence
 	 * 
-	 * @return Orientation of the fence
+	 * @return abstrac.Orientation of the fence
 	 */
 
 	public Orientation getOrientation() {
@@ -140,7 +142,7 @@ public class Fence {
 	}
 	
 	/** 
-	 * Set the orientation of the fence by converting the given String to an Orientation object
+	 * Set the orientation of the fence by converting the given String to an abstrac.Orientation object
 	 * 
 	 * @param orientation New orientation of the fence
 	 */
@@ -155,19 +157,19 @@ public class Fence {
 
 	
 	/** 
-	 * Returns a String representing the Fence in the following format:
+	 * Returns a String representing the abstrac.Fence in the following format:
 	 * {
 	 * lenght: LENGTH
-	 * Orientation: ORIENTATION
+	 * abstrac.Orientation: ORIENTATION
 	 * start: START
 	 * end: END
 	 * }
 	 * 
-	 * @return String representing the Fence.
+	 * @return String representing the abstrac.Fence.
 	 */
 
 	@Override
 	public String toString(){
-		return("{\nlenght:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
+		return("{\nlenght:"+this.length+",\n"+"abstrac.Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
 	}
 }

@@ -1,8 +1,9 @@
-/**
- * Importing java classes needed for the GameConsole class
+package abstraction; /**
+ * Importing java classes needed for the abstrac.GameConsole class
  * 
  * Importing classes from the java.util package
  */
+
 import java.util.Scanner;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 public class GameConsole extends GameAbstract {
     /**
-	 * Create a GameConsole object by giving all of its attributes
+	 * Create a abstrac.GameConsole object by giving all of its attributes
 	 * @param players Array of the players
 	 * @param nbFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board
@@ -111,7 +112,7 @@ public class GameConsole extends GameAbstract {
             System.out.println("The winner is "+playerWinner);
             this.setState(GameState.FINISHED);
         } catch (IncorrectPawnIndexException e) {
-            System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
+            System.err.println("ERROR: abstrac.Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
             System.exit(-1);
         }
 	}

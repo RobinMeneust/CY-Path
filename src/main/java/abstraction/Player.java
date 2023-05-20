@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This class corresponds to all elements that are related to a player in a CY-PATH game.
  * 
@@ -6,7 +8,7 @@
 
 public class Player {
     /**
-     * State the Player's class attributes
+     * State the abstrac.Player's class attributes
      */
 
 	private String username;

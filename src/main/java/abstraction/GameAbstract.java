@@ -1,4 +1,4 @@
-/**
+package abstraction; /**
  * Abstract class representing the current game with its parameters and rules
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
@@ -16,7 +16,7 @@ public abstract class GameAbstract {
 	private int currentPlayerIndex;
 
 	/**
-	 * Create a GameAbstract object by giving all of its attributes
+	 * Create a abstrac.GameAbstract object by giving all of its attributes
 	 * 
 	 * @param players Array of the players
 	 * @param nbFences Maximum number of fences that can be placed in total
@@ -25,7 +25,7 @@ public abstract class GameAbstract {
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
 	 */
 
-	public GameAbstract(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException{
+	public GameAbstract(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
 		this.state = GameState.READY;
 		if(players == null || (players.length != 2 && players.length != 4)){
 			throw new InvalidNumberOfPlayersException();
@@ -98,7 +98,7 @@ public abstract class GameAbstract {
 	 * Get a player from its index
 	 * 
 	 * @param index Index of the player
-	 * @return Player corresponding to the given index
+	 * @return abstrac.Player corresponding to the given index
 	 */
 
 	public Player getPlayer(int index){
@@ -118,7 +118,7 @@ public abstract class GameAbstract {
 	/**
 	 * Get the board on which the current game is played
 	 * 
-	 * @return Board used for this game
+	 * @return abstrac.Board used for this game
 	 */
 	
 	public Board getBoard() {

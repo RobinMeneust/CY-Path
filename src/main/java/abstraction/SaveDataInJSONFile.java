@@ -1,29 +1,19 @@
-
+package abstraction;
 /**
- * Importing java classes needed for the SaveDataInJSONFile class
+ * Importing java classes needed for the abstrac.SaveDataInJSONFile class
  * 
  * Importing classes from the java.util package
  */
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
-/**
- * Importing classes from the java.io package
- */
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-/**
- * Importing classes from the java.nio package
- */
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-/**
- * Importing classes from the arg.json package
- */
-import org.json.JSONObject;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault,
@@ -51,7 +41,7 @@ public class SaveDataInJSONFile {
      * 
      * @param rows         (int) number of columns of the game board
      * @param columns      (int) number of rows of the game board
-     * @param listFences   (Fence) list of fences placed on the board
+     * @param listFences   (abstrac.Fence) list of fences placed on the board
      * @param placedFences (int) number of fences placed on the board
      * @param listPawns    (int) list of pawns of all players of the CY-PATH party
      */

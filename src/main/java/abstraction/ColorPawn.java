@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * This enum represents the pawn possible colors.
  */

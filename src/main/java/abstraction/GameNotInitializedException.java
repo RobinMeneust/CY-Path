@@ -1,3 +1,5 @@
+package abstraction;
+
 /**
  * Exception used to describe the case where the initialization of the javafx scene game is incorrect
  */

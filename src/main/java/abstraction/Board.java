@@ -1,5 +1,5 @@
-/**
- * Importing java classes needed for the Board class
+package abstraction; /**
+ * Importing java classes needed for the abstrac.Board class
  * 
  * Importing classes from the java.util package
  */
@@ -17,7 +17,7 @@ import java.util.Scanner;
 
 public class Board {
 	/**
-	 * State the Board's class attributes
+	 * State the abstrac.Board's class attributes
 	 */
 	
 	private int nbCols;
@@ -39,7 +39,7 @@ public class Board {
 	 * 
 	 * @param nbCols Number of columns of the game board
 	 * @param nbRows Number of rows of the game board
-	 * @param game Object extending GameAbstract, that contains the components of the current game (list of players, rules...)
+	 * @param game Object extending abstrac.GameAbstract, that contains the components of the current game (list of players, rules...)
 	 */
 
 	public Board(int nbCols, int nbRows, GameAbstract game) {
@@ -83,7 +83,7 @@ public class Board {
 	 * Check if the last checked position was where the pawn of the given index is. If it's not, then we get the list of possible moves the player can make from this position
 	 * 
 	 * @param pawnId Id of a pawn of the board
-	 * @return A PossibleMoves object corresponding to the given pawn. It contains its position and the possible moves it can do
+	 * @return A abstrac.PossibleMoves object corresponding to the given pawn. It contains its position and the possible moves it can do
 	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
 	 */
 
@@ -106,7 +106,7 @@ public class Board {
 	}
 
 	/**
-	 * Clear the instance attribute PossibleMoves (object), by setting its attributes to null.
+	 * Clear the instance attribute abstrac.PossibleMoves (object), by setting its attributes to null.
 	 */
 
 	public void clearPossibleMoves() {
@@ -129,7 +129,7 @@ public class Board {
 	/** 
 	 * Get the lastCheckedFence attribute
 	 * 
-	 * @return Fence whose validity was checked the last
+	 * @return abstrac.Fence whose validity was checked the last
 	 */
 
 	private Fence getLastCheckedFence() {
@@ -146,7 +146,7 @@ public class Board {
 
 	
 	/** 
-	 * Get the value of lastCheckedFenceValid. Its value is true is the Fence in lastCheckedFence is valid
+	 * Get the value of lastCheckedFenceValid. Its value is true is the abstrac.Fence in lastCheckedFence is valid
 	 * 
 	 * @return Boolean value of lastCheckedFenceValid
 	 */
@@ -207,9 +207,9 @@ public class Board {
 	}
 
 	/**
-	 * Get the Game element that is using this instance of Board. It contains information about the current game
+	 * Get the Game element that is using this instance of abstrac.Board. It contains information about the current game
 	 * 
-	 * @return Object extending GameAbstract, that contains elements about the current game
+	 * @return Object extending abstrac.GameAbstract, that contains elements about the current game
 	 */
 
 	public GameAbstract getGame() {
@@ -246,7 +246,7 @@ public class Board {
 	/** 
 	 * Get the possibleMoves instance attribute
 	 * 
-	 * @return PossibleMoves object correspoonding to the last checked pawn position
+	 * @return abstrac.PossibleMoves object correspoonding to the last checked pawn position
 	 */
 
 	public PossibleMoves getPossibleMoves() {
@@ -254,9 +254,9 @@ public class Board {
 	}
 
 	/**
-	 * Ask for a Point from the user, and return it.
+	 * Ask for a abstrac.Point from the user, and return it.
 	 * 
-	 * @return Point chosen by the user
+	 * @return abstrac.Point chosen by the user
 	 */
 
 	public static Point choosePosition(){
@@ -288,7 +288,7 @@ public class Board {
 	 * Check if the given fence is on the board
 	 * A fence that is on the board borders is considered out of the board
 	 * 
-	 * @param fence Fence that is checked
+	 * @param fence abstrac.Fence that is checked
 	 * @return Boolean value equals to true if the fence is in the game board, and false otherwise
 	 */
 
@@ -301,9 +301,9 @@ public class Board {
     }
 
 	/**
-	 * Check if the given Point is on the board
+	 * Check if the given abstrac.Point is on the board
 	 * 
-	 * @param point Point containing the coordinates of a cell
+	 * @param point abstrac.Point containing the coordinates of a cell
 	 * @return Boolean value equals to true if the game board contains this cell and false otherwise
 	 */
 
@@ -447,7 +447,7 @@ public class Board {
 	 * Get a pawn at the given coordinates on the board, if there is one
 	 * 
 	 * @param pos Coordinates of a cell
-	 * @return Pawn in the given cell. It returns 0 if there is no pawn at the given position
+	 * @return abstrac.Pawn in the given cell. It returns 0 if there is no pawn at the given position
 	 */
 
 	public Pawn getPawnAtPos(Point pos) {
@@ -552,7 +552,7 @@ public class Board {
 	/**
 	 * Add a fence to the board
 	 * 
-	 * @param fence Fence added
+	 * @param fence abstrac.Fence added
 	 */
 
 	public void addFenceToData(Fence fence) {
@@ -574,7 +574,7 @@ public class Board {
 	/**
 	 * Remove a fence from the current game
 	 * 
-	 * @param fence Fence removed
+	 * @param fence abstrac.Fence removed
 	 */
 
 	public void removeFenceFromData(Fence fence) {
@@ -594,7 +594,7 @@ public class Board {
 	}
 
 	/**
-	 * Check for all pawns if there is a path between its position and the Side that makes it wins (opposite side of its starting side)
+	 * Check for all pawns if there is a path between its position and the abstrac.Side that makes it wins (opposite side of its starting side)
 	 * 
 	 * @return Boolean value equals to true if there is such a path and false if there isn't
 	 */
@@ -615,7 +615,7 @@ public class Board {
 	/** 
 	 * Move the given pawn to the given position if it can be moved there
 	 * 
-	 * @param pawnId Pawn id of the pawn moved
+	 * @param pawnId abstrac.Pawn id of the pawn moved
 	 * @param newPawnPos New position of the pawn
 	 * @return Boolean value equals to true if the pawn can be moved there and false if it can't
 	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
@@ -646,8 +646,8 @@ public class Board {
 	/** 
 	 * Place a fence at the given position for the given pawn if it can be placed
 	 * 
-	 * @param pawnId Pawn id of the pawn that places a fence
-	 * @param fence Fence placed
+	 * @param pawnId abstrac.Pawn id of the pawn that places a fence
+	 * @param fence abstrac.Fence placed
 	 * @return Boolean value equals to true if the fence can be placed there and false if it can't
 	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
 	 */
@@ -680,9 +680,9 @@ public class Board {
 
 	
 	/** 
-	 * Check if the given Fence can be placed
+	 * Check if the given abstrac.Fence can be placed
 	 * 
-	 * @param fence Fence to be checked
+	 * @param fence abstrac.Fence to be checked
 	 * @return Boolean value equals to true if the fence can be placed there and false if it can't
 	 */
 
@@ -719,7 +719,7 @@ public class Board {
 	/** 
 	 * Set the winner to the given pawnId
 	 * 
-	 * @param pawnId Pawn that won
+	 * @param pawnId abstrac.Pawn that won
 	 */
 
 	public void setWinner(int pawnId) {

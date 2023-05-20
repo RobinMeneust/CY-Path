@@ -1,14 +1,19 @@
-/**
- * Importing java classes needed for the CYPathFX class
+package presentation; /**
+ * Importing java classes needed for the presentation.CYPathFX class
  */
 
 import java.io.File;
 import java.util.LinkedList;
 
 /**
- * Importing javafx classes needed for the CYPathFX class
+ * Importing javafx classes needed for the presentation.CYPathFX class
  */
 
+import abstraction.*;
+import control.ActionButtonControl;
+import control.ClickAddBorderControl;
+import control.FenceOrientationControl;
+import control.HoverBorderControl;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -24,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -39,16 +45,16 @@ public class CYPathFX extends Application {
      */
     
     private Button actionButton;
-    private GameFX game;
-    private GridPane gPane;
+    public GameFX game;
+    public GridPane gPane;
     private HBox buttonsHBox;
     private Orientation fenceOrientation;
-    private LinkedList<Line> prevHighlightedFencesList;
-    private LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
-    private Color possibleCellColor;
-    private Color cellColorHover;
+    public LinkedList<Line> prevHighlightedFencesList;
+    public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
+    public Color possibleCellColor;
+    public Color cellColorHover;
     private boolean moveMode;
-    private TextField fenceCounter;
+    public Text fenceCounter;
 
     private Thread terminalThread;
     
@@ -67,17 +73,12 @@ public class CYPathFX extends Application {
         this.gPane = null;
         this.buttonsHBox = new HBox(3);
         this.actionButton = new Button("Move");
-        this.actionButton.setOnAction(new ActionButtonHandler());
-        
         this.mainMenuScene = null;
         this.newGameMenuScene = null;
         this.gameScene = null;
         this.primaryStage = primaryStage;
         this.terminalThread = null;
-        this.fenceCounter = new TextField("test");
-        this.fenceCounter.setEditable(false);
-        this.fenceCounter.setPrefColumnCount(2);
-
+        this.fenceCounter = new Text("0");
 
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
@@ -202,6 +203,7 @@ public class CYPathFX extends Application {
         }
         try {
             this.game = new GameFX(players,20, 9, 9);
+            this.actionButton.setOnAction(new ActionButtonControl(this, this.actionButton, this.game));
         } catch (InvalidNumberOfPlayersException e) {
             System.err.println(e);
             System.exit(-1);
@@ -222,6 +224,8 @@ public class CYPathFX extends Application {
         }
         this.terminalThread = new Thread(() -> {
             CYPathFX.this.game.launch();
+            Platform.exit();
+            System.exit(0);
         });
         this.terminalThread.setDaemon(true);
         this.terminalThread.start();
@@ -265,7 +269,7 @@ public class CYPathFX extends Application {
         Color borderColor = Color.LIGHTGRAY;
         Color cellColor = Color.rgb(230, 230, 230);
     
-        gPane.setOnScroll(new ChangeFenceOrientation());
+        gPane.setOnMouseClicked(new FenceOrientationControl(this));
     
         // First horizontal border (top)
         for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
@@ -286,28 +290,32 @@ public class CYPathFX extends Application {
                 // Cells
                 cell = new Rectangle(cellSize, cellSize);
                 cell.setFill(cellColor);
-                cellStackPane.setOnMouseEntered(new HoverBorder());
-                cellStackPane.setOnMouseExited(new HoverBorder());
-                cellStackPane.setOnMouseClicked(new ClickAddBorder());
+                cellStackPane.setOnMouseEntered(new HoverBorderControl(this));
+                cellStackPane.setOnMouseExited(new HoverBorderControl(this));
+                cellStackPane.setOnMouseClicked(new ClickAddBorderControl(this, this.game, this.actionButton));
                 cellStackPane.getChildren().add(cell);
                 //System.out.println("column = " + j +" ligne = " + i);                
 
                 // Add player circles to the middle of each side
                 try{
-                    // commentaire
+                    // TOP
                     if(j == sizeBoardColumns && (i == sizeBoardRows * 2 - 1)) {
                         Circle player1Circle = createPlayerCircle(this.game.getBoard().getPawn(0).getColor()); 
                         System.out.println("couleur joueur "+ this.game.getBoard().getPawn(0) +" = " + this.game.getBoard().getPawn(0).getColor());
                         cellStackPane.getChildren().add(player1Circle);
+
+                        // BOTTOM
                     } else if (j == sizeBoardColumns && (i == 1 )) {
                         Circle player2Circle = createPlayerCircle(this.game.getBoard().getPawn(1).getColor());
                         System.out.println("couleur joueur " + this.game.getBoard().getPawn(1) + " = " + this.game.getBoard().getPawn(1).getColor());
                         cellStackPane.getChildren().add(player2Circle);
                     }
-    
+
+                    // LEFT
                     if(this.game.getNbPlayers() == 4 && j == 1 && (i == sizeBoardRows)) {
                         Circle player3Circle = createPlayerCircle(this.game.getBoard().getPawn(2).getColor());
                         cellStackPane.getChildren().add(player3Circle);
+                        // RIGHT
                     } else if(this.game.getNbPlayers() == 4 && (j == sizeBoardColumns * 2 - 1) && (i == sizeBoardRows)){
                         Circle player4Circle = createPlayerCircle(this.game.getBoard().getPawn(3).getColor());
                         cellStackPane.getChildren().add(player4Circle);
@@ -388,203 +396,6 @@ public class CYPathFX extends Application {
         }
     }
 
-    class ClickAddBorder implements EventHandler<MouseEvent> {
-        @Override
-        public void handle(MouseEvent event) {
-            Object o = event.getSource();
-            if (o instanceof StackPane) {
-                StackPane stackPane = (StackPane) o;
-                if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Rectangle) {
-                    Rectangle sourceCell = (Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-                    if(!CYPathFX.this.isMoveMode() && CYPathFX.this.prevHighlightedFencesList != null){
-                        //Update data   
-                        Fence fence = null;
-                        Point pStartCell = new Point(0,0);
-                        Point pStartFenceCoord = new Point(0,0);
-    
-                        // Convert from grid coordinates to fence coordinates
-                        pStartCell.setX(GridPane.getColumnIndex(stackPane));
-                        pStartCell.setY(GridPane.getRowIndex(stackPane));
-    
-                        pStartFenceCoord.setX((pStartCell.getX()-1)/2);
-                        pStartFenceCoord.setY((pStartCell.getY()-1)/2);
-    
-    
-                        fence = new Fence(CYPathFX.this.game.getBoard().getFenceLength(), CYPathFX.this.getFenceOrientation(), pStartFenceCoord);
-    
-                        try{
-                            if(CYPathFX.this.game.getBoard().placeFence(CYPathFX.this.game.getCurrentPlayerIndex(), fence)) {
-                                // Add fence to the gridPane
-                                for(Line l : CYPathFX.this.prevHighlightedFencesList) {
-                                    l.setStroke(Color.BLACK);
-                                    l.toFront();
-                                    // Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved
-                                }
-                                CYPathFX.this.prevHighlightedFencesList.clear();
-                                
-    
-    
-                                CYPathFX.this.game.setIsEndTurn(true);
-    
-                                //We wait the begining of the next turn
-                                while (CYPathFX.this.game.getIsEndTurn()) {
-                                    try {
-                                        Thread.sleep(100); //Wait 100 milliseconds before checking again
-                                    } catch (InterruptedException ev) {
-                                        ev.printStackTrace();
-                                    }
-                                }
-                                //update button
-                                actionButton.fire();
-                            } else {
-                                System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
-                            }
-                        } catch (IncorrectPawnIndexException e) {
-                            System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
-                            System.exit(-1);
-                        }
-                    } else if(CYPathFX.this.isMoveMode() && CYPathFX.this.previousPossibleCells != null && CYPathFX.this.previousPossibleCells.contains(sourceCell)) {
-                        try {
-                            Pawn pawn = CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex());
-    
-                            removeCircleFromCell(CYPathFX.this.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
-    
-                            StackPane parentStackPane = (StackPane) sourceCell.getParent(); // Récupérer le StackPane parent
-                            int columnIndex = GridPane.getColumnIndex(parentStackPane); // Obtenir l'indice de colonne du StackPane
-                            int rowIndex = GridPane.getRowIndex(parentStackPane); // Obtenir l'indice de ligne du StackPane
-                            pawn.setPosition(new Point(columnIndex / 2, rowIndex / 2));
-                            
-                            addCircleToCell(CYPathFX.this.gPane, rowIndex, columnIndex, pawn.getColor());
-                            //the information is transmitted to the terminal
-                            CYPathFX.this.game.setIsEndTurn(true);
-                            //We wait the begining of the next turn
-                            while (CYPathFX.this.game.getIsEndTurn()) {
-                                try {
-                                    Thread.sleep(100); //Wait 100 milliseconds before checking again
-                                } catch (InterruptedException ev) {
-                                    ev.printStackTrace();
-                                }
-                            }
-                            //update button
-                            actionButton.fire();
-                            if(actionButton.getText() != "Move"){
-                                actionButton.fire();
-                            }
-    
-                        } catch(IncorrectPawnIndexException err) {
-                            System.err.println(err);
-                            System.exit(-1);
-                        }
-                    
-                    }
-                }
-            }
-        }
-    }
-
-    class HoverBorder implements EventHandler<MouseEvent> {
-        @Override
-        public void handle(MouseEvent event){
-            Object o = event.getSource();
-            if (o instanceof StackPane) {
-                StackPane stackPane = (StackPane) o;
-                if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Rectangle) {
-                    Rectangle sourceCell = (Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-                    if(!CYPathFX.this.isMoveMode()) {
-                        if(event.getEventType() == MouseEvent.MOUSE_ENTERED) {
-                            Point pStartCell = new Point(0,0);
-                            Point pStartFenceCoord = new Point(0,0);
-
-                            // Convert from grid coordinates to fence coordinates
-                            pStartCell.setX(GridPane.getColumnIndex(stackPane));
-                            pStartCell.setY(GridPane.getRowIndex(stackPane));
-
-                            pStartFenceCoord.setX((pStartCell.getX()-1)/2);
-                            pStartFenceCoord.setY((pStartCell.getY()-1)/2);
-
-
-                            if(CYPathFX.this.getFenceOrientation() == Orientation.HORIZONTAL) {
-                                Fence fence = new Fence(CYPathFX.this.game.getBoard().getFenceLength(), Orientation.HORIZONTAL, pStartFenceCoord);
-                                if(CYPathFX.this.game.getBoard().isFencePositionValid(fence)) {
-                                    // we take the row above the cell
-                                    int y = pStartCell.getY() - 1; 
-                                    for(int i=pStartCell.getX(); i<pStartCell.getX()+2*fence.getLength(); i+=2) {
-                                        Node n = getNodeFromGridPane(CYPathFX.this.gPane, y,i);
-                                        if(n instanceof Line) {
-                                            Line l = (Line) n;
-                                            if(l.getStroke() != Color.BLACK){
-                                                // If it's not already a border
-                                                l.setStroke(Color.DARKGREEN);
-                                                l.toFront();
-                                                CYPathFX.this.prevHighlightedFencesList.add(l);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    Node n = getNodeFromGridPane(CYPathFX.this.gPane, GridPane.getRowIndex(stackPane)-1, GridPane.getColumnIndex(stackPane)); // get the upper border of the cell
-                                    if(n instanceof Line) {
-                                        Line l = (Line) n;
-                                        if(l.getStroke() != Color.BLACK){
-                                            // If it's not already a border
-                                            l.setStroke(Color.DARKRED);
-                                            l.toFront();
-                                            CYPathFX.this.prevHighlightedFencesList.add(l);
-                                        }
-                                    }
-                                }
-                            } else if(CYPathFX.this.getFenceOrientation() == Orientation.VERTICAL) {
-                                Fence fence = new Fence(CYPathFX.this.game.getBoard().getFenceLength(), Orientation.VERTICAL, pStartFenceCoord);
-                                if(CYPathFX.this.game.getBoard().isFencePositionValid(fence)) {
-                                    int x = pStartCell.getX() - 1;
-                                    for(int i=pStartCell.getY(); i<pStartCell.getY()+2*fence.getLength(); i+=2) {
-                                        Node n = getNodeFromGridPane(CYPathFX.this.gPane, i, x);
-                                        if(n instanceof Line) {
-                                            Line l = (Line) n;
-                                            if(l.getStroke() != Color.BLACK){
-                                                // If it's not already a border
-                                                l.setStroke(Color.DARKGREEN);
-                                                l.toFront();
-                                                CYPathFX.this.prevHighlightedFencesList.add(l);
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    Node n = getNodeFromGridPane(CYPathFX.this.gPane, GridPane.getRowIndex(stackPane), GridPane.getColumnIndex(stackPane)-1); // get the left border of the cell
-                                    if(n instanceof Line) {
-                                        Line l = (Line) n;
-                                        if(l.getStroke() != Color.BLACK){
-                                            // If it's not already a border
-                                            l.setStroke(Color.DARKRED);
-                                            l.toFront();
-                                            CYPathFX.this.prevHighlightedFencesList.add(l);
-                                        }
-                                    }
-                                }
-                            }
-                        } else if (event.getEventType() == MouseEvent.MOUSE_EXITED){
-                            if(CYPathFX.this.prevHighlightedFencesList != null){
-                                for(Line l : CYPathFX.this.prevHighlightedFencesList) {
-                                    if(l.getStroke() != Color.BLACK){
-                                        // If it's not already a border
-                                        l.setStroke(Color.LIGHTGRAY);
-                                        l.toBack();
-                                    }
-                                }
-                                CYPathFX.this.prevHighlightedFencesList.clear();
-                            }
-                        }
-                    } else if(CYPathFX.this.previousPossibleCells != null && CYPathFX.this.previousPossibleCells.contains(sourceCell)) {
-                        if(event.getEventType() == MouseEvent.MOUSE_ENTERED) {
-                            sourceCell.setFill(cellColorHover);
-                        } else if(event.getEventType() == MouseEvent.MOUSE_EXITED) {
-                            sourceCell.setFill(possibleCellColor);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
     /**
 	 * Get a specific node from the GridPane.
@@ -595,7 +406,7 @@ public class CYPathFX extends Application {
 	 * @return The specific node from the GridPane we were looking for.
 	 */
 
-    private Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
+    public Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
         
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
@@ -623,57 +434,12 @@ public class CYPathFX extends Application {
         this.fenceOrientation = fenceOrientation;
     }
 
-    class ChangeFenceOrientation implements EventHandler<ScrollEvent> {
-        @Override
-        public void handle(ScrollEvent event) {
-            if(!CYPathFX.this.isMoveMode()){
-                if(CYPathFX.this.getFenceOrientation() == Orientation.HORIZONTAL) {
-                    CYPathFX.this.setFenceOrientation(Orientation.VERTICAL);
-                } else {
-                    CYPathFX.this.setFenceOrientation(Orientation.HORIZONTAL);
-                }
-            }
-        }
-        
-    }
-
-    /**
-	 * Event that determined the player's choice between "Place a fence" and "Move".
-	 */
-
-    class ActionButtonHandler implements EventHandler<ActionEvent> {
-        @Override
-        public void handle(ActionEvent event){
-            //If the current player have fence
-            CYPathFX.this.resetPossibleCells(CYPathFX.this.game.getCurrentPlayerIndex()); // Use PAC model to consider the game tracking
-            try {
-                if(actionButton.getText() == "Move" && CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex()).getAvailableFences() > 0){
-                    CYPathFX.this.game.setAction("Place fence");
-                    CYPathFX.this.setMoveMode(false);
-                }
-                else{
-                    CYPathFX.this.showPossibleCells(CYPathFX.this.game.getCurrentPlayerIndex());
-                    CYPathFX.this.game.setAction("Move");
-                    CYPathFX.this.setMoveMode(true);
-                }
-
-                //Update fenceCounter
-                CYPathFX.this.fenceCounter.setEditable(true);
-                CYPathFX.this.fenceCounter.setText(""+CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex()).getAvailableFences());
-                CYPathFX.this.fenceCounter.setEditable(false);
-                
-            } catch(IncorrectPawnIndexException e) {
-                System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
-                System.exit(-1);
-            }
-        }
-    }
 
     /**
 	 * Color all the cells that the player can move to.
      * Change the cell's color if the player hover.
 	 * 
-	 * @param pawnId Int representing the ID of the Player.
+	 * @param pawnId Int representing the ID of the abstraction.Player.
 	 */
 
     public void showPossibleCells(int pawnId){
@@ -696,7 +462,7 @@ public class CYPathFX extends Application {
                 rec.setFill(possibleCellColor);
                 this.previousPossibleCells.add(rec);
 
-                //Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
+                //abstraction.Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
             }
         }
     }
