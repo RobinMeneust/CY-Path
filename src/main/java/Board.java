@@ -1,3 +1,9 @@
+/**
+ * Importing java classes needed for the Board class
+ * 
+ * Importing classes from the java.util package
+ */
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -10,6 +16,10 @@ import java.util.Scanner;
  */
 
 public class Board {
+	/**
+	 * State the Board's class attributes
+	 */
+	
 	private int nbCols;
 	private int nbRows;
 	private int size;
@@ -71,6 +81,7 @@ public class Board {
 	
 	/** 
 	 * Check if the last checked position was where the pawn of the given index is. If it's not, then we get the list of possible moves the player can make from this position
+	 * 
 	 * @param pawnId Id of a pawn of the board
 	 * @return A PossibleMoves object corresponding to the given pawn. It contains its position and the possible moves it can do
 	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
@@ -97,6 +108,7 @@ public class Board {
 	/**
 	 * Clear the instance attribute PossibleMoves (object), by setting its attributes to null.
 	 */
+
 	public void clearPossibleMoves() {
 		this.possibleMoves.setCurrentPosition(null);
 		this.possibleMoves.setPossibleMovesList(null);
@@ -105,6 +117,7 @@ public class Board {
 	
 	/** 
 	 * Set the lastCheckedFence attribute to the given value
+	 * 
 	 * @param lastCheckedFence New value
 	 */
 
@@ -115,6 +128,7 @@ public class Board {
 	
 	/** 
 	 * Get the lastCheckedFence attribute
+	 * 
 	 * @return Fence whose validity was checked the last
 	 */
 
@@ -133,6 +147,7 @@ public class Board {
 	
 	/** 
 	 * Get the value of lastCheckedFenceValid. Its value is true is the Fence in lastCheckedFence is valid
+	 * 
 	 * @return Boolean value of lastCheckedFenceValid
 	 */
 
@@ -143,6 +158,7 @@ public class Board {
 	
 	/** 
 	 * Set the lastCheckedFenceValid value to the given one
+	 * 
 	 * @param lastCheckedFenceValid New value
 	 */
 
@@ -229,6 +245,7 @@ public class Board {
 	
 	/** 
 	 * Get the possibleMoves instance attribute
+	 * 
 	 * @return PossibleMoves object correspoonding to the last checked pawn position
 	 */
 
@@ -712,6 +729,7 @@ public class Board {
 	
 	/**
 	 * Get the id of the winner
+	 * 
 	 * @return Winner's id
 	 */
 	public int getWinner() {

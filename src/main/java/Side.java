@@ -8,22 +8,26 @@ public enum Side {
 	/**
 	 * Side where y is at its maximum value
 	 */
-	BOTTOM, 
+	BOTTOM,
+
 	/**
 	 * Side where y = 0
 	 */
 	TOP,
+
 	/**
 	 * Side where x = 0
 	 */
 	LEFT,
+
 	/**
-	 * Side where y is at its maximum value
+	 * Side where x is at its maximum value
 	 */
 	RIGHT;
 
 	/**
 	 * Get the opposite side on the board
+	 * 
 	 * @return Opposite side
 	 */
 

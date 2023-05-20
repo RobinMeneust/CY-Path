@@ -4,13 +4,15 @@
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
-
 public class Fence {
+	/**
+	 * State the Fence's class attributes
+	 */
+	
 	private int length;
 	private Orientation orientation;
 	private Point start;
 	private Point end;
-
 	
 	/**
 	 * Create a Fence by giving all of its attributes
@@ -60,6 +62,7 @@ public class Fence {
 	
 	/** 
 	 * Get the length of the fence
+	 * 
 	 * @return Length of the fence
 	 */
 
@@ -70,6 +73,7 @@ public class Fence {
 	
 	/** 
 	 * Get the orientation of the fence
+	 * 
 	 * @return Orientation of the fence
 	 */
 
@@ -80,6 +84,7 @@ public class Fence {
 	
 	/** 
 	 * Get the starting point of the fence
+	 * 
 	 * @return Starting point of the fence
 	 */
 
@@ -90,6 +95,7 @@ public class Fence {
 	
 	/** 
 	 * Get the ending point of the fence
+	 * 
 	 * @return Ending point of the fence
 	 */
 
@@ -100,6 +106,7 @@ public class Fence {
 	
 	/** 
 	 * Set the starting point of the fence and change the ending point accordingly
+	 * 
 	 * @param start New starting point of the fence
 	 */
 
@@ -124,6 +131,7 @@ public class Fence {
 	
 	/** 
 	 * Set the orientation of the fence
+	 * 
 	 * @param orientation New orientation of the fence
 	 */
 
@@ -133,6 +141,7 @@ public class Fence {
 	
 	/** 
 	 * Set the orientation of the fence by converting the given String to an Orientation object
+	 * 
 	 * @param orientation New orientation of the fence
 	 */
 

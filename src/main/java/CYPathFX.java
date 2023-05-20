@@ -1,5 +1,13 @@
+/**
+ * Importing java classes needed for the CYPathFX class
+ */
+
 import java.io.File;
 import java.util.LinkedList;
+
+/**
+ * Importing javafx classes needed for the CYPathFX class
+ */
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,9 +34,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
 public class CYPathFX extends Application {
+    /**
+     * State the CYPATH's class attributes
+     */
+    
     private Button actionButton;
-    private Button loadButton;
-    private Button saveButton;
     private GameFX game;
     private GridPane gPane;
     private HBox buttonsHBox;
@@ -45,7 +55,6 @@ public class CYPathFX extends Application {
     private Stage primaryStage;
     private Scene mainMenuScene;
     private Scene newGameMenuScene;
-    private Scene loadGameScene;
     private Scene gameScene;
 
     //JavaFX
@@ -59,13 +68,9 @@ public class CYPathFX extends Application {
         this.buttonsHBox = new HBox(3);
         this.actionButton = new Button("Move");
         this.actionButton.setOnAction(new ActionButtonHandler());
-        this.loadButton = new Button("Load");
-        this.saveButton = new Button("Save");
-        this.loadButton.setOnAction(e -> openFileChooser(primaryStage, "Load"));
-        this.saveButton.setOnAction(e -> openFileChooser(primaryStage, "Save"));
+        
         this.mainMenuScene = null;
         this.newGameMenuScene = null;
-        this.loadGameScene = null;
         this.gameScene = null;
         this.primaryStage = primaryStage;
         this.terminalThread = null;
@@ -94,12 +99,30 @@ public class CYPathFX extends Application {
         HBox buttonsMenuHBox = new HBox();
         rootMainMenu.setCenter(buttonsMenuHBox);
 
+        if(this.gameScene != null) {
+            Button continueGameButton = new Button("Continue current game");
+            continueGameButton.setOnAction(e -> {
+                try {
+                    goToGameScene();
+                    // The GameNotInitializedException should not be thrown here since gameScene is not null
+                    // But even if it's thrown it's not an issue, we can just prevent the user from going back to its exited game and start a new one
+                } catch (GameNotInitializedException err) {}
+            });
+            buttonsMenuHBox.getChildren().add(continueGameButton);
+        }
+
         Button newGameMenuButton = new Button("New Game");
         newGameMenuButton.setOnAction(e -> goToNewGameMenu());
 
-        Button loadGameMenuButton = new Button("Load Game");
+        Button loadButton = new Button("Load");
+
+        loadButton.setOnAction(e -> {
+            openFileChooser(this.primaryStage, "Load");
+        });
         
-        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadGameMenuButton);
+
+        
+        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton);
     }
 
     public void goToMainMenuScene() {
@@ -143,35 +166,33 @@ public class CYPathFX extends Application {
                 System.exit(-1);
             }
         });
+
+        Button goBack = new Button("Main Menu");
+        goBack.setOnAction(e -> {
+            goToMainMenuScene();
+        });
+
+        root.setTop(goBack);
         root.setLeft(twoPlayersModeButton);
         root.setRight(fourPlayersModeButton);
         
         this.newGameMenuScene = new Scene(root);
     }
-    
-    public void createLoadGameScene() {
-        BorderPane root = new BorderPane();
-        
-        // TODO: A file chooser should be added here
-        
-        this.loadGameScene = new Scene(root);
-    }
-
-    public void goToLoadGameScene() {
-        if(this.loadGameScene == null) {
-            createLoadGameScene();
-        }
-
-        this.primaryStage.setScene(this.loadGameScene);
-    }
 
     public void createGameScene(int nbPlayers) {
         BorderPane rootGameScene = new BorderPane();
         
-        buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton);
+        Button goBack = new Button("Main Menu");
+        goBack.setOnAction(e -> {
+            goToMainMenuScene();
+        });
+
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(e -> openFileChooser(this.primaryStage, "Save"));
+
+        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
 
         
-
 
         // Initialize game
 
@@ -199,7 +220,9 @@ public class CYPathFX extends Application {
         if(this.terminalThread != null && this.terminalThread.isAlive()) {
             this.terminalThread.interrupt();
         }
-        this.terminalThread = new Thread(() -> runInTerminal());
+        this.terminalThread = new Thread(() -> {
+            CYPathFX.this.game.launch();
+        });
         this.terminalThread.setDaemon(true);
         this.terminalThread.start();
     }
@@ -357,7 +380,7 @@ public class CYPathFX extends Application {
     
     public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        System.out.println("SUPPRR column index = " + columnIndex  + "row index = " + rowIndex);
+        System.out.println("SUPPRR column index = " + columnIndex + "row index = " + rowIndex);
         System.out.println("Circle en cours de suppression");
         if(stack != null) {
             stack.getChildren().removeIf(node -> node instanceof Circle);
@@ -570,7 +593,6 @@ public class CYPathFX extends Application {
 	 * @param row the row from the node we want.
      * @param col the column from the node we want.
 	 * @return The specific node from the GridPane we were looking for.
-	 * 
 	 */
 
     private Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
@@ -618,6 +640,7 @@ public class CYPathFX extends Application {
     /**
 	 * Event that determined the player's choice between "Place a fence" and "Move".
 	 */
+
     class ActionButtonHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event){
@@ -652,6 +675,7 @@ public class CYPathFX extends Application {
 	 * 
 	 * @param pawnId Int representing the ID of the Player.
 	 */
+
     public void showPossibleCells(int pawnId){
         LinkedList<Point> possibleMoves = null;
         try {
@@ -679,9 +703,10 @@ public class CYPathFX extends Application {
 
     /**
 	 * Reset previous possible cells to be updated with the game.
+     * 
 	 * @param pawnId Int represanting the ID of the player.
-	 * 
 	 */
+
     public void resetPossibleCells(int pawnId){
         Color cellColor = Color.rgb(230, 230, 230);
 
@@ -696,40 +721,47 @@ public class CYPathFX extends Application {
 
 
 
-/**
+    private void loadGame(File file)  {
+        // TODO
+    }
+
+    private void saveGame(File file) {
+        // TODO
+    }
+
+
+    /**
 	 * Open a file chooser to save or load a game.
+     * 
 	 * @param primaryStage Main stage
      * @param action "Load" or "Save" to dertermine what the file chooser has to do.
 	 */
     private void openFileChooser(Stage primaryStage, String action) {
         FileChooser fileChooser = new FileChooser();
 
-         fileChooser.setTitle("Select Some Files");
+        fileChooser.setTitle("Select Some Files");
 
-         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        if (action.equals("Load")) {
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if(action.equals("Load")) {
             fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
-            fileChooser.showOpenDialog(primaryStage);
-            
+            File file = fileChooser.showSaveDialog(primaryStage);
+            if(file != null) {
+                loadGame(file);
+            }
         } else if (action.equals("Save")) {
             fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
-            fileChooser.showSaveDialog(primaryStage);
+            File file = fileChooser.showSaveDialog(primaryStage);
+            if(file != null) {
+                saveGame(file);
+            }
         }
+
+
+        //TODO: save and load the game in the given file
 
         System.out.println("Action: " + action);
     }
-    /*//JavaFX
-    private void runInJavaFX(){
-        
-    }*/
-    //Terminal
-    private void runInTerminal() {
-        try {
-            CYPathFX.this.game.launch();
-        } catch (Exception e) {
-            System.err.println(e);
-        }
-    }
+
 
     public static void main(String[] args) {
         launch(args);
