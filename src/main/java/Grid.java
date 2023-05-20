@@ -3,11 +3,26 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+/**
+ * Grid using as a data structure an undirected graph using an adjacency list
+ * It contains a grid of nbRows x nbCols cells.
+ * Each cells is an adjacency list containing all the cells connected to this one.
+ * 
+ * @author MENEUST Robin
+ */
+
 public class Grid {
 	private HashMap<Point,HashSet<Point>> adjacencyList;
 	private int nbRows;
 	private int nbCols;
 	private int nbNodes;
+
+	/**
+	 * Constructor of the Grid
+	 * 
+	 * @param nbRows Number of rows in the grid
+	 * @param nbCols Number of columns in the grid
+	 */
 
 	public Grid(int nbRows, int nbCols) {
 		this.nbRows = nbRows;
@@ -47,32 +62,68 @@ public class Grid {
 		}
 	}
 
+	/**
+	 * Get the number of rows of the grid
+	 * @return Number of rows
+	 */
+
 	public int getNbRows() {
 		return nbRows;
 	}
+
+	
+	/**
+	 * Get the number of columns of the grid
+	 * @return Number of columns
+	 */
 
 	public int getNbCols() {
 		return nbCols;
 	}
 
+	/**
+	 * Get the number of nodes (or cells) of the grid
+	 * @return Number of nodes
+	 */
+
 	public int getNbNodes() {
 		return nbNodes;
 	}
 
+	/**
+	 * Get the set of nodes of the grid
+	 * @return Set of nodes
+	 */
+
 	public Set<Point> getNodesList() {
 		return this.adjacencyList.keySet();
 	}
+
+	/**
+	 * Add an edge between two nodes
+	 * @param p1 Coordinates of the first node
+	 * @param p2 Coordinates of the second node
+	 */
 
 	public void addEdge(Point p1, Point p2) {
 		this.adjacencyList.get(p1).add(p2);
 		this.adjacencyList.get(p2).add(p1);
 	}
 
+	/**
+	 * Remove an edge between two nodes
+	 * @param p1 Coordinates of the first node
+	 * @param p2 Coordinates of the second node
+	 */
+
 	public void removeEdge(Point p1, Point p2) {
 		this.adjacencyList.get(p1).remove(p2);
 		this.adjacencyList.get(p2).remove(p1);
 	}
 
+	/**
+	 * Display the grid: display all nodes and for each node it displays all of its neighbors
+	 */
 
 	public void displayGrid() {
 		for(int i=0; i<this.getNbRows(); i++) {
@@ -85,6 +136,13 @@ public class Grid {
 		}
 	}
 
+	/**
+	 * Check if two nodes are connected by an edge (so if they are neighbors)
+	 * @param p1 Coordinates of the first node
+	 * @param p2 Coordinates of the second node
+	 * @return Boolean value equals to true if they are connected and false otherwise
+	 */
+
 	public boolean areConnected(Point p1, Point p2) {
 		if(p1 != null && p2 != null && this.adjacencyList.containsKey(p1))
 			return this.adjacencyList.get(p1).contains(p2);
@@ -92,20 +150,42 @@ public class Grid {
 			return false;
 	}
 
+	/**
+	 * Check if two nodes are connected by an edge (so if they are neighbors)
+	 * @param x1 X coordinate of the first node
+	 * @param y1 Y coordinate of the first node
+	 * @param x2 X coordinate of the second node
+	 * @param y2 Y coordinate of the second node
+	 * @return
+	 */
+
 	public boolean areConnected(int x1, int y1, int x2, int y2) {
 		Point p1 = new Point(x1,y1);
 		Point p2 = new Point(x2,y2);
 		return areConnected(p1,p2);
 	}
 
-	// destination = middle of row or column (e.g if the real destination is (0,0),(0,1),(0,2) then (0,1) is the destination point)
-	public static int costFunctionPath(Point node, Point destination) {
-		return Point.getDistance(node,destination);
+	/**
+	 * Get the approximate cost of a path between a start and a destination
+	 * @param start Node where the path starts
+	 * @param destination Node where the path ends
+	 * @return Cost of the path
+	 */
+
+	public static int costFunctionPath(Point start, Point destination) {
+		return Point.getDistance(start,destination);
 	}
 
-	public static Point getMinPoint(LinkedList<Point> queue, HashMap<Point,Integer> cost) {
-		Point minPoint = queue.peek();
-		for(Point p : queue) {
+	/**
+	 * Get the Point that has the minimum cost value
+	 * @param list List of points where the minimum is searched
+	 * @param cost Map of the cost of each point
+	 * @return Point that has the minimum cost
+	 */
+
+	public static Point getMinPoint(LinkedList<Point> list, HashMap<Point,Integer> cost) {
+		Point minPoint = list.peek();
+		for(Point p : list) {
 			if(cost.get(minPoint) > cost.get(p)) {
 				minPoint = p;
 			}
@@ -113,13 +193,22 @@ public class Grid {
 		return minPoint;
 	}
 
+	/**
+	 * Get the list of neighbors of a node
+	 * @param node Node whose neigbors are searched
+	 * @return List of neigbors
+	 */
+
 	public HashSet<Point> getListNeighbors(Point node) {
 		return this.adjacencyList.get(node);
 	}
 
-	public int getDegree(Point node) {
-		return this.getListNeighbors(node).size();
-	}
+	/**
+	 * Get the point at the center of a side
+	 * 
+	 * @param side Side whose center is searched
+	 * @return Center of the side
+	 */
 
 	public Point getCenterOfSide(Side side) {
 		switch(side){
@@ -130,6 +219,12 @@ public class Grid {
 			default: return null;
 		}
 	}
+
+	/**
+	 * Get the set of points on the given side
+	 * @param sideDest Side where points are searched
+	 * @return Set of points found on the given side
+	 */
 
 	public HashSet<Point> getPointsSetFromSide(Side sideDest) {
 		HashSet<Point> pointsSet = new HashSet<Point>(9);
@@ -158,6 +253,13 @@ public class Grid {
 		}
 		return pointsSet;
 	}
+
+	/**
+	 * 
+	 * @param start Node from where the path starts
+	 * @param sideDest Side where the path must go to
+	 * @return Boolean value equals to true if a path exists and false if it doesn't
+	 */
 
 	public boolean existPath(Point start, Side sideDest) {
 		LinkedList<Point> nodesToBeExpanded = new LinkedList<Point>();
