@@ -1,5 +1,13 @@
+/**
+ * Importing java classes needed for the CYPathFX class
+ */
+
 import java.io.File;
 import java.util.LinkedList;
+
+/**
+ * Importing javafx classes needed for the CYPathFX class
+ */
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -26,6 +34,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
 public class CYPathFX extends Application {
+    /**
+     * State the CYPATH's class attributes
+     */
+    
     private Button actionButton;
     private Button loadButton;
     private Button saveButton;
@@ -174,7 +186,6 @@ public class CYPathFX extends Application {
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
 
-
         // Initialize game
 
         Player[] players = new Player[nbPlayers];
@@ -322,7 +333,7 @@ public class CYPathFX extends Application {
     
     public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        System.out.println("SUPPRR column index = " + columnIndex  + "row index = " + rowIndex);
+        System.out.println("SUPPRR column index = " + columnIndex + "row index = " + rowIndex);
         System.out.println("Circle en cours de suppression");
         if(stack != null) {
             stack.getChildren().removeIf(node -> node instanceof Circle);
@@ -528,7 +539,6 @@ public class CYPathFX extends Application {
 	 * @param row the row from the node we want.
      * @param col the column from the node we want.
 	 * @return The specific node from the GridPane we were looking for.
-	 * 
 	 */
 
     private Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
@@ -576,6 +586,7 @@ public class CYPathFX extends Application {
     /**
 	 * Event that determined the player's choice between "Place a fence" and "Move".
 	 */
+
     class ActionButtonHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event){
@@ -610,6 +621,7 @@ public class CYPathFX extends Application {
 	 * 
 	 * @param pawnId Int representing the ID of the Player.
 	 */
+
     public void showPossibleCells(int pawnId){
         LinkedList<Point> possibleMoves = null;
         try {
@@ -637,9 +649,10 @@ public class CYPathFX extends Application {
 
     /**
 	 * Reset previous possible cells to be updated with the game.
+     * 
 	 * @param pawnId Int represanting the ID of the player.
-	 * 
 	 */
+
     public void resetPossibleCells(int pawnId){
         Color cellColor = Color.rgb(230, 230, 230);
 
@@ -654,8 +667,9 @@ public class CYPathFX extends Application {
 
 
 
-/**
+    /**
 	 * Open a file chooser to save or load a game.
+     * 
 	 * @param primaryStage Main stage
      * @param action "Load" or "Save" to dertermine what the file chooser has to do.
 	 */

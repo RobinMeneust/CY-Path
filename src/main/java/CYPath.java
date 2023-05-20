@@ -1,3 +1,9 @@
+/**
+ * Importing java classes needed for the CYPath class
+ * 
+ * Importing classes from the java.util package
+ */
+
 import java.util.Scanner;
 
 /**
@@ -7,7 +13,6 @@ import java.util.Scanner;
  */
 
 public class CYPath {
-    
     /** 
      * Main method
      * Launch the game in console mode or window mode

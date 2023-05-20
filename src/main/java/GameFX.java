@@ -1,5 +1,15 @@
+/**
+ * Importing java classes needed for the GameFX class
+ * 
+ * Importing classes from the java.util package
+ */
+
 import java.util.List;
 import java.util.Scanner;
+
+/**
+ * Importing javafx classes needed for the CYPathFX class
+ */
 
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,6 +27,7 @@ public class GameFX extends GameAbstract {
 
     /**
 	 * Create a GameFX object by giving all of its attributes
+     * 
 	 * @param players Array of the players
 	 * @param nbFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board

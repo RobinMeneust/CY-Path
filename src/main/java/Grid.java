@@ -1,3 +1,9 @@
+/**
+ * Importing java classes needed for the Grid class
+ * 
+ * Importing classes from the java.util package
+ */
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,10 +14,15 @@ import java.util.Set;
  * It contains a grid of nbRows x nbCols cells.
  * Each cells is an adjacency list containing all the cells connected to this one.
  * 
- * @author MENEUST Robin
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
 public class Grid {
+
+	/**
+	 * State the Grid's class attributes
+	 */
+	
 	private HashMap<Point,HashSet<Point>> adjacencyList;
 	private int nbRows;
 	private int nbCols;
@@ -64,6 +75,7 @@ public class Grid {
 
 	/**
 	 * Get the number of rows of the grid
+	 * 
 	 * @return Number of rows
 	 */
 
@@ -74,6 +86,7 @@ public class Grid {
 	
 	/**
 	 * Get the number of columns of the grid
+	 * 
 	 * @return Number of columns
 	 */
 
@@ -83,6 +96,7 @@ public class Grid {
 
 	/**
 	 * Get the number of nodes (or cells) of the grid
+	 * 
 	 * @return Number of nodes
 	 */
 
@@ -92,6 +106,7 @@ public class Grid {
 
 	/**
 	 * Get the set of nodes of the grid
+	 * 
 	 * @return Set of nodes
 	 */
 
@@ -101,6 +116,7 @@ public class Grid {
 
 	/**
 	 * Add an edge between two nodes
+	 * 
 	 * @param p1 Coordinates of the first node
 	 * @param p2 Coordinates of the second node
 	 */
@@ -112,6 +128,7 @@ public class Grid {
 
 	/**
 	 * Remove an edge between two nodes
+	 * 
 	 * @param p1 Coordinates of the first node
 	 * @param p2 Coordinates of the second node
 	 */
@@ -138,6 +155,7 @@ public class Grid {
 
 	/**
 	 * Check if two nodes are connected by an edge (so if they are neighbors)
+	 * 
 	 * @param p1 Coordinates of the first node
 	 * @param p2 Coordinates of the second node
 	 * @return Boolean value equals to true if they are connected and false otherwise
@@ -152,6 +170,7 @@ public class Grid {
 
 	/**
 	 * Check if two nodes are connected by an edge (so if they are neighbors)
+	 * 
 	 * @param x1 X coordinate of the first node
 	 * @param y1 Y coordinate of the first node
 	 * @param x2 X coordinate of the second node
@@ -167,6 +186,7 @@ public class Grid {
 
 	/**
 	 * Get the approximate cost of a path between a start and a destination
+	 * 
 	 * @param start Node where the path starts
 	 * @param destination Node where the path ends
 	 * @return Cost of the path
@@ -178,6 +198,7 @@ public class Grid {
 
 	/**
 	 * Get the Point that has the minimum cost value
+	 * 
 	 * @param list List of points where the minimum is searched
 	 * @param cost Map of the cost of each point
 	 * @return Point that has the minimum cost
@@ -195,6 +216,7 @@ public class Grid {
 
 	/**
 	 * Get the list of neighbors of a node
+	 * 
 	 * @param node Node whose neigbors are searched
 	 * @return List of neigbors
 	 */
@@ -222,6 +244,7 @@ public class Grid {
 
 	/**
 	 * Get the set of points on the given side
+	 * 
 	 * @param sideDest Side where points are searched
 	 * @return Set of points found on the given side
 	 */
@@ -255,6 +278,7 @@ public class Grid {
 	}
 
 	/**
+	 * Function to determine if there is a path that connects a point to the side of the grid it must reach
 	 * 
 	 * @param start Node from where the path starts
 	 * @param sideDest Side where the path must go to
