@@ -39,10 +39,10 @@ public class GameConsole extends GameAbstract {
 
                 System.out.println("Turn of player: " +  this.getPlayer(this.getCurrentPlayerIndex()));
                 currentPawn = this.getBoard().getPawn(this.getCurrentPlayerIndex());
-
+                System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
                 if(currentPawn.getAvailableFences() == 0){
                     response = "move";
-                    System.out.println("You have "+currentPawn.getAvailableFences()+ "fences remaining.\nYou can only move.");
+                    System.out.println("You don't have any fence remaining. You can only move.");
                 } else{
                     do {
                         System.out.println("What is your next action ? ('m' (move) or 'f' (place fence))");
