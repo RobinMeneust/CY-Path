@@ -78,6 +78,10 @@ public class CYPathFX extends Application {
         this.game = new GameFX(players,20, 9, 9);
         actionButton.textProperty().bind(CYPathFX.this.game.getAction());
 
+        //We click on the button two times for update the first player action
+        actionButton.fire();
+        actionButton.fire();
+
         //Create a thread to run in the terminal
         Thread terminalThread = new Thread(() -> runInTerminal());
         terminalThread.setDaemon(true);
@@ -233,6 +237,36 @@ public class CYPathFX extends Application {
                                 }
                             }
                         }
+
+                        //Update data   
+                        sourceCell.setOnMouseClicked(e -> {
+                            Fence fence = null;
+                            
+                            System.out.println("click");
+                            if(CYPathFX.this.getFenceOrientation() == Orientation.HORIZONTAL){
+                                fence = new Fence(CYPathFX.this.game.getBoard().getFenceLength(), Orientation.HORIZONTAL, pStartFenceCoord);
+                            }
+                            else{
+                                fence = new Fence(CYPathFX.this.game.getBoard().getFenceLength(), Orientation.VERTICAL, pStartFenceCoord);
+                            }
+
+                            if(CYPathFX.this.game.getBoard().isFencePositionValid(fence)){
+                                CYPathFX.this.game.getBoard().addFenceToData(fence);
+                                CYPathFX.this.game.setIsEndTurn(true);
+
+                                //We wait the begining of the next turn
+                                while (CYPathFX.this.game.getIsEndTurn()) {
+                                    try {
+                                        Thread.sleep(100); //Wait 100 milliseconds before checking again
+                                    } catch (InterruptedException ev) {
+                                        ev.printStackTrace();
+                                    }
+                                }
+                                //update button
+                                actionButton.fire();
+                            }
+                        });
+                        
                     } else if (event.getEventType() == MouseEvent.MOUSE_EXITED){
                         if(CYPathFX.this.prevHighlightedFencesList != null){
                             for(Line l : CYPathFX.this.prevHighlightedFencesList) {
@@ -343,11 +377,22 @@ public class CYPathFX extends Application {
                 rec.setOnMouseClicked(e -> {
                     try {
                         this.game.getBoard().getPawn(pawnId).setPosition(new Point(GridPane.getColumnIndex(rec) / 2, GridPane.getRowIndex(rec) / 2));
-                        if(CYPathFX.this.game.getCurrentPlayerIndex() == 0){
-                            this.game.setCurrentPlayerIndex(1);
-                        } else {
-                            this.game.setCurrentPlayerIndex(0);
+                        //the information is transmitted to the terminal
+                        this.game.setIsEndTurn(true);
+                        //We wait the begining of the next turn
+                        while (this.game.getIsEndTurn()) {
+                            try {
+                                Thread.sleep(100); //Wait 100 milliseconds before checking again
+                            } catch (InterruptedException ev) {
+                                ev.printStackTrace();
+                            }
                         }
+                        //update button
+                        actionButton.fire();
+                        if(actionButton.getText() != "Move"){
+                            actionButton.fire();
+                        }
+
                     } catch(IncorrectPawnIndexException err) {
                         System.err.println(err);
                         System.exit(-1);
