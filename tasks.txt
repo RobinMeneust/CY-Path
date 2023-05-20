@@ -313,17 +313,17 @@ The task's priority is sorted in ascending order
 
 11. Add a main menu and its buttons
 	11.1 Create the menu Scene
-		* PROGRESS: IN_PROGRESS
+		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/20 16:40
 		* Estimated end : 2023/05/20 17:10
-		* Real end :
+		* Real end : 2023/05/20 17:45
 	11.2 New game button and its event (launch a new game)
-		* PROGRESS: TO_DO
+		* PROGRESS: DONE
 		* Who: PERSON_5
-		* Start : 2023/05/17 12:00
-		* Estimated end : 2023/05/17 12:45
-		* Real end :
+		* Start : 2023/05/20 17:45
+		* Estimated end : 2023/05/20 18:15
+		* Real end : 2023/05/20 18:30
 	11.3 Load Game button and its event (load and launch a game)
 		* PROGRESS: TO_DO
 		* Who: PERSON_5

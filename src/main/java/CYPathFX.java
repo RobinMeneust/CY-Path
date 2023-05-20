@@ -37,49 +37,150 @@ public class CYPathFX extends Application {
     private Color cellColorHover;
     private boolean moveMode;
 
+    private Thread terminalThread;
+    
+    private Stage primaryStage;
+    private Scene mainMenuScene;
+    private Scene newGameMenuScene;
+    private Scene loadGameScene;
+    private Scene gameScene;
+
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
         this.possibleCellColor = Color.rgb(172, 255, 214);
         this.cellColorHover = Color.rgb(239,255,172);
         this.prevHighlightedFencesList = new LinkedList<Line>();
         this.moveMode = true;
+        this.fenceOrientation = Orientation.HORIZONTAL;
+        this.gPane = null;
+        this.buttonsHBox = new HBox(3);
+        this.actionButton = new Button("Move");
+        this.actionButton.setOnAction(new ActionButtonHandler());
+        this.loadButton = new Button("Load");
+        this.saveButton = new Button("Save");
+        this.loadButton.setOnAction(e -> openFileChooser(primaryStage, "Load"));
+        this.saveButton.setOnAction(e -> openFileChooser(primaryStage, "Save"));
+        this.mainMenuScene = null;
+        this.newGameMenuScene = null;
+        this.loadGameScene = null;
+        this.gameScene = null;
+        this.primaryStage = primaryStage;
+        this.terminalThread = null;
+
+
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
         primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
-        fenceOrientation = Orientation.HORIZONTAL;
-        this.gPane = createBoard();
-        this.buttonsHBox = new HBox(3);
-        actionButton = new Button("Move");
-        actionButton.setOnAction(new ActionButtonHandler());
-        this.loadButton = new Button("Load");
-        this.saveButton = new Button("Save");
-        loadButton.setOnAction(e -> openFileChooser(primaryStage, "Load"));
-        saveButton.setOnAction(e -> openFileChooser(primaryStage, "Save"));
+        // Open main menu
+        createMainMenuScene();
+        goToMainMenuScene();
+    }
+
+    public void createMainMenuScene() {
+        BorderPane rootMainMenu = new BorderPane();
+        this.mainMenuScene = new Scene(rootMainMenu);
+        
+        HBox buttonsMenuHBox = new HBox();
+        rootMainMenu.setCenter(buttonsMenuHBox);
+
+        Button newGameMenuButton = new Button("New Game");
+        newGameMenuButton.setOnAction(e -> goToNewGameMenu());
+
+        Button loadGameMenuButton = new Button("Load Game");
+        
+        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadGameMenuButton);
+    }
+
+    public void goToMainMenuScene() {
+        if(this.mainMenuScene == null) {
+            createMainMenuScene();
+        }
+        this.primaryStage.setScene(this.mainMenuScene);
+        if(!this.primaryStage.isShowing()) {
+            this.primaryStage.show();
+        }
+    }
+
+    public void goToNewGameMenu() {
+        if (this.newGameMenuScene == null) {
+            createNewGameScene();
+        }
+
+        this.primaryStage.setScene(this.newGameMenuScene);
+    }
+
+    public void createNewGameScene() {
         BorderPane root = new BorderPane();
+        
+        Button twoPlayersModeButton = new Button("2 Players");
+        twoPlayersModeButton.setOnAction(e -> {
+            try {    
+                createGameScene(2);
+                goToGameScene();
+            } catch (GameNotInitializedException err) {
+                System.err.println(err);
+                System.exit(-1);
+            }
+        });
+        Button fourPlayersModeButton = new Button("4 Players");
+        fourPlayersModeButton.setOnAction(e -> {
+            try {    
+                createGameScene(4);
+                goToGameScene();
+            } catch (GameNotInitializedException err) {
+                System.err.println(err);
+                System.exit(-1);
+            }
+        });
+        root.setLeft(twoPlayersModeButton);
+        root.setRight(fourPlayersModeButton);
+        
+        this.newGameMenuScene = new Scene(root);
+    }
+    
+    public void createLoadGameScene() {
+        BorderPane root = new BorderPane();
+        
+        // TODO: A file chooser should be added here
+        
+        this.loadGameScene = new Scene(root);
+    }
+
+    public void goToLoadGameScene() {
+        if(this.loadGameScene == null) {
+            createLoadGameScene();
+        }
+
+        this.primaryStage.setScene(this.loadGameScene);
+    }
+
+    public void createGameScene(int nbPlayers) {
+        BorderPane rootGameScene = new BorderPane();
+        this.gPane = createBoard();
         buttonsHBox.getChildren().addAll(actionButton, loadButton, saveButton);
 
-        root.setCenter(this.gPane);
-        root.setTop(buttonsHBox);
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        
+        rootGameScene.setCenter(this.gPane);
+        rootGameScene.setTop(buttonsHBox);
+        gameScene = new Scene(rootGameScene);
+
 
         // Initialize game
-        System.out.println("Welcome to CY-Path.\n");
-        int nbPlayer = 0;
-        Scanner sc = new Scanner(System.in);
-        while(nbPlayer != 2 && nbPlayer != 4){
-            System.out.println("How many players do you want ? (2 or 4)");
-            nbPlayer = Integer.parseInt(sc.nextLine());
-        }
 
-        Player[] players= new Player[nbPlayer];
-        for (int i = 0; i < nbPlayer; i++){
+        Player[] players = new Player[nbPlayers];
+        for (int i = 0; i < nbPlayers; i++){
             players[i] = new Player("Anonymous player" + i);
         }
-
-        this.game = new GameFX(players,20, 9, 9);
+        try {
+            this.game = new GameFX(players,20, 9, 9);
+        } catch (InvalidNumberOfPlayersException e) {
+            System.err.println(e);
+            System.exit(-1);
+        }
         actionButton.textProperty().bind(CYPathFX.this.game.getAction());
 
         //We click on the button two times for update the first player action
@@ -87,18 +188,21 @@ public class CYPathFX extends Application {
         actionButton.fire();
 
         //Create a thread to run in the terminal
-        Thread terminalThread = new Thread(() -> runInTerminal());
-        terminalThread.setDaemon(true);
-        terminalThread.start();
-
-        // Open the window
-        primaryStage.show();
-        primaryStage.setOnCloseRequest(e -> {
-            Platform.exit();
-            System.exit(0);
-        });
+        if(this.terminalThread != null && this.terminalThread.isAlive()) {
+            this.terminalThread.interrupt();
+        }
+        this.terminalThread = new Thread(() -> runInTerminal());
+        this.terminalThread.setDaemon(true);
+        this.terminalThread.start();
     }
 
+    public void goToGameScene() throws GameNotInitializedException {
+        if(this.gameScene == null) {
+            throw new GameNotInitializedException();
+        }
+
+        this.primaryStage.setScene(gameScene);
+    }
     
     public boolean isMoveMode() {
         return moveMode;

@@ -22,7 +22,7 @@ Please note that CYPath.jar needs to be with the lib directory in target whereas
 ## Installation
 
 - JavaFX must be installed (JDK)
-- Maven is required
+- Maven is required (was tested on 3.9.2)
 
 Change `19` to your JDK version in pom.xml at the line :
 `<java.version>19</java.version>`
