@@ -1,10 +1,15 @@
 /**
  * This enum represents the two orientations a fence can have
- * 
- * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
-public enum Orientation {
+ public enum Orientation {
+	/*
+	 * The orientation of a fence "Vertical".
+	 */
 	VERTICAL,
-	HORIZONTAL
+
+	/*
+	 * The orientation of a fence "Horizontal".
+	 */
+	HORIZONTAL;
 }

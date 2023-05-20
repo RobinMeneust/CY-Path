@@ -5,6 +5,10 @@
  */
 
 public abstract class GameAbstract {
+	/**
+	 * State the Game's class attributes
+	 */
+	
 	private GameState state;
 	private int nbFences;
 	private Player[] players;
@@ -13,6 +17,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Create a GameAbstract object by giving all of its attributes
+	 * 
 	 * @param players Array of the players
 	 * @param nbFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board
@@ -33,6 +38,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Get the index of the current player
+	 * 
 	 * @return Index of the curretn player
 	 */
 
@@ -42,6 +48,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Set the current player index to the one with the givenIndex
+	 * 
 	 * @param currentPlayer New current player index
 	 */
 
@@ -59,6 +66,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Get the current state of the game
+	 * 
 	 * @return State of the game
 	 */
 
@@ -68,6 +76,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Set the current state of the game to a new state
+	 * 
 	 * @param state New game state
 	 */
 
@@ -77,6 +86,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Get the number of players
+	 * 
 	 * @return Number of players
 	 */
 
@@ -86,6 +96,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Get a player from its index
+	 * 
 	 * @param index Index of the player
 	 * @return Player corresponding to the given index
 	 */
@@ -96,6 +107,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Get the maximum number of fences
+	 * 
 	 * @return Maximum number of fences
 	 */
 
@@ -105,6 +117,7 @@ public abstract class GameAbstract {
 
 	/**
 	 * Get the board on which the current game is played
+	 * 
 	 * @return Board used for this game
 	 */
 	

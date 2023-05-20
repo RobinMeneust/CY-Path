@@ -1,3 +1,8 @@
+/**
+ * Importing java classes needed for the GameConsole class
+ * 
+ * Importing classes from the java.util package
+ */
 import java.util.Scanner;
 import java.util.List;
 
