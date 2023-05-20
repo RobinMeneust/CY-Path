@@ -1,9 +1,9 @@
 import java.io.File;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -11,7 +11,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
@@ -36,6 +38,7 @@ public class CYPathFX extends Application {
     private Color possibleCellColor;
     private Color cellColorHover;
     private boolean moveMode;
+    private TextField fenceCounter;
 
     private Thread terminalThread;
     
@@ -66,6 +69,9 @@ public class CYPathFX extends Application {
         this.gameScene = null;
         this.primaryStage = primaryStage;
         this.terminalThread = null;
+        this.fenceCounter = new TextField("test");
+        this.fenceCounter.setEditable(false);
+        this.fenceCounter.setPrefColumnCount(2);
 
 
         // Set up stage
@@ -233,53 +239,95 @@ public class CYPathFX extends Application {
         int lineLengthBorders = lineLength + lineWidth;
         Color borderColor = Color.LIGHTGRAY;
         Color cellColor = Color.rgb(230, 230, 230);
-        
-
+    
         gPane.setOnScroll(new ChangeFenceOrientation());
-
+    
         // First horizontal border (top)
-        for(int j=1; j<=2*sizeBoardColumns; j+=2) {
-            border = createLineBorder(0,0,lineLengthBorders,0, borderColor, lineWidth);
-            gPane.add(border,j,0);
+        for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
+            border = createLineBorder(0, 0, lineLengthBorders, 0, borderColor, lineWidth);
+            gPane.add(border, j, 0);
         }
         gPane.getRowConstraints().add(new RowConstraints(lineWidth));
-        
-        for(int i=1; i<=2*sizeBoardRows; i+=2) {
+    
+        for (int i = 1; i <= 2 * sizeBoardRows; i += 2) {
             // First vertical border (left)
-            border = createLineBorder(0,0,0,lineLengthBorders, borderColor, lineWidth);
-            gPane.add(border,0,i);
-            
-            for(int j=1; j<=2*sizeBoardColumns; j+=2) {
+            border = createLineBorder(0, 0, 0, lineLengthBorders, borderColor, lineWidth);
+            gPane.add(border, 0, i);
+    
+            for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
                 // Cells
-                cell = new Rectangle(cellSize,cellSize);
+                StackPane cellStackPane = new StackPane(); // Créer un nouveau StackPane pour chaque cellule
+
+                // Cells
+                cell = new Rectangle(cellSize, cellSize);
                 cell.setFill(cellColor);
                 cell.setOnMouseEntered(new HoverBorder());
                 cell.setOnMouseExited(new HoverBorder());
                 cell.setOnMouseClicked(new ClickAddBorder());
-                gPane.add(cell,j,i);
-                
+                cellStackPane.getChildren().add(cell);
+                System.out.println("column = " + j +" ligne = " + i);                
+
+                // Add player circles to the middle of each side
+                if( j == sizeBoardColumns && (i == 1 )) {
+                    Circle player1Circle = createPlayerCircle(Color.RED);
+                    cellStackPane.getChildren().add(player1Circle);
+                } else if (j == sizeBoardColumns && (i == sizeBoardRows * 2 - 1)) {
+                    Circle player2Circle = createPlayerCircle(Color.BLUE);
+                    cellStackPane.getChildren().add(player2Circle);
+                }
+
+                gPane.add(cellStackPane, j, i);
+    
                 // Vertical borders
-                border = createLineBorder(0,0,0,lineLength, borderColor, lineWidth);
-                gPane.add(border,j+1,i);
+                border = createLineBorder(0, 0, 0, lineLength, borderColor, lineWidth);
+                gPane.add(border, j + 1, i);
             }
-            
+    
             // Horizontal borders
-            for(int j=1; j<2*sizeBoardColumns; j+=2) {
-                border = createLineBorder(0,0,lineLength, 0, borderColor, lineWidth);
-                gPane.add(border,j,i+1);
+            for (int j = 1; j < 2 * sizeBoardColumns; j += 2) {
+                border = createLineBorder(0, 0, lineLength, 0, borderColor, lineWidth);
+                gPane.add(border, j, i + 1);
             }
             // Horizontal borders
             gPane.getRowConstraints().add(new RowConstraints(cellSize));
             gPane.getRowConstraints().add(new RowConstraints(lineWidth));
         }
-        
+    
         gPane.getColumnConstraints().add(new ColumnConstraints(lineWidth));
-        for(int i=0; i<sizeBoardColumns; i++) {
+        for (int i = 0; i < sizeBoardColumns; i++) {
             gPane.getColumnConstraints().add(new ColumnConstraints(cellSize));
             gPane.getColumnConstraints().add(new ColumnConstraints(lineWidth));
         }
-        
+    
         return gPane;
+    }
+    
+    private Circle createPlayerCircle(Color color) {
+        Circle circle = new Circle(15, color);
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(2);
+        return circle;
+    }
+
+    public void addCircleToCell(GridPane gridPane, int rowIndex, int columnIndex, Color color) {
+        System.out.println("AJOUT column index = " + columnIndex + "row index = " + rowIndex);
+        StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
+        System.out.println("Circle en cours d'ajout");
+        if(stack != null) {
+            Circle circle = createPlayerCircle(color);
+            stack.getChildren().add(circle);
+            System.out.println("Circle ajouté");
+        }
+    }
+    
+    public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
+        StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
+        System.out.println("SUPPRR column index = " + columnIndex  + "row index = " + rowIndex);
+        System.out.println("Circle en cours de suppression");
+        if(stack != null) {
+            stack.getChildren().removeIf(node -> node instanceof Circle);
+            System.out.println("Circle supprimé");
+        }
     }
 
     class ClickAddBorder implements EventHandler<MouseEvent> {
@@ -337,8 +385,16 @@ public class CYPathFX extends Application {
                     }
                 } else if(CYPathFX.this.isMoveMode() && CYPathFX.this.previousPossibleCells != null && CYPathFX.this.previousPossibleCells.contains(sourceCell)) {
                     try {
-                        int pawnId = CYPathFX.this.game.getCurrentPlayerIndex();
-                        CYPathFX.this.game.getBoard().getPawn(pawnId).setPosition(new Point(GridPane.getColumnIndex(sourceCell) / 2, GridPane.getRowIndex(sourceCell) / 2));
+                        Pawn pawn = CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex());
+
+                        removeCircleFromCell(CYPathFX.this.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
+
+                        StackPane parentStackPane = (StackPane) sourceCell.getParent(); // Récupérer le StackPane parent
+                        int columnIndex = GridPane.getColumnIndex(parentStackPane); // Obtenir l'indice de colonne du StackPane
+                        int rowIndex = GridPane.getRowIndex(parentStackPane); // Obtenir l'indice de ligne du StackPane
+                        pawn.setPosition(new Point(columnIndex / 2, rowIndex / 2));
+                        
+                        addCircleToCell(CYPathFX.this.gPane, rowIndex, columnIndex, Color.YELLOW);
                         //the information is transmitted to the terminal
                         CYPathFX.this.game.setIsEndTurn(true);
                         //We wait the begining of the next turn
@@ -354,6 +410,7 @@ public class CYPathFX extends Application {
                         if(actionButton.getText() != "Move"){
                             actionButton.fire();
                         }
+
                     } catch(IncorrectPawnIndexException err) {
                         System.err.println(err);
                         System.exit(-1);
@@ -475,9 +532,19 @@ public class CYPathFX extends Application {
 	 */
 
     private Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
+        
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
+            }
+        }
+        return null;
+    }
+
+    public StackPane getCellStackPane(GridPane gridPane, int row, int column) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row && node instanceof StackPane) {
+                return (StackPane) node;
             }
         }
         return null;
@@ -524,6 +591,12 @@ public class CYPathFX extends Application {
                     CYPathFX.this.game.setAction("Move");
                     CYPathFX.this.setMoveMode(true);
                 }
+
+                //Update fenceCounter
+                CYPathFX.this.fenceCounter.setEditable(true);
+                CYPathFX.this.fenceCounter.setText(""+CYPathFX.this.game.getBoard().getPawn(CYPathFX.this.game.getCurrentPlayerIndex()).getAvailableFences());
+                CYPathFX.this.fenceCounter.setEditable(false);
+                
             } catch(IncorrectPawnIndexException e) {
                 System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
                 System.exit(-1);
@@ -547,7 +620,11 @@ public class CYPathFX extends Application {
         }
         
         for( Point p : possibleMoves){
-            Node node = (Rectangle) getNodeFromGridPane(gPane, p.getY()*2+1, p.getX()*2+1);
+            StackPane stack = getCellStackPane(gPane, p.getY()*2+1, p.getX()*2+1);
+            ObservableList<Node> children = stack.getChildren();
+            int lastIndex = children.size() - 1;
+            Node node = children.get(lastIndex);
+            System.out.println(p.getX() + "," + p.getY());
             if( node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
                 rec.setFill(possibleCellColor);
