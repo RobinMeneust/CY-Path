@@ -324,8 +324,8 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/20 17:45
 		* Estimated end : 2023/05/20 18:15
 		* Real end : 2023/05/20 18:30
-	11.3 Load Game button and its event (load and launch a game)
-		* PROGRESS: TO_DO
+	11.3 Load Game and save game buttons and their events (load and launch a game or save it)
+		* PROGRESS: ON_HOLD (needs 7. & 8. tasks)
 		* Who: Robin
 		* Start : 2023/05/21 12:45
 		* Estimated end :  2023/05/21 13:45
