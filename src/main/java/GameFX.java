@@ -13,6 +13,7 @@ import javafx.beans.property.StringProperty;
 
 public class GameFX extends GameAbstract {
     private StringProperty action;
+    private boolean isEndTurn;
 
     /**
 	 * Create a GameFX object by giving all of its attributes
@@ -26,6 +27,7 @@ public class GameFX extends GameAbstract {
     public GameFX(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
         super(players, nbFences, nbRows, nbCols);
         this.action = new SimpleStringProperty("Move");
+        this.isEndTurn = false;
     }
 
     /**
@@ -48,87 +50,47 @@ public class GameFX extends GameAbstract {
 		this.action.set(a);
 	}
 
+    public boolean getIsEndTurn(){
+		return this.isEndTurn;
+	}
+	public void setIsEndTurn(boolean b){
+		this.isEndTurn = b;
+	}
+
     /**
      * Launch the current game for window mode
      */
 
-    public void launch() {
+     public void launch() {
 		// The game is now in progress
 		this.setState(GameState.IN_PROGRESS);
 
-        String response = "";
-        Scanner scanner = new Scanner(System.in);
+        //String response = "";
+        //Scanner scanner = new Scanner(System.in);
         Pawn currentPawn = null;
 
         try {
             while(this.getBoard().getWinner() == -1){
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
-                Platform.runLater(() -> this.setAction("Move"));
+                //Platform.runLater(() -> this.setAction("Move"));
 
                 System.out.println("Turn of player: " +  this.getPlayer(this.getCurrentPlayerIndex()));
                 currentPawn = this.getBoard().getPawn(this.getCurrentPlayerIndex());
-                
-                if(currentPawn.getAvailableFences() != 0){
-                    do {
-                        System.out.println("To choose your next action, click on the button so that its text correpsonds to what you want to do.\n Press 'yes' in the terminal to confirm your selection");
-                        response = scanner.nextLine();
-                    }while(!response.equals("yes"));
+
+                this.setIsEndTurn(false);
+                while (!this.getIsEndTurn()) {
+                    try {
+                        Thread.sleep(100); //Wait 100 milliseconds before checking again
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 //If button set Move
                 if("Move".equals(this.getAction().get())){
-                    this.getBoard().displayBoard(DisplayType.COORD_CELL);
-
-                    if (currentPawn.getAvailableFences() == 0) {
-                        System.out.println("You have "+currentPawn.getAvailableFences()+ "fences remaining.\nYou can only move.");
-                    }
-
-                    PossibleMoves possibleMoves = this.getBoard().updateAndGetPossibleMoves(this.getCurrentPlayerIndex());
-                    List<Point> listPossibleMoves = possibleMoves.getPossibleMovesList();
-
-                    System.out.println("Those are the cells where your pawn can move to:");
-                    System.out.println(listPossibleMoves);
-                    
-                    Point point = null;
-                    boolean isPawnPosValid = false;
-                    System.out.println("Where do you want to go ?");
-
-                    do {
-                        point = Board.choosePosition();
-                        isPawnPosValid = this.getBoard().movePawn(this.getCurrentPlayerIndex(), point);
-                        if(!isPawnPosValid) {
-                            System.out.println("The pawn can't move here\nTry again.");
-                        }
-                    } while(!isPawnPosValid);
+                    System.out.println("Move in : " + currentPawn.getPosition());
                 } else if("Place fence".equals(this.getAction().get())) {
-                    //If button set Place Fence
-
-                    this.getBoard().displayBoard(DisplayType.COORD_LINE);
-                    boolean isFenceValid = false;
-
-                    String orientation = "";
-                    Fence fence = new Fence(this.getBoard().getFenceLength());
-                    Point point = null;
-                    do {
-                        System.out.println("What is the orientation of your fence ? (H(ORIZONTAL) or V(ERTICAL))");
-                        orientation = this.getBoard().chooseOrientation();
-                        isFenceValid = this.getBoard().isValidOrientation(orientation);
-
-                        if(!isFenceValid) {
-                            System.out.println(orientation+" is not a valid orientation\nTry again.");
-                        }
-                    }while(!isFenceValid);
-                    fence.setOrientation(orientation);
-
-                    do {
-                        System.out.println("Where do you want to put your fence ? (X,Y)");
-                        point = Board.choosePosition();
-                        fence.setStart(point);
-                        isFenceValid = this.getBoard().placeFence(this.getCurrentPlayerIndex(), fence);
-                        if(!isFenceValid) {
-                            System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
-                        }
-                    } while(!isFenceValid);
+                    System.out.println("Fence have been placed");
                 }   
                 this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
             }
