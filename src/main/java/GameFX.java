@@ -1,3 +1,4 @@
+import java.text.BreakIterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -93,11 +94,14 @@ public class GameFX extends GameAbstract {
                     System.out.println("Fence have been placed");
                 }   
                 this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
+                this.getBoard().checkWin();
             }
         
             Pawn pawnWinner = this.getBoard().getPawn(this.getBoard().getWinner());
             System.out.println("The winner is "+pawnWinner.getPlayer());
             this.setState(GameState.FINISHED);
+            System.out.println("Bug infinity loop");
+            
         } catch (IncorrectPawnIndexException e) {
             System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
             System.exit(-1);
