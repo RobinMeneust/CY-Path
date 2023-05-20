@@ -1,5 +1,5 @@
 package abstraction; /**
- * Importing java classes needed for the abstrac.Grid class
+ * Importing java classes needed for the Grid class
  * 
  * Importing classes from the java.util package
  */
@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /**
- * abstrac.Grid using as a data structure an undirected graph using an adjacency list
+ * Grid using as a data structure an undirected graph using an adjacency list
  * It contains a grid of nbRows x nbCols cells.
  * Each cells is an adjacency list containing all the cells connected to this one.
  * 
@@ -20,7 +20,7 @@ import java.util.Set;
 public class Grid {
 
 	/**
-	 * State the abstrac.Grid's class attributes
+	 * State the Grid's class attributes
 	 */
 	
 	private HashMap<Point,HashSet<Point>> adjacencyList;
@@ -29,7 +29,7 @@ public class Grid {
 	private int nbNodes;
 
 	/**
-	 * Constructor of the abstrac.Grid
+	 * Constructor of the Grid
 	 * 
 	 * @param nbRows Number of rows in the grid
 	 * @param nbCols Number of columns in the grid
@@ -197,11 +197,11 @@ public class Grid {
 	}
 
 	/**
-	 * Get the abstrac.Point that has the minimum cost value
+	 * Get the Point that has the minimum cost value
 	 * 
 	 * @param list List of points where the minimum is searched
 	 * @param cost Map of the cost of each point
-	 * @return abstrac.Point that has the minimum cost
+	 * @return Point that has the minimum cost
 	 */
 
 	public static Point getMinPoint(LinkedList<Point> list, HashMap<Point,Integer> cost) {
@@ -228,7 +228,7 @@ public class Grid {
 	/**
 	 * Get the point at the center of a side
 	 * 
-	 * @param side abstrac.Side whose center is searched
+	 * @param side Side whose center is searched
 	 * @return Center of the side
 	 */
 
@@ -245,7 +245,7 @@ public class Grid {
 	/**
 	 * Get the set of points on the given side
 	 * 
-	 * @param sideDest abstrac.Side where points are searched
+	 * @param sideDest Side where points are searched
 	 * @return Set of points found on the given side
 	 */
 
@@ -281,7 +281,7 @@ public class Grid {
 	 * Function to determine if there is a path that connects a point to the side of the grid it must reach
 	 * 
 	 * @param start Node from where the path starts
-	 * @param sideDest abstrac.Side where the path must go to
+	 * @param sideDest Side where the path must go to
 	 * @return Boolean value equals to true if a path exists and false if it doesn't
 	 */
 

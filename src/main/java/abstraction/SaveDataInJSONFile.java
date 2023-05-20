@@ -1,6 +1,6 @@
 package abstraction;
 /**
- * Importing java classes needed for the abstrac.SaveDataInJSONFile class
+ * Importing java classes needed for the SaveDataInJSONFile class
  * 
  * Importing classes from the java.util package
  */
@@ -41,7 +41,7 @@ public class SaveDataInJSONFile {
      * 
      * @param rows         (int) number of columns of the game board
      * @param columns      (int) number of rows of the game board
-     * @param listFences   (abstrac.Fence) list of fences placed on the board
+     * @param listFences   (Fence) list of fences placed on the board
      * @param placedFences (int) number of fences placed on the board
      * @param listPawns    (int) list of pawns of all players of the CY-PATH party
      */

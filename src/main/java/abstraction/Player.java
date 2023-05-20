@@ -8,7 +8,7 @@ package abstraction;
 
 public class Player {
     /**
-     * State the abstrac.Player's class attributes
+     * State the Player's class attributes
      */
 
 	private String username;

@@ -6,7 +6,7 @@ package abstraction;
 
 public class InvalidNumberOfPlayersException extends Exception {
 	/**
-     * Constructor of abstrac.InvalidNumberOfPlayersException.
+     * Constructor of InvalidNumberOfPlayersException.
      * Add the error message to the exception: "ERROR: Invalid number of players (must be 2 or 4)"
      */
 

@@ -16,8 +16,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
-        <javafx.version>17</javafx.version>
+        <java.version>19</java.version>
+        <javafx.version>17.0.7</javafx.version>
         <javafx.main.class>presentation.CYPathFX</javafx.main.class>
         <main.class>presentation.CYPath</main.class>
     </properties>
@@ -57,20 +57,7 @@
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
-             <!-- Generate Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>      
+              
 
             <!-- Build src -->
             <plugin>
@@ -84,7 +71,6 @@
                     <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>

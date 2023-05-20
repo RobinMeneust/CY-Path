@@ -1,12 +1,12 @@
 package presentation; /**
- * Importing java classes needed for the presentation.CYPathFX class
+ * Importing java classes needed for the CYPathFX class
  */
 
 import java.io.File;
 import java.util.LinkedList;
 
 /**
- * Importing javafx classes needed for the presentation.CYPathFX class
+ * Importing javafx classes needed for the CYPathFX class
  */
 
 import abstraction.*;
@@ -33,11 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 
 public class CYPathFX extends Application {
     /**
@@ -47,7 +43,6 @@ public class CYPathFX extends Application {
     private Button actionButton;
     public GameFX game;
     public GridPane gPane;
-    private HBox buttonsHBox;
     private Orientation fenceOrientation;
     public LinkedList<Line> prevHighlightedFencesList;
     public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
@@ -71,7 +66,6 @@ public class CYPathFX extends Application {
         this.moveMode = true;
         this.fenceOrientation = Orientation.HORIZONTAL;
         this.gPane = null;
-        this.buttonsHBox = new HBox(3);
         this.actionButton = new Button("Move");
         this.mainMenuScene = null;
         this.newGameMenuScene = null;
@@ -191,6 +185,7 @@ public class CYPathFX extends Application {
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> openFileChooser(this.primaryStage, "Save"));
 
+        HBox buttonsHBox = new HBox();
         buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
 
         
@@ -301,13 +296,13 @@ public class CYPathFX extends Application {
                     // TOP
                     if(j == sizeBoardColumns && (i == sizeBoardRows * 2 - 1)) {
                         Circle player1Circle = createPlayerCircle(this.game.getBoard().getPawn(0).getColor()); 
-                        System.out.println("couleur joueur "+ this.game.getBoard().getPawn(0) +" = " + this.game.getBoard().getPawn(0).getColor());
+                        // System.out.println("couleur joueur "+ this.game.getBoard().getPawn(0) +" = " + this.game.getBoard().getPawn(0).getColor());
                         cellStackPane.getChildren().add(player1Circle);
 
                         // BOTTOM
                     } else if (j == sizeBoardColumns && (i == 1 )) {
                         Circle player2Circle = createPlayerCircle(this.game.getBoard().getPawn(1).getColor());
-                        System.out.println("couleur joueur " + this.game.getBoard().getPawn(1) + " = " + this.game.getBoard().getPawn(1).getColor());
+                        // System.out.println("couleur joueur " + this.game.getBoard().getPawn(1) + " = " + this.game.getBoard().getPawn(1).getColor());
                         cellStackPane.getChildren().add(player2Circle);
                     }
 
@@ -376,23 +371,23 @@ public class CYPathFX extends Application {
     }
 
     public void addCircleToCell(GridPane gridPane, int rowIndex, int columnIndex, ColorPawn color) {
-        System.out.println("AJOUT column index = " + columnIndex + "row index = " + rowIndex);
+        // System.out.println("AJOUT column index = " + columnIndex + "row index = " + rowIndex);
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        System.out.println("Circle en cours d'ajout");
+        // System.out.println("Circle en cours d'ajout");
         if(stack != null) {
             Circle circle = createPlayerCircle(color);
             stack.getChildren().add(circle);
-            System.out.println("Circle ajouté");
+            // System.out.println("Circle ajouté");
         }
     }
     
     public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        System.out.println("SUPPRR column index = " + columnIndex + "row index = " + rowIndex);
-        System.out.println("Circle en cours de suppression");
+        // System.out.println("SUPPRR column index = " + columnIndex + "row index = " + rowIndex);
+        // System.out.println("Circle en cours de suppression");
         if(stack != null) {
             stack.getChildren().removeIf(node -> node instanceof Circle);
-            System.out.println("Circle supprimé");
+            // System.out.println("Circle supprimé");
         }
     }
 
@@ -439,7 +434,7 @@ public class CYPathFX extends Application {
 	 * Color all the cells that the player can move to.
      * Change the cell's color if the player hover.
 	 * 
-	 * @param pawnId Int representing the ID of the abstraction.Player.
+	 * @param pawnId Int representing the ID of the Player.
 	 */
 
     public void showPossibleCells(int pawnId){
@@ -456,13 +451,13 @@ public class CYPathFX extends Application {
             ObservableList<Node> children = stack.getChildren();
             int lastIndex = children.size() - 1;
             Node node = children.get(lastIndex);
-            System.out.println(p.getX() + "," + p.getY());
+            // System.out.println(p.getX() + "," + p.getY());
             if( node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
                 rec.setFill(possibleCellColor);
                 this.previousPossibleCells.add(rec);
 
-                //abstraction.Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
+                //Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
             }
         }
     }
@@ -523,9 +518,7 @@ public class CYPathFX extends Application {
         }
 
 
-        //TODO: save and load the game in the given file
-
-        System.out.println("Action: " + action);
+        // System.out.println("Action: " + action);
     }
 
 

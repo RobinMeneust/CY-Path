@@ -47,13 +47,24 @@ or
 
 ## Known Bugs/Issues to be fixed
 
-- In the JavaFX window, there is no pawn for now and fences can't be placed yet
-- The fence can't be placed here (Starting point:(1,1)) at the first round even though it should be possible
+- When you win the program stops. In a future update we may want to go to the main menu after winning a game.
+- Crossing fences can be placed (in a "X" shape), it shouldn't be allowed.
+- Trying to place a fence to (0,0) and then to another position causes a crash.
+- Javadoc isn't complete so `mvn javadoc:jar` may generate errors
 
 ## How to play
 
-For now this is mainly in console mode.
+When you launch the application you can either press 'w' to open a JavaFX window or play in console mode by pressing 'c'.
 The JavaFX application window can be openend, but it's just used to show the current progress of this project, it's still not finished.
+
+In the JavaFX window:
+
+- Click on the button to change the mode (placing fence or moving)
+- Click on a cell to make a move or place a fence
+- Right click to change the fence orientation
+- If a fence is red it's not a valid position and if it's green it can be placed
+- The cells where you can move to are in a different color
+
 
 In the console mode display:
 
@@ -89,18 +100,6 @@ To play you must write in the console your answer when a question is asked to yo
     - "Y" : Give a number between 0 and 8. It's the y (vertical) coordinate of the position where you want to move your pawn
     - Here we consider that (0,0) will place a fence going from (0,0) to (0,2) if it's vertical or (0,0) to (2,0) if it's horizontal. So the coordinates given here correspond to leftmost and uppermost point of the fence
 - If any of the given input are incorrect we ask the same question to the user over and over again
-
-
-### Concerning the JavaFX application
-
-The window opens after you entered the number of player (so when the game really start)
-It's still under developement so all functionalities aren't available and it needs more testing
-
-For now you can only:
-- Choose your mode by clicking the button: Placing fences or moving your pawn
-- See the possible moves your pawn can do
-- Move the pawn by clicking an available cell, but in this version you have to click twice the button (used to change modes), to update the board, and a player can move twice and there is not pawn displayed
-- See where a fence can be placed on the board by moving your mouse above the cells (green = it can be placed and red = it's not a valid position) to rotate the fence use the mouse wheel on the board
 
 
 ## Documentation

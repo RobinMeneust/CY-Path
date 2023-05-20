@@ -8,22 +8,22 @@ package abstraction;
 
 public enum Side {
 	/**
-	 * abstrac.Side where y is at its maximum value
+	 * Side where y is at its maximum value
 	 */
 	BOTTOM,
 
 	/**
-	 * abstrac.Side where y = 0
+	 * Side where y = 0
 	 */
 	TOP,
 
 	/**
-	 * abstrac.Side where x = 0
+	 * Side where x = 0
 	 */
 	LEFT,
 
 	/**
-	 * abstrac.Side where x is at its maximum value
+	 * Side where x is at its maximum value
 	 */
 	RIGHT;
 

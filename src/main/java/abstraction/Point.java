@@ -9,7 +9,7 @@ package abstraction;
 public class Point {
 
     /**
-     * State the abstrac.Point's class attributes
+     * State the Point's class attributes
      */
 
     private int x;
@@ -38,7 +38,7 @@ public class Point {
     /**
      * Create a point by taking another point as an argument
      * 
-     * @param p (abstrac.Point)
+     * @param p (Point)
      */
 
     public Point(Point p) {
@@ -90,8 +90,8 @@ public class Point {
     /**
      * Accessor to recover the distance between two points
      * 
-     * @param p1 (abstrac.Point) : First point coordinates
-     * @param p2 (abstrac.Point) : Second point coordinates
+     * @param p1 (Point) : First point coordinates
+     * @param p2 (Point) : Second point coordinates
      * @return (int) : Distance between two points
      */
 

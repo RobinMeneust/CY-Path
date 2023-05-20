@@ -16,7 +16,7 @@ public abstract class GameAbstract {
 	private int currentPlayerIndex;
 
 	/**
-	 * Create a abstrac.GameAbstract object by giving all of its attributes
+	 * Create a GameAbstract object by giving all of its attributes
 	 * 
 	 * @param players Array of the players
 	 * @param nbFences Maximum number of fences that can be placed in total
@@ -98,7 +98,7 @@ public abstract class GameAbstract {
 	 * Get a player from its index
 	 * 
 	 * @param index Index of the player
-	 * @return abstrac.Player corresponding to the given index
+	 * @return Player corresponding to the given index
 	 */
 
 	public Player getPlayer(int index){
@@ -118,7 +118,7 @@ public abstract class GameAbstract {
 	/**
 	 * Get the board on which the current game is played
 	 * 
-	 * @return abstrac.Board used for this game
+	 * @return Board used for this game
 	 */
 	
 	public Board getBoard() {

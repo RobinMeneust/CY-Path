@@ -74,7 +74,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 							System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
 						}
 					} catch (IncorrectPawnIndexException e) {
-						System.err.println("ERROR: abstrac.Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
+						System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
 						System.exit(-1);
 					}
 				} else if (this.cyPathFX.isMoveMode() && this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell)) {

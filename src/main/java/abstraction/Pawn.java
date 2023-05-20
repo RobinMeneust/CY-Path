@@ -8,7 +8,7 @@ package abstraction;
 
 public class Pawn {
     /**
-     * State the abstrac.Pawn's class attributes
+     * State the Pawn's class attributes
      */
 
 	private Point position;
@@ -24,15 +24,15 @@ public class Pawn {
      * account the number of remaining cells of the game board, its starting point,
      * the game board and a player.
      * 
-     * @param position        (abstrac.Point) : coordinates of the current pawn
+     * @param position        (Point) : coordinates of the current pawn
      * @param id              (int) : id of the pawn
      * @param availableFences (int) : number of barriers still available for a
      *                        player
-     * @param startingSide    (abstrac.Side) : side of the game board from which the pawn
+     * @param startingSide    (Side) : side of the game board from which the pawn
      *                        leaves
      * @param color           (Color) : color of a pawn
-     * @param board           (abstrac.Board) : current board game
-     * @param player          (abstrac.Player) : the player who has the pawn
+     * @param board           (Board) : current board game
+     * @param player          (Player) : the player who has the pawn
      */
 
     public Pawn(Point position, int id, int availableFences, Side startingSide, ColorPawn color, Board board, Player player){
@@ -50,10 +50,10 @@ public class Pawn {
      * account its starting point, the game board and a player.
      * 
      * @param id           (int) : id of the pawn
-     * @param startingSide (abstrac.Side) : side of the game board from which the pawn
+     * @param startingSide (Side) : side of the game board from which the pawn
      * @param color        (Color) : color of a pawn
-     * @param board        (abstrac.Board) : current board game
-     * @param player       (abstrac.Player) : the player who has the pawn
+     * @param board        (Board) : current board game
+     * @param player       (Player) : the player who has the pawn
      */
 
     public Pawn(int id, Side startingSide, ColorPawn color, Board board, Player player){
@@ -69,7 +69,7 @@ public class Pawn {
     /**
      * Accessor to recover the position of a pawn
      * 
-     * @return (abstrac.Point) position
+     * @return (Point) position
      */
 
     public Point getPosition() {
@@ -79,7 +79,7 @@ public class Pawn {
     /**
      * Accessor to assign the position of a pawn to the current pawn
      * 
-     * @param positition (abstrac.Point)
+     * @param positition (Point)
      */
 
     public void setPosition(Point positition){
@@ -119,7 +119,7 @@ public class Pawn {
     /**
      * Accessor to recover the initial starting side of the pawn
      * 
-     * @return (abstrac.Side) startingSide
+     * @return (Side) startingSide
      */
 
     public Side getStartingSide() {
@@ -139,7 +139,7 @@ public class Pawn {
     /**
      * Accessor to recover the board game of a CY-PATH game
      * 
-     * @return (abstrac.Board) board
+     * @return (Board) board
      */
 
     public Board getBoard() {
@@ -149,7 +149,7 @@ public class Pawn {
     /**
      * Accessor to retrieve the player associated with the current pawn
      * 
-     * @return (abstrac.Player) player
+     * @return (Player) player
      */
 
     public Player getPlayer(){
@@ -167,7 +167,7 @@ public class Pawn {
     /**
      * A procedure to update the current point position
      * 
-     * @param position (abstrac.Point)
+     * @param position (Point)
      */
 
     public void move(Point position){

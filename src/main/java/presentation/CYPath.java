@@ -1,5 +1,5 @@
 package presentation; /**
- * Importing java classes needed for the presentation.CYPath class
+ * Importing java classes needed for the CYPath class
  * 
  * Importing classes from the java.util package
  */
@@ -10,7 +10,7 @@ import abstraction.Player;
 import java.util.Scanner;
 
 /**
- * Main class of the presentation.CYPath project
+ * Main class of the CYPath project
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */

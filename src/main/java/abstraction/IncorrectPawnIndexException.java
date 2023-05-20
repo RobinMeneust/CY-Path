@@ -6,11 +6,11 @@ package abstraction;
 
 public class IncorrectPawnIndexException extends Exception {
     /**
-     * Constructor of abstrac.IncorrectPawnIndexException.
-     * Add the error message to the exception: "ERROR: abstrac.Pawn index out of bounds"
+     * Constructor of IncorrectPawnIndexException.
+     * Add the error message to the exception: "ERROR: Pawn index out of bounds"
      */
     
     public IncorrectPawnIndexException() {
-        super("ERROR: abstrac.Pawn index out of bounds");
+        super("ERROR: Pawn index out of bounds");
     }
 }
