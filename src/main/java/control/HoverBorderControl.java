@@ -3,7 +3,6 @@ package control;
 import abstraction.*;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -14,16 +13,30 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import presentation.CYPathFX;
 
+/**
+ * Control when the player hovers his cursor on the board.
+ *
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
 public class HoverBorderControl implements EventHandler<MouseEvent> {
 
 	private CYPathFX cyPathFX;
 	private Fence fence;
 
+	/**
+	 * @param cyPathFX	Reference to the JavaFX interface
+	 * @param fence		Reference to abstraction.Fence
+	 */
 	public HoverBorderControl(CYPathFX cyPathFX, Fence fence) {
 		this.cyPathFX = cyPathFX;
 		this.fence = fence;
 	}
 
+	/**
+	 * Handler of a cell when the cursor hovers it.
+	 * This handler helps the players to acknowledge where he can move his pawn or where it's possible to place a fence.
+	 * @param event	Event of the mouse when it entered or exited a cell
+	 */
 	@Override
 	public void handle(MouseEvent event) {
 		Object o = event.getSource();
@@ -37,6 +50,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 			}else{
 				System.err.println("ERROR: Can't cast to a rectangle or a circle");
 			}
+			// The player wants to place a fence
 			if (!this.cyPathFX.isMoveMode()) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED || event.getEventType() == MouseEvent.MOUSE_CLICKED) {
 					Point pStartCell = new Point(0, 0);
@@ -49,7 +63,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 					pStartFenceCoord.setX((pStartCell.getX() - 1) / 2);
 					pStartFenceCoord.setY((pStartCell.getY() - 1) / 2);
 
-
+					// Depending on the orientation of the fence, a dummy fence will be displayed to show where it is possible to place a fence.
 					if (this.fence.getOrientation() == Orientation.HORIZONTAL) {
 						Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), Orientation.HORIZONTAL, pStartFenceCoord);
 						if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
@@ -91,8 +105,10 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 						}
 					}
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
+					// If the cursor moves from the current cell, we delete the current dummy fence for the next one to appear properly
 					this.resetHighlightedFences(this.cyPathFX);
 				}
+			// The player wants to move
 			} else if (this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell) && sourceCell != null) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 					sourceCell.setFill(this.cyPathFX.cellColorHover);
@@ -103,8 +119,14 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 		}
 	}
 
-	private void setColorLine(int x, int i) {
-		Node n = this.cyPathFX.getNodeFromGridPane(this.cyPathFX.gPane, i, x);
+
+	/**
+	 * Set the color the dummy fence for the player to show where it is possible to place a fence.
+	 * @param x	The X coordinate of the origin of the fence on the grid
+	 * @param y The Y coordinate of the origin of the fence on the grid
+	 */
+	private void setColorLine(int x, int y) {
+		Node n = this.cyPathFX.getNodeFromGridPane(this.cyPathFX.gPane, y, x);
 		if (n instanceof Line) {
 			Line l = (Line) n;
 			if (l.getStroke() != Color.BLACK) {
@@ -116,9 +138,15 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 		}
 	}
 
+	/**
+	 * Resets the separation of the grid to the original.
+	 * With this, the old dummy fence is deleted to let the new one be visible and distinct from the rest of the grid.
+	 * @param cyPathFX Reference to the JavaFX interface
+	 */
 	public void resetHighlightedFences(CYPathFX cyPathFX) {
 		if (cyPathFX.prevHighlightedFencesList != null) {
 			for (Line l : cyPathFX.prevHighlightedFencesList) {
+				// If the color is BLACK, it means that it's border already placed, and it must not be changed.
 				if (l.getStroke() != Color.BLACK) {
 					// If it's not already a border
 					l.setStroke(Color.LIGHTGRAY);

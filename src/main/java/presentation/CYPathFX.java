@@ -417,7 +417,7 @@ public class CYPathFX extends Application {
     /**
 	 * Reset previous possible cells to be updated with the game.
      * 
-	 * @param pawnId Int represanting the ID of the player.
+	 * @param pawnId Int representing the ID of the player.
 	 */
 
     public void resetPossibleCells(int pawnId){
@@ -428,8 +428,6 @@ public class CYPathFX extends Application {
             rec.setFill(cellColor);
             previousPossibleCells.removeFirst();
         }
-
-        //System.out.println("Reset des couleurs");
     }
 
 
