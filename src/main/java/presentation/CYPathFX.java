@@ -2,7 +2,6 @@ package presentation; /**
  * Importing java classes needed for the CYPathFX class
  */
 
-import java.io.File;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
@@ -38,7 +37,7 @@ public class CYPathFX extends Application {
      * State the CYPATH's class attributes
      */
     
-    private Button actionButton;
+    public Button actionButton;
     public GameFX game;
     public GridPane gPane;
     private Fence fence;
@@ -110,7 +109,7 @@ public class CYPathFX extends Application {
         Button loadButton = new Button("Load");
 
         loadButton.setOnAction(e -> loadGame());
-        
+
 
         buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton);
     }
@@ -270,9 +269,7 @@ public class CYPathFX extends Application {
         }catch (IncorrectPawnIndexException err){
             System.err.println(err);
         }
-    
-        gPane.setOnMouseClicked(new FenceOrientationControl(this, this.fence));
-    
+
         // First horizontal border (top)
         for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
             border = createLineBorder(0, 0, lineLengthBorders, 0, borderColor, lineWidth);
@@ -287,14 +284,14 @@ public class CYPathFX extends Application {
     
             for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
                 // Cells
-                StackPane cellStackPane = new StackPane(); // Créer un nouveau StackPane pour chaque cellule
+                StackPane cellStackPane = new StackPane(); // Create a new StackPane for every cell
 
                 // Cells
                 cell = new Rectangle(cellSize, cellSize);
                 cell.setFill(cellColor);
                 cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
                 cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
-                cellStackPane.setOnMouseClicked(new ClickAddBorderControl(this, this.game, this.actionButton, this.fence));
+                cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.actionButton));
                 cellStackPane.getChildren().add(cell);
                 //System.out.println("column = " + j +" ligne = " + i);                
 
@@ -420,7 +417,7 @@ public class CYPathFX extends Application {
     /**
 	 * Reset previous possible cells to be updated with the game.
      * 
-	 * @param pawnId Int represanting the ID of the player.
+	 * @param pawnId Int representing the ID of the player.
 	 */
 
     public void resetPossibleCells(int pawnId){
@@ -431,8 +428,6 @@ public class CYPathFX extends Application {
             rec.setFill(cellColor);
             previousPossibleCells.removeFirst();
         }
-
-        //System.out.println("Reset des couleurs");
     }
 
 

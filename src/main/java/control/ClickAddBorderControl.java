@@ -14,6 +14,12 @@ import javafx.scene.shape.Shape;
 import presentation.CYPathFX;
 import javafx.scene.control.Button;
 
+/**
+ * Control when the player wants to place a fence on the board.
+ *
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
+
 public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 
 	private CYPathFX cyPathFX;
@@ -21,6 +27,13 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 	private Button actionButton;
 	private Fence fence;
 
+	/**
+	 * Default constructor.
+	 * @param cyPathFX 		Reference to the JavaFX interface
+	 * @param game			Reference to the game for the JavaFX interface
+	 * @param actionButton	Reference to the action button
+	 * @param fence			Reference to the fence to be placed
+	 */
 	public ClickAddBorderControl(CYPathFX cyPathFX, GameFX game, Button actionButton, Fence fence) {
 		this.cyPathFX = cyPathFX;
 		this.game = game;
@@ -28,12 +41,20 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 		this.fence = fence;
 	}
 
+	/**
+	 * Handler when a cell is clicked to place a fence.
+	 * This handler places a fence in the available row or column between two cells.
+	 * With that, a player can place a fence wherever he wants if the position of the wanted fence complies with the game's rules.
+	 * @param event	Event of the mouse when it's pressed
+	 */
 	@Override
 	public void handle(MouseEvent event) {
 		Object o = event.getSource();
 		if (o instanceof StackPane) {
 			StackPane stackPane = (StackPane) o;
 			Shape sourceCell = null;
+
+			// The cell retrieved may be just a rectangle or have a circle in it.
 			if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Rectangle) {
 				sourceCell = (Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
 			} else if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Circle) {
@@ -91,11 +112,12 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 				try {
 					Pawn pawn = this.game.getBoard().getPawn(this.game.getCurrentPlayerIndex());
 
+					// We move circle (pawn of the player) to its new location
 					this.cyPathFX.removeCircleFromCell(this.cyPathFX.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
 
-					StackPane parentStackPane = (StackPane) sourceCell.getParent(); // Récupérer le StackPane parent
-					int columnIndex = GridPane.getColumnIndex(parentStackPane); // Obtenir l'indice de colonne du StackPane
-					int rowIndex = GridPane.getRowIndex(parentStackPane); // Obtenir l'indice de ligne du StackPane
+					StackPane parentStackPane = (StackPane) sourceCell.getParent();
+					int columnIndex = GridPane.getColumnIndex(parentStackPane);
+					int rowIndex = GridPane.getRowIndex(parentStackPane);
 					pawn.setPosition(new Point(columnIndex / 2, rowIndex / 2));
 
 					this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());

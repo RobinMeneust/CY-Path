@@ -273,7 +273,13 @@ The task's priority is sorted in ascending order
 			* Start : 2023/05/18 16:00
 			* Estimated end : 2023/05/18 16:10
 			* Real end :2023/05/18 16:20
-		10.1.3 Add an event to move the player when a cell is clicked (where he can go) (remove the previous pawn position on the grid)
+		10.1.3 Add a pawn for each player
+			* PROGRESS: Done
+			* Who: David
+			* Start : 2023/05/20 18:30
+			* Estimated end : 2023/05/20 19:00
+			* Real end : 2023/05/20 20:00
+		10.1.4 Add an event to move the player when a cell is clicked (where he can go) (remove the previous pawn position on the grid)
 			* PROGRESS: Done
 			* Who: David
 			* Start : 2023/05/18 16:30
@@ -300,13 +306,13 @@ The task's priority is sorted in ascending order
 		* Real end : 2023/05/20 17h07
 	10.5 Add button for the save system
 		10.3.1 Create a load button that opens a FileChoser
-			* PROGRESS: In progress
+			* PROGRESS: Done
 			* Who: David
 			* Start : 2023/05/20 13:10
 			* Estimated end : 2023/05/20 14:00
 			* Real end :2023/05/20 13:30
 		10.3.2 Create a save button that opens a FileChoser
-			* PROGRESS: In progress
+			* PROGRESS: Done
 			* Who: David
 			* Start : 2023/05/20 13:30
 			* Estimated end : 2023/05/20 14:40
