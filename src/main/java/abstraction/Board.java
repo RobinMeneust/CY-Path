@@ -78,6 +78,21 @@ public class Board {
 		return fenceLength;
 	}
 
+	public Fence[] getFencesArray() {
+		Fence[] fencesArray = new Fence[this.fences.size()];
+		this.fences.toArray(fencesArray);
+		return fencesArray;
+	}
+
+	public Pawn[] getPawnsArray() {
+		Pawn[] clone = new Pawn[this.pawns.length];
+		try {
+			for(int i=0; i<clone.length; i++) {
+				clone[i] = (Pawn) pawns[i].clone();
+			}
+		} catch(CloneNotSupportedException e) {};
+		return clone;
+	}
 	
 	/** 
 	 * Check if the last checked position was where the pawn of the given index is. If it's not, then we get the list of possible moves the player can make from this position

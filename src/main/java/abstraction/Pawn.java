@@ -6,7 +6,7 @@ package abstraction;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
-public class Pawn {
+public class Pawn implements Cloneable{
     /**
      * State the Pawn's class attributes
      */
@@ -184,5 +184,10 @@ public class Pawn {
     @Override
     public String toString(){
         return("{\nposition:"+this.getPosition()+",\n"+"id:"+this.getId()+",\n"+"availableFences:"+this.getAvailableFences()+",\n"+"startingSide:"+this.getStartingSide()+",\n"+"color:"+this.getColor()+",\n"+"}");
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+        Pawn clone = new Pawn(this.getPosition(),this.getId(), this.getAvailableFences(), this.getStartingSide(), this.getColor(),this.getBoard(), this.getPlayer());
+        return clone;
     }
 }

@@ -451,6 +451,8 @@ public class CYPathFX extends Application {
 
     private void saveGame(File file) {
         // TODO
+        SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
+        saveDataObject.save(file.getAbsolutePath());
     }
 
 

@@ -29,7 +29,7 @@ public class SaveDataInJSONFile {
     private int rows;
     private int columns;
     private Fence[] listFences;
-    private int placedFences;
+    private int maxNbFences;
     private Pawn[] listPawns;
 
     private String folderPath = "./src/main/resources/data/";
@@ -42,14 +42,14 @@ public class SaveDataInJSONFile {
      * @param rows         (int) number of columns of the game board
      * @param columns      (int) number of rows of the game board
      * @param listFences   (Fence) list of fences placed on the board
-     * @param placedFences (int) number of fences placed on the board
+     * @param maxNbFences (int) number of fences placed on the board
      * @param listPawns    (int) list of pawns of all players of the CY-PATH party
      */
     public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int placedFences, Pawn[] listPawns) {
         this.rows = rows;
         this.columns = columns;
         this.listFences = listFences;
-        this.placedFences = placedFences;
+        this.maxNbFences = placedFences;
         this.listPawns = listPawns;
     }
 
@@ -98,26 +98,39 @@ public class SaveDataInJSONFile {
         }
     }
 
-    public void save(SaveDataInJSONFile game, String filePath) {
+    public void save(String filePath) {
 
         JSONObject gameObjects = new JSONObject();
         gameObjects.put("rows", rows);
         gameObjects.put("columns", columns);
-        gameObjects.put("placedFences", placedFences);
+        gameObjects.put("maxNbFences", maxNbFences);
 
+        
         CustomJSONArray gameElementsListFences = new CustomJSONArray();
-
-        for (int i = 1; i <= listFences.length; i++) {
-            gameElementsListFences.addCustomArrayPoint("StartPawnFence" + i, listFences[i - 1].getStart());
-            gameElementsListFences.addCustomArrayPoint("EndPawnFence" + i, listFences[i - 1].getEnd());
+        
+        for (int i = 0; i < listFences.length; i++) {
+            JSONObject fenceObject = new JSONObject();
+            fenceObject.put("start", listFences[i].getStart());
+            fenceObject.put("end", listFences[i].getEnd());
+            fenceObject.put("orientation", listFences[i].getOrientation());
+            gameElementsListFences.put(fenceObject);
         }
 
         gameObjects.put("listFences", gameElementsListFences);
 
         CustomJSONArray gameElementsListPawns = new CustomJSONArray();
 
-        for (int i = 1; i <= listPawns.length; i++) {
-            gameElementsListPawns.addCustomArrayPoint("PositionPawnPlayer" + i, listPawns[i - 1].getPosition());
+        for (int i = 0; i < listPawns.length; i++) {
+            JSONObject pawnObject = new JSONObject();
+
+            pawnObject.put("color",listPawns[i].getColor().toString());
+            JSONObject pointObject = new JSONObject();
+            pointObject.put("x", listPawns[i].getPosition().getX());
+            pointObject.put("y", listPawns[i].getPosition().getY());
+            pawnObject.put("pos",pointObject);
+            pawnObject.put("nbRemainingFences",listPawns[i].getAvailableFences());
+
+            gameElementsListPawns.put(listPawns[i].getId(),pawnObject);
         }
 
         gameObjects.put("listPawns", gameElementsListPawns);
