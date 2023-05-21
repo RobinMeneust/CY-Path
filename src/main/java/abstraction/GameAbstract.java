@@ -1,5 +1,6 @@
 package abstraction;
 
+import java.util.HashMap;
 import java.util.Observable;
 
 /**
@@ -18,6 +19,7 @@ public abstract class GameAbstract extends Observable {
 	private Player[] players;
 	private Board board;
 	private int currentPlayerIndex;
+	private HashMap<Player,Pawn> playersPawns;
 
 	/**
 	 * Create a GameAbstract object by giving all of its attributes
@@ -36,8 +38,25 @@ public abstract class GameAbstract extends Observable {
 		}
 		this.nbFences = nbFences;
 		this.players = players;
-		this.board = new Board(nbCols, nbRows, this);
+
+		this.playersPawns = new HashMap<Player,Pawn>(4);
+		try {
+			for(int i=0; i<players.length;i++) {
+				Pawn pawn = new Pawn(i, Side.values()[i], ColorPawn.values()[i], this.getPlayer(i), this.getNbFences(), this.getNbPlayers());
+				playersPawns.put(players[i], pawn);
+			}
+		} catch(IncorrectPlayerIndexException e) {
+			// It should not happen since i is positive and lesser than the size of the players array
+			System.err.println(e);
+			System.exit(-1);
+		}
+
+		this.board = new Board(nbCols, nbRows, this, playersPawns);
 		this.currentPlayerIndex = 0;
+	}
+
+	public Pawn getPawn(Player p) {
+		return this.playersPawns.get(p);
 	}
 
 	/**
@@ -56,10 +75,26 @@ public abstract class GameAbstract extends Observable {
 	 * @param currentPlayer New current player index
 	 */
 
-	protected void setCurrentPlayerIndex(int currentPlayer) {
+	private void setCurrentPlayerIndex(int currentPlayer) {
 		if(currentPlayer>=0) {	
 			this.currentPlayerIndex = currentPlayer % this.getNbPlayers();
 		}
+	}
+
+	protected void endPlayerTurn() {
+		int newPlayerIndex = (this.getCurrentPlayerIndex()+1) % this.getNbPlayers();
+		this.setCurrentPlayerIndex(newPlayerIndex);
+	}
+
+	public Player getCurrentPlayer() {
+		try {
+			return this.getPlayer(getCurrentPlayerIndex());
+		} catch (IncorrectPlayerIndexException e) {
+			// It should not happen since the currentPlayerIndex is positive and lesser than the size of the players array
+			System.err.println(e);
+			System.exit(-1);
+		}
+		return null;
 	}
 
 	/**
@@ -105,8 +140,12 @@ public abstract class GameAbstract extends Observable {
 	 * @return Player corresponding to the given index
 	 */
 
-	public Player getPlayer(int index){
-		return players[index];
+	public Player getPlayer(int index) throws IncorrectPlayerIndexException {
+		if(index>=0 && index<players.length) {
+			return players[index];
+		} else {
+			throw new IncorrectPlayerIndexException();
+		}
 	}
 
 	/**

@@ -16,6 +16,6 @@ public class CurrentPlayerTextControl implements Observer {
 	}
 	@Override
 	public void update(Observable observable, Object o) {
-		currentPlayer.setText(this.game.getPlayer(this.game.getCurrentPlayerIndex()).getUsername()+"'s turn");
+		currentPlayer.setText(this.game.getCurrentPlayer().getUsername()+"'s turn");
 	}
 }

@@ -38,10 +38,10 @@ public class Pawn implements Cloneable{
     public Pawn(Point position, int id, int availableFences, Side startingSide, ColorPawn color, Board board, Player player){
         this.position = position;
         this.id = id;
-        this.availableFences = availableFences;
+        this.availableFences = board.getGame().getNbFences() / board.getGame().getNbPlayers();
+        this.board = board;
         this.startingSide = startingSide;
         this.color = color;
-        this.board = board;
         this.player = player;
     }
 
@@ -52,17 +52,18 @@ public class Pawn implements Cloneable{
      * @param id           (int) : id of the pawn
      * @param startingSide (Side) : side of the game board from which the pawn
      * @param color        (Color) : color of a pawn
-     * @param board        (Board) : current board game
      * @param player       (Player) : the player who has the pawn
+     * @param nbMaxFences  (int) : Max number of fences in total (with all the pawns)
+     * @param nbPawns      (int) : Number of pawns
      */
 
-    public Pawn(int id, Side startingSide, ColorPawn color, Board board, Player player){
-        this.position = board.getGrid().getCenterOfSide(startingSide);
+    public Pawn(int id, Side startingSide, ColorPawn color, Player player, int nbMaxFences, int nbPawns){
+        this.position = null;
         this.id = id;
-        this.availableFences = board.getGame().getNbFences()/board.getGame().getNbPlayers();
+        this.availableFences = nbMaxFences / nbPawns;
+        this.board = null;
         this.startingSide = startingSide;
         this.color = color;
-        this.board = board;
         this.player = player;
     }
     
@@ -143,7 +144,12 @@ public class Pawn implements Cloneable{
      */
 
     public Board getBoard() {
-        return board;
+        return this.board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+        this.position = board.getGrid().getCenterOfSide(startingSide);
     }
 
     /**
@@ -160,7 +166,7 @@ public class Pawn implements Cloneable{
      * A procedure that updates the number of remaining fences to be placed
      */
 
-    public void placeFence(){
+    public void decreaseAvailableFences(){
         this.setAvailableFences(this.getAvailableFences()-1);
     }
 

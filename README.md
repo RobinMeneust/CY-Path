@@ -47,10 +47,11 @@ or
 
 ## Known Bugs/Issues to be fixed
 
-- When you win the program stops. In a future update we may want to go to the main menu after winning a game.
-- Crossing fences can be placed (in a "X" shape), it shouldn't be allowed.
-- Trying to place a fence to (0,0) and then to another position causes a crash.
+- When you win the program stops. In a future update we may want to go to the main menu after winning a game
+- Trying to place a fence to (0,0) and then to another position causes a crash
 - Javadoc isn't complete so `mvn javadoc:jar` may generate errors
+- For now entering an illegal file nam for the save causes a crash
+- We can't load a game
 
 ## How to play
 

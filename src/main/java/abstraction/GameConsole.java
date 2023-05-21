@@ -44,8 +44,8 @@ public class GameConsole extends GameAbstract {
             while(this.getBoard().getWinner() == -1){
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
 
-                System.out.println("Turn of player: " +  this.getPlayer(this.getCurrentPlayerIndex()));
-                currentPawn = this.getBoard().getPawn(this.getCurrentPlayerIndex());
+                System.out.println("Turn of player: " +  this.getCurrentPlayer());
+                currentPawn = this.getPawn(this.getCurrentPlayer());
                 System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
                 if(currentPawn.getAvailableFences() == 0){
                     response = "move";
@@ -60,18 +60,16 @@ public class GameConsole extends GameAbstract {
                             System.out.println("What is the name of your save file? (without extension) :");
                             String fileName = scanner.nextLine();
 
-                            File file = new File("../ressources/saves/"+fileName);
                             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbFences(), this.getBoard().getPawnsArray());
-                            saveDataObject.save(file.getAbsolutePath());
+                            saveDataObject.save(fileName);
                         }
-                    }while(!response.matches("M(OVE)?") && !response.matches("S(AVE)?"));
+                    }while(!response.matches("M(OVE)?") && !response.matches("F(ENCE)?"));
                 }
         
                 if(response.equals("M")){
                     this.getBoard().displayBoard(DisplayType.COORD_CELL);
 
-                    PossibleMoves possibleMoves = this.getBoard().updateAndGetPossibleMoves(this.getCurrentPlayerIndex());
-                    List<Point> listPossibleMoves = possibleMoves.getPossibleMovesList();
+                    List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
 
                     System.out.println("Those are the cells where your pawn can move to:");
                     System.out.println(listPossibleMoves);
@@ -81,8 +79,8 @@ public class GameConsole extends GameAbstract {
                     System.out.println("Where do you want to go ?");
 
                     do {
-                        point = Board.choosePosition();
-                        isPawnPosValid = this.getBoard().movePawn(this.getCurrentPlayerIndex(), point);
+                        point = Point.choosePoint();
+                        isPawnPosValid = this.getBoard().movePawn(this.getPawn(getCurrentPlayer()).getId(), point);
                         if(!isPawnPosValid) {
                             System.out.println("The pawn can't move here\nTry again.");
                         }
@@ -107,16 +105,15 @@ public class GameConsole extends GameAbstract {
 
                     do {
                         System.out.println("Where do you want to put your fence ? (X,Y)");
-                        point = Board.choosePosition();
+                        point = Point.choosePoint();
                         fence.setStart(point);
-                        isFenceValid = this.getBoard().placeFence(this.getCurrentPlayerIndex(), fence);
+                        isFenceValid = this.getBoard().placeFence(this.getPawn(getCurrentPlayer()).getId(), fence);
                         if(!isFenceValid) {
                             System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
                         }
                     } while(!isFenceValid);
                 }
-                this.getBoard().clearLastCheckedFence();
-                this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
+                this.endPlayerTurn();
             }
 
             Player playerWinner = this.getBoard().getPawn(this.getBoard().getWinner()).getPlayer();

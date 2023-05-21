@@ -26,15 +26,15 @@ public class CYPath {
     public static void main(String[] args) {
         // Initialize game
         System.out.println("Welcome to CY-Path.\n");
-        char mode = '\0';
         Scanner sc = new Scanner(System.in);
+        String line = "";
         do{
             System.out.println("Type 'c' if you want to play in console mode or in a window with visuals 'w'");
-            String line = sc.nextLine();
-            mode = line.charAt(0);
-        } while(mode != 'w' && mode != 'c');
+            line = sc.nextLine();
+            line = line.toUpperCase();
+        } while(!line.equals("W") && !line.equals("C"));
 
-        if(mode == 'w'){
+        if(line.equals("W")){
             // Display mode
             CYPathFX.main(args);
         } else {
@@ -44,7 +44,10 @@ public class CYPath {
             int nbPlayer = 0;
             while(nbPlayer != 2 && nbPlayer != 4){
                 System.out.println("How many players do you want ? (2 or 4)");
-                nbPlayer = Integer.parseInt(sc.nextLine());
+                String userInput = sc.nextLine();
+                if(userInput.equals("2") || userInput.equals("4")){
+                    nbPlayer = Integer.parseInt(userInput);
+                }
             }
 
             Player[] players= new Player[nbPlayer];

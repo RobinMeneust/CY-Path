@@ -81,11 +81,11 @@ public class GameFX extends GameAbstract {
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
                 //Platform.runLater(() -> this.setAction("Move"));
 
-                System.out.println("Turn of player: " +  this.getPlayer(this.getCurrentPlayerIndex()));
+                System.out.println("Turn of player: " + this.getCurrentPlayer());
 
 				this.setChanged();
 				this.notifyObservers(this.getCurrentPlayerIndex());
-                currentPawn = this.getBoard().getPawn(this.getCurrentPlayerIndex());
+                currentPawn = this.getPawn(this.getCurrentPlayer());
 
                 this.setIsEndTurn(false);
                 while (!this.getIsEndTurn()) {
@@ -101,10 +101,8 @@ public class GameFX extends GameAbstract {
                     System.out.println("Move in : " + currentPawn.getPosition());
                 } else if("Place fence".equals(this.getAction().get())) {
                     System.out.println("Fence have been placed");
-                }  
-                this.getBoard().clearLastCheckedFence();
-                this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
-                this.getBoard().checkWin();
+                }
+                this.endPlayerTurn();
             }
         
             Pawn pawnWinner = this.getBoard().getPawn(this.getBoard().getWinner());

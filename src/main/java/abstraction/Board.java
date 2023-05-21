@@ -5,7 +5,9 @@ package abstraction; /**
  */
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -29,10 +31,8 @@ public class Board {
 	private int nbPlacedFences;
 	private Pawn[] pawns;
 	private int fenceLength;
-	private PossibleMoves possibleMoves;
-	private Fence lastCheckedFence;
-	private boolean lastCheckedFenceValid;
 	private int winner;
+	private List<Point> currentPossibleMoves;
 	
 	/**
 	 * Create a game board from a number of rows, columns and a Game
@@ -40,9 +40,10 @@ public class Board {
 	 * @param nbCols Number of columns of the game board
 	 * @param nbRows Number of rows of the game board
 	 * @param game Object extending GameAbstract, that contains the components of the current game (list of players, rules...)
+	 * @param playersPawns Map associating players to their pawn
 	 */
 
-	public Board(int nbCols, int nbRows, GameAbstract game) {
+	public Board(int nbCols, int nbRows, GameAbstract game, HashMap<Player,Pawn> playersPawns) {
 		this.nbCols = nbCols;
 		this.nbRows = nbRows;
 		this.size = nbCols * nbRows;
@@ -51,9 +52,6 @@ public class Board {
 		this.fences = null;
 		this.fenceLength = 2;
 		this.winner = -1;
-		this.possibleMoves = new PossibleMoves(null);
-		this.lastCheckedFence = null;
-		this.lastCheckedFenceValid = false;
 
 		if(game != null && game.getNbFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbFences());
@@ -61,10 +59,11 @@ public class Board {
 		
 		this.nbPlacedFences = 0;
 		this.pawns = new Pawn[game.getNbPlayers()];
-		int j = 0;
-		for(int i = 0; i < pawns.length; i++){
-			pawns[i] = new Pawn(i, Side.values()[j], ColorPawn.values()[j], this, this.game.getPlayer(i));
-			j++;
+		int i = 0;
+		for(Player p : playersPawns.keySet()){
+			pawns[i] = playersPawns.get(p);
+			pawns[i].setBoard(this);
+			i++;
 		}
 	}
 
@@ -92,93 +91,6 @@ public class Board {
 			}
 		} catch(CloneNotSupportedException e) {};
 		return clone;
-	}
-	
-	/** 
-	 * Check if the last checked position was where the pawn of the given index is. If it's not, then we get the list of possible moves the player can make from this position
-	 * 
-	 * @param pawnId Id of a pawn of the board
-	 * @return A PossibleMoves object corresponding to the given pawn. It contains its position and the possible moves it can do
-	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
-	 */
-
-	public PossibleMoves updateAndGetPossibleMoves(int pawnId) throws IncorrectPawnIndexException {
-		try {
-			Pawn pawn = this.getPawn(pawnId);
-			Point pawnPos = pawn.getPosition();
-			if(this.possibleMoves.getCurrentPosition() != null && pawnPos.equals(this.possibleMoves.getCurrentPosition())) {
-				// We don't search the possible moves since we've already done it for the same point
-				return this.possibleMoves;
-			}
-			
-			this.possibleMoves.setCurrentPosition(pawnPos);
-			this.possibleMoves.setPossibleMovesList(this.listPossibleMoves(pawnPos));
-			
-			return this.possibleMoves;
-		} catch (IncorrectPawnIndexException e) {
-			throw e;
-		}
-	}
-
-	/**
-	 * Clear the instance attribute PossibleMoves (object), by setting its attributes to null.
-	 */
-
-	public void clearPossibleMoves() {
-		this.possibleMoves.setCurrentPosition(null);
-		this.possibleMoves.setPossibleMovesList(null);
-	}
-
-	
-	/** 
-	 * Set the lastCheckedFence attribute to the given value
-	 * 
-	 * @param lastCheckedFence New value
-	 */
-
-	private void setLastCheckedFence(Fence lastCheckedFence) {
-		this.lastCheckedFence = lastCheckedFence;
-	}
-
-	
-	/** 
-	 * Get the lastCheckedFence attribute
-	 * 
-	 * @return Fence whose validity was checked the last
-	 */
-
-	private Fence getLastCheckedFence() {
-		return this.lastCheckedFence;
-	}
-
-	/**
-	 * Clear the lastCheckedFence attrivute by setting it to null
-	 */
-
-	public void clearLastCheckedFence() {
-		this.setLastCheckedFence(null);
-	}
-
-	
-	/** 
-	 * Get the value of lastCheckedFenceValid. Its value is true is the Fence in lastCheckedFence is valid
-	 * 
-	 * @return Boolean value of lastCheckedFenceValid
-	 */
-
-	public boolean isLastCheckedFenceValid() {
-		return this.lastCheckedFenceValid;
-	}
-
-	
-	/** 
-	 * Set the lastCheckedFenceValid value to the given one
-	 * 
-	 * @param lastCheckedFenceValid New value
-	 */
-
-	public void setLastCheckedFenceValid(boolean lastCheckedFenceValid) {
-		this.lastCheckedFenceValid = lastCheckedFenceValid;
 	}
 
 	/**
@@ -257,35 +169,8 @@ public class Board {
 		}
 	}
 
+
 	
-	/** 
-	 * Get the possibleMoves instance attribute
-	 * 
-	 * @return PossibleMoves object correspoonding to the last checked pawn position
-	 */
-
-	public PossibleMoves getPossibleMoves() {
-		return this.possibleMoves;
-	}
-
-	/**
-	 * Ask for a Point from the user, and return it.
-	 * 
-	 * @return Point chosen by the user
-	 */
-
-	public static Point choosePosition(){
-		Scanner scanner = new Scanner(System.in);
-		System.out.println();
-
-		System.out.print("X : ");
-		int x = Integer.parseInt(scanner.next());
-		System.out.println();
-		System.out.print("Y : ");	
-		int y = Integer.parseInt(scanner.next());
-		
-		return new Point(x,y);
-	}
 
 	/**
 	 * Get a string from the user that corresponds to the position where the player wants to move his pawn
@@ -349,14 +234,14 @@ public class Board {
 	 * 
 	 * @param position Current pawn position
 	 * @param posTested Position tested
-	 * @param posBehindTested Position just after posTested (posTested is between position and posLeftBehindTested)
-	 * @param posLeftBehindTested Position on the left of posBehindTested
-	 * @param posRightBehindTested Position on the right of posBehindTested
+	 * @param posBehindTested Position just after posTested (posTested is between position and posLeftTested)
+	 * @param posLeftTested Position on the left of posTested
+	 * @param posRightTested Position on the right of posTested
 	 * @return List of cells coordinates where the pawn can move to but only in one direction (only one 'posTested')
 	 * 
 	 */
 
-	public LinkedList<Point> possibleMove(Point position, Point posTested, Point posBehindTested, Point posLeftBehindTested, Point posRightBehindTested){
+	public LinkedList<Point> possibleMove(Point position, Point posTested, Point posBehindTested, Point posLeftTested, Point posRightTested){
 		LinkedList<Point> listMove = new LinkedList<Point>();
 		/* 
 		The given points are defined by considering the position and looking at one of the 4 directions (top,left,right,bottom).
@@ -365,23 +250,23 @@ public class Board {
 
 		// We check if the tested position is on the board and if the current position and the tested position are not separated by a fence
 		if(this.isCellOnTheBoard(posTested) && this.grid.areConnected(position,posTested)){
-			if(this.isPawnAtPos(posTested) && this.isCellOnTheBoard(posBehindTested)){
-				// There is a pawn so we can't go there, but we can maybe jump above it since the cell behind is on the board
-				if(this.grid.areConnected(posTested,posBehindTested) && !this.isPawnAtPos(posBehindTested)){
+			if(this.isPawnAtPos(posTested)) {
+				// There is a pawn so we can't go there, but we can maybe jump above it
+				if(this.isCellOnTheBoard(posBehindTested) && this.grid.areConnected(posTested,posBehindTested) && !this.isPawnAtPos(posBehindTested)){
 					// The cell just behind is free
 					listMove.add(posBehindTested);
 				}
 				else{
 					// If there is a fence behind the pawn we check if we can go leftside or rightside
-					if(this.isCellOnTheBoard(posLeftBehindTested) && this.grid.areConnected(posBehindTested,posLeftBehindTested) && !this.isPawnAtPos(posLeftBehindTested)){
-						listMove.add(posLeftBehindTested);
+					if(this.isCellOnTheBoard(posLeftTested) && this.grid.areConnected(posTested,posLeftTested) && !this.isPawnAtPos(posLeftTested)){
+						listMove.add(posLeftTested);
 					}
-					if(this.isCellOnTheBoard(posRightBehindTested) && this.grid.areConnected(posBehindTested,posRightBehindTested) && !this.isPawnAtPos(posRightBehindTested)){
-						listMove.add(posRightBehindTested);
+					if(this.isCellOnTheBoard(posRightTested) && this.grid.areConnected(posTested,posRightTested) && !this.isPawnAtPos(posRightTested)){
+						listMove.add(posRightTested);
 					}
 				}
 			}
-			else{
+			else {
 				// There is no pawn so we can go there and we can't go behind it
 				listMove.add(posTested);
 			}
@@ -407,17 +292,17 @@ public class Board {
 
 		Point posTested = null;
 		Point posBehindTested = null;
-		Point posLeftBehindTested = null;
-		Point posRightBehindTested = null;
+		Point posLeftTested = null;
+		Point posRightTested = null;
 		LinkedList<Point> allPossibleMoves = null; // List of all the possibles moves considering the 4 directions
 		
 		//We test the bottom position
 		posTested = new Point(position.getX(), position.getY() + 1);
 		posBehindTested = new Point(position.getX(), position.getY() + 2);
-		posLeftBehindTested = new Point(position.getX() + 1, position.getY() + 1);
-		posRightBehindTested = new Point(position.getX() - 1, position.getY() + 1);
+		posLeftTested = new Point(position.getX() + 1, position.getY() + 1);
+		posRightTested = new Point(position.getX() - 1, position.getY() + 1);
 		
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftBehindTested,posRightBehindTested);
+		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
 		//if we can move to a position other than the initial position in this direction, we add it to the list
 		if(!allPossibleMoves.contains(position)){
 			listPossibleMovements.addAll(allPossibleMoves);
@@ -426,10 +311,10 @@ public class Board {
 		//We test the top position
 		posTested = new Point(position.getX(), position.getY() - 1);
 		posBehindTested = new Point(position.getX(), position.getY() - 2);
-		posLeftBehindTested = new Point(position.getX() - 1, position.getY() - 1);
-		posRightBehindTested = new Point(position.getX() + 1, position.getY() - 1);
+		posLeftTested = new Point(position.getX() - 1, position.getY() - 1);
+		posRightTested = new Point(position.getX() + 1, position.getY() - 1);
 
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftBehindTested,posRightBehindTested);
+		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
 		if(!allPossibleMoves.contains(position)){
 			listPossibleMovements.addAll(allPossibleMoves);
 		}
@@ -437,10 +322,10 @@ public class Board {
 		//We test the left position
 		posTested = new Point(position.getX() - 1, position.getY());
 		posBehindTested = new Point(position.getX() - 2, position.getY());
-		posLeftBehindTested = new Point(position.getX() - 1, position.getY() + 1);
-		posRightBehindTested = new Point(position.getX() - 1, position.getY() - 1);
+		posLeftTested = new Point(position.getX() - 1, position.getY() + 1);
+		posRightTested = new Point(position.getX() - 1, position.getY() - 1);
 
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftBehindTested,posRightBehindTested);
+		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
 		if(!allPossibleMoves.contains(position)){
 			listPossibleMovements.addAll(allPossibleMoves);
 		}
@@ -448,10 +333,10 @@ public class Board {
 		//We test the right position
 		posTested = new Point(position.getX() + 1, position.getY());
 		posBehindTested = new Point(position.getX() + 2, position.getY());
-		posLeftBehindTested = new Point(position.getX() + 1, position.getY() - 1);
-		posRightBehindTested = new Point(position.getX() + 1, position.getY() + 1);
+		posLeftTested = new Point(position.getX() + 1, position.getY() - 1);
+		posRightTested = new Point(position.getX() + 1, position.getY() + 1);
 
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftBehindTested,posRightBehindTested);
+		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
 		if(!allPossibleMoves.contains(position)){
 			listPossibleMovements.addAll(allPossibleMoves);
 		}
@@ -472,6 +357,35 @@ public class Board {
 			}
 		}
 		return null;
+	}
+
+
+	public List<Point> getCurrentPossibleMoves() throws IncorrectPawnIndexException {
+		if(this.currentPossibleMoves == null) {
+			try {
+				Pawn pawn = this.getPawn(this.getGame().getCurrentPlayerIndex());
+				this.setCurrentPossibleMoves(this.listPossibleMoves(pawn.getPosition()));
+			} catch (IncorrectPawnIndexException e) {
+				throw e;
+			}
+		}
+		return currentPossibleMoves;
+	}
+
+	public boolean isPawnPosValid(Point pos) throws IncorrectPawnIndexException {		
+		try {
+			return this.getCurrentPossibleMoves().contains(pos);
+		} catch (IncorrectPawnIndexException e) {
+			throw e;
+		}
+	}
+
+	private void setCurrentPossibleMoves(List<Point> currentPossibleMoves) {
+		this.currentPossibleMoves = currentPossibleMoves;
+	}
+
+	private void clearCurrentPossibleMoves() {
+		this.currentPossibleMoves = null;
 	}
 
 	/**
@@ -625,7 +539,6 @@ public class Board {
 		}
 		return true;
 	}
-
 	
 	/** 
 	 * Move the given pawn to the given position if it can be moved there
@@ -643,18 +556,22 @@ public class Board {
 		}
 
 		try {
-			this.updateAndGetPossibleMoves(pawnId);
+			Pawn pawn = this.getPawn(pawnId);
+			
+			// Check if the new position is valid
+
+			if(this.isPawnPosValid(newPawnPos)) {
+				this.getPawn(pawnId).setPosition(newPawnPos);
+				this.checkWin();
+				this.clearCurrentPossibleMoves();
+				return true;
+			}
+		
 		} catch (IncorrectPawnIndexException e) {
 			throw e;
 		}
-		
-		if(this.getPossibleMoves().getPossibleMovesList().contains(newPawnPos)) {
-			this.pawns[pawnId].setPosition(newPawnPos);
-			this.checkWin();
-			return true;
-		} else {
-			return false;
-		}
+
+		return false;
 	}
 
 	
@@ -673,24 +590,18 @@ public class Board {
 			return false;
 		}
 
-		if(getLastCheckedFence() != fence) {
-			// It wasn't checked
-			setLastCheckedFenceValid(this.isFencePositionValid(fence));
-			setLastCheckedFence(fence);
-		}
-
-		if(isLastCheckedFenceValid()) {
+		if(this.isFencePositionValid(fence)) {
 			addFenceToData(fence);
 			try {
 				Pawn pawn = this.getPawn(pawnId);
-				pawn.placeFence();
+				pawn.decreaseAvailableFences();
+				this.clearCurrentPossibleMoves();
 			} catch (IncorrectPawnIndexException e) {
 				throw e;
 			}
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	
