@@ -1,1 +1,0 @@
-{"listPawns":[{"color":"YELLOW","pos":{"x":4,"y":8},"nbRemainingFences":8},{"color":"BLUE","pos":{"x":4,"y":1},"nbRemainingFences":9}],"columns":9,"maxNbFences":20,"rows":9,"listFences":[{"orientation":"HORIZONTAL","start":"(4,4)","end":"(6,4)"},{"orientation":"VERTICAL","start":"(1,4)","end":"(1,6)"},{"orientation":"VERTICAL","start":"(1,0)","end":"(1,2)"}]}
