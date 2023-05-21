@@ -277,7 +277,7 @@ The task's priority is sorted in ascending order
 			* PROGRESS: Done
 			* Who: David
 			* Start : 2023/05/20 18:30
-			* Estimated end : 2023/05/18 19:00
+			* Estimated end : 2023/05/20 19:00
 			* Real end : 2023/05/20 20:00
 		10.1.4 Add an event to move the player when a cell is clicked (where he can go) (remove the previous pawn position on the grid)
 			* PROGRESS: Done
