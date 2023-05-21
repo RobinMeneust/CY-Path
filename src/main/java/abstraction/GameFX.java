@@ -82,6 +82,9 @@ public class GameFX extends GameAbstract {
                 //Platform.runLater(() -> this.setAction("Move"));
 
                 System.out.println("Turn of player: " +  this.getPlayer(this.getCurrentPlayerIndex()));
+
+				this.setChanged();
+				this.notifyObservers(this.getCurrentPlayerIndex());
                 currentPawn = this.getBoard().getPawn(this.getCurrentPlayerIndex());
 
                 this.setIsEndTurn(false);

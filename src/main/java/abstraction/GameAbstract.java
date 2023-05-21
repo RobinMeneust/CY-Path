@@ -1,10 +1,14 @@
-package abstraction; /**
+package abstraction;
+
+import java.util.Observable;
+
+/**
  * Abstract class representing the current game with its parameters and rules
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
-public abstract class GameAbstract {
+public abstract class GameAbstract extends Observable {
 	/**
 	 * State the Game's class attributes
 	 */

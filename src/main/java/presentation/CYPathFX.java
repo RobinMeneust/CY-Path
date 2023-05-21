@@ -10,10 +10,7 @@ import java.util.LinkedList;
  */
 
 import abstraction.*;
-import control.ActionButtonControl;
-import control.ClickAddBorderControl;
-import control.FenceOrientationControl;
-import control.HoverBorderControl;
+import control.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -112,12 +109,9 @@ public class CYPathFX extends Application {
 
         Button loadButton = new Button("Load");
 
-        loadButton.setOnAction(e -> {
-            openFileChooser(this.primaryStage, "Load");
-        });
-        
+        FileChooserControl fileChooserControlLoad = new FileChooserControl(this.primaryStage, "Load");
+        loadButton.setOnAction(fileChooserControlLoad);
 
-        
         buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton);
     }
 
@@ -184,7 +178,8 @@ public class CYPathFX extends Application {
         });
 
         Button saveButton = new Button("Save");
-        saveButton.setOnAction(e -> openFileChooser(this.primaryStage, "Save"));
+        FileChooserControl fileChooserControlSave = new FileChooserControl(this.primaryStage, "Save");
+        saveButton.setOnAction(fileChooserControlSave);
 
         HBox buttonsHBox = new HBox();
         buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
@@ -193,7 +188,7 @@ public class CYPathFX extends Application {
 
         Player[] players = new Player[nbPlayers];
         for (int i = 0; i < nbPlayers; i++){
-            players[i] = new Player("Anonymous player" + i);
+            players[i] = new Player("Player" + i);
         }
         try {
             this.game = new GameFX(players,20, 9, 9);
@@ -207,6 +202,11 @@ public class CYPathFX extends Application {
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
         actionButton.textProperty().bind(this.game.getAction());
+
+        Text currentPlayerText = new Text();
+        CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
+        this.game.addObserver(currentPlayerTextControl);
+        buttonsHBox.getChildren().add(currentPlayerText);
 
         //We click on the button two times for update the first player action
         actionButton.fire();
@@ -344,23 +344,17 @@ public class CYPathFX extends Application {
     }
 
     public void addCircleToCell(GridPane gridPane, int rowIndex, int columnIndex, ColorPawn color) {
-        // System.out.println("AJOUT column index = " + columnIndex + "row index = " + rowIndex);
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        // System.out.println("Circle en cours d'ajout");
         if(stack != null) {
             Circle circle = createPlayerCircle(color);
             stack.getChildren().add(circle);
-            // System.out.println("Circle ajouté");
         }
     }
     
     public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        // System.out.println("SUPPRR column index = " + columnIndex + "row index = " + rowIndex);
-        // System.out.println("Circle en cours de suppression");
         if(stack != null) {
             stack.getChildren().removeIf(node -> node instanceof Circle);
-            // System.out.println("Circle supprimé");
         }
     }
 
@@ -374,7 +368,6 @@ public class CYPathFX extends Application {
 	 * @return The specific node from the GridPane we were looking for.
 	 */
     public Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
-        
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
@@ -454,38 +447,6 @@ public class CYPathFX extends Application {
         SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
         saveDataObject.save(file.getAbsolutePath());
     }
-
-
-    /**
-	 * Open a file chooser to save or load a game.
-     * 
-	 * @param primaryStage Main stage
-     * @param action "Load" or "Save" to dertermine what the file chooser has to do.
-	 */
-    private void openFileChooser(Stage primaryStage, String action) {
-        FileChooser fileChooser = new FileChooser();
-
-        fileChooser.setTitle("Select Some Files");
-
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        if(action.equals("Load")) {
-            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
-            File file = fileChooser.showSaveDialog(primaryStage);
-            if(file != null) {
-                loadGame(file);
-            }
-        } else if (action.equals("Save")) {
-            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
-            File file = fileChooser.showSaveDialog(primaryStage);
-            if(file != null) {
-                saveGame(file);
-            }
-        }
-
-
-        // System.out.println("Action: " + action);
-    }
-
 
     public static void main(String[] args) {
         launch(args);
