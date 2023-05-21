@@ -797,10 +797,6 @@ public class Board {
 			And the x of the starting point or ending point of those fences must be equals to the x of the new fence (if fenceChecked is vertical, and y if it's horizontal)
 			In this array there is for each index (the y (if vertical) or x (if horizontal) coordinate of the new fence) the number of fences that correspond to the statements above
 			*/
-			int[] numberOfFencesAlignedAndHitting = new int[fenceChecked.getLength()]; 
-			for(int i=0; i<fenceChecked.getLength(); i++) {
-				numberOfFencesAlignedAndHitting[i] = 0;
-			}
 
             for (Fence fence : this.fences) {
                 // over each other
@@ -822,10 +818,7 @@ public class Board {
                                     if(fence.getStart().getY() < fenceChecked.getStart().getY() && fenceChecked.getStart().getY() < fence.getEnd().getY()){
                                         return true;
                                     }
-                                } else if(fenceChecked.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceChecked.getEnd().getX()
-									&& (fenceChecked.getStart().getY() == fence.getStart().getY() || fence.getEnd().getY() == fenceChecked.getStart().getY())) {
-									numberOfFencesAlignedAndHitting[fence.getStart().getX() - fenceChecked.getStart().getX()]++;
-								}
+                                }
                             }
                             break;
                         case VERTICAL:
@@ -842,10 +835,7 @@ public class Board {
                                     if(fenceChecked.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceChecked.getEnd().getY()){
                                         return true;
                                     }
-                                } else if(fenceChecked.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceChecked.getEnd().getY()
-									&& (fenceChecked.getStart().getX() == fence.getStart().getX() || fence.getEnd().getX() == fenceChecked.getStart().getX())) {
-									numberOfFencesAlignedAndHitting[fence.getStart().getY() - fenceChecked.getStart().getY()]++;
-								}
+                                }
                             }
                             break;
                         default:
@@ -853,26 +843,6 @@ public class Board {
                     }
                 }
             }
-			switch (fenceChecked.getOrientation()) {
-				case HORIZONTAL:
-					for(int nbFences : numberOfFencesAlignedAndHitting) {
-						if(nbFences > 1) { 
-							// it's not a 'T' shape but a 'X' shape
-							return true;
-						}
-					}
-					break;
-				case VERTICAL:
-					for(int nbFences : numberOfFencesAlignedAndHitting) {
-						if(nbFences > 1) { 
-							// it's not a 'T' shape but a 'X' shape
-							return true;
-						}
-					}
-					break;
-				default:
-					break;
-			}
         }
 		return false;
     }

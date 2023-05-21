@@ -5,6 +5,8 @@ package presentation; /**
 import java.io.File;
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 /**
  * Importing javafx classes needed for the CYPathFX class
  */
@@ -112,9 +114,7 @@ public class CYPathFX extends Application {
 
         Button loadButton = new Button("Load");
 
-        loadButton.setOnAction(e -> {
-            openFileChooser(this.primaryStage, "Load");
-        });
+        loadButton.setOnAction(e -> loadGame());
         
 
         
@@ -184,7 +184,7 @@ public class CYPathFX extends Application {
         });
 
         Button saveButton = new Button("Save");
-        saveButton.setOnAction(e -> openFileChooser(this.primaryStage, "Save"));
+        saveButton.setOnAction(e -> saveGame());
 
         HBox buttonsHBox = new HBox();
         buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
@@ -445,47 +445,17 @@ public class CYPathFX extends Application {
 
 
 
-    private void loadGame(File file)  {
+    private void loadGame()  {
         // TODO
     }
 
-    private void saveGame(File file) {
-        // TODO
-        SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
-        saveDataObject.save(file.getAbsolutePath());
-    }
-
-
-    /**
-	 * Open a file chooser to save or load a game.
-     * 
-	 * @param primaryStage Main stage
-     * @param action "Load" or "Save" to dertermine what the file chooser has to do.
-	 */
-    private void openFileChooser(Stage primaryStage, String action) {
-        FileChooser fileChooser = new FileChooser();
-
-        fileChooser.setTitle("Select Some Files");
-
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-        if(action.equals("Load")) {
-            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
-            File file = fileChooser.showSaveDialog(primaryStage);
-            if(file != null) {
-                loadGame(file);
-            }
-        } else if (action.equals("Save")) {
-            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.*"));
-            File file = fileChooser.showSaveDialog(primaryStage);
-            if(file != null) {
-                saveGame(file);
-            }
+    private void saveGame() {
+        String fileName = JOptionPane.showInputDialog("Choose a name for your save file");
+        if(fileName != null) {
+            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
+            saveDataObject.save(fileName);
         }
-
-
-        // System.out.println("Action: " + action);
     }
-
 
     public static void main(String[] args) {
         launch(args);

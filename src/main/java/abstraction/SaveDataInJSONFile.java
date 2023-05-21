@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 /**
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault,
@@ -32,8 +31,7 @@ public class SaveDataInJSONFile {
     private int maxNbFences;
     private Pawn[] listPawns;
 
-    private String folderPath = "./src/main/resources/data/";
-    private String fileName;
+    private String folderPath = "./src/main/resources/data/saves"; // TODO: Needs to be changed so that it works in the .jar
 
     /**
      * Create a constructor that groups the elements that make up a backup file of a
@@ -75,31 +73,22 @@ public class SaveDataInJSONFile {
         return false; // File name is unique
     }
 
-    public void createFile(String folderPath) {
-
+    public static File createFile(String folderPath, String fileName) throws Exception {
         try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter the name of the backup file: ");
-            fileName = scanner.nextLine();
-
+            new File(folderPath).mkdirs(); // Create the folder if it doesn't exist
             boolean isFileNameDuplicateTest = isFileNameDuplicate(folderPath, fileName);
-
             if (!isFileNameDuplicateTest) {
                 Path folder = Paths.get(folderPath);
                 Path filePath = folder.resolve(fileName);
+                return filePath.toFile();
             }
-
-            scanner.close();
-
         } catch (NoSuchElementException elm) {
-            System.out.println("Error : the name of the file can't be null : " + elm.getMessage());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw elm;
         }
     }
 
-    public void save(String filePath) {
-
+    public void save(String fileName) {
+        File newFile = createFile(this.folderPath, fileName+".json");
         JSONObject gameObjects = new JSONObject();
         gameObjects.put("rows", rows);
         gameObjects.put("columns", columns);
@@ -135,7 +124,7 @@ public class SaveDataInJSONFile {
 
         gameObjects.put("listPawns", gameElementsListPawns);
 
-        try (FileWriter file = new FileWriter(filePath + ".json")) {
+        try (FileWriter file = new FileWriter(newFile)) {
             file.write(gameObjects.toString());
             file.flush();
             file.close();

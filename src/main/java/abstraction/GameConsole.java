@@ -5,6 +5,7 @@ package abstraction; /**
  */
 
 import java.util.Scanner;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -51,10 +52,19 @@ public class GameConsole extends GameAbstract {
                     System.out.println("You don't have any fence remaining. You can only move.");
                 } else{
                     do {
-                        System.out.println("What is your next action ? ('m' (move) or 'f' (place fence))");
+                        System.out.println("What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))");
                         response = scanner.nextLine();
                         response = response.toUpperCase();
-                    }while(!response.equals("M") && !response.equals("F"));
+                        
+                        if(response.matches("S(AVE)?")) {
+                            System.out.println("What is the name of your save file? (without extension) :");
+                            String fileName = scanner.nextLine();
+
+                            File file = new File("../ressources/saves/"+fileName);
+                            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbFences(), this.getBoard().getPawnsArray());
+                            saveDataObject.save(file.getAbsolutePath());
+                        }
+                    }while(!response.matches("M(OVE)?") && !response.matches("S(AVE)?"));
                 }
         
                 if(response.equals("M")){
