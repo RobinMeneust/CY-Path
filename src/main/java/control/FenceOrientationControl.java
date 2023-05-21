@@ -23,6 +23,9 @@ public class FenceOrientationControl implements EventHandler<MouseEvent> {
             } else {
                 this.fence.setOrientation(Orientation.HORIZONTAL);
             }
+            HoverBorderControl hoverBorderControl = new HoverBorderControl(this.cyPathFX, this.fence);
+            hoverBorderControl.resetHighlightedFences(this.cyPathFX);
+            hoverBorderControl.handle(event);
         }
     }
 }
