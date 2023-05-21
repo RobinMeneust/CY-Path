@@ -98,7 +98,8 @@ public class GameFX extends GameAbstract {
                     System.out.println("Move in : " + currentPawn.getPosition());
                 } else if("Place fence".equals(this.getAction().get())) {
                     System.out.println("Fence have been placed");
-                }   
+                }  
+                this.getBoard().clearLastCheckedFence();
                 this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
                 this.getBoard().checkWin();
             }

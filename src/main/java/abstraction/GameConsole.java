@@ -105,6 +105,7 @@ public class GameConsole extends GameAbstract {
                         }
                     } while(!isFenceValid);
                 }
+                this.getBoard().clearLastCheckedFence();
                 this.setCurrentPlayerIndex(this.getCurrentPlayerIndex()+1);
             }
 

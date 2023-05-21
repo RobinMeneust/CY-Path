@@ -113,10 +113,11 @@ The task's priority is sorted in ascending order
 				* Real end : 2023/05/15 20:30
 			5.2.1.2 Check if 2 fences are intersecting
 				* PROGRESS: DONE
-				* Who: Romain
+				* Who: Romain, Robin
 				* Start : 2023/05/17 11:00
 				* Estimated end : 2023/05/17 14:00
 				* Real end : 2023/05/17 15:25
+				* NOTE: was reopened on 2023/05/21 to fix it (borders in "X" shaped were allowed before)
 			5.2.1.3 Find a path between to points,
 				* PROGRESS: DONE
 				* Who: Robin

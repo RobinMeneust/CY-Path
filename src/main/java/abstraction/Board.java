@@ -777,6 +777,16 @@ public class Board {
 
     public boolean isFenceOverlapping(Fence fenceChecked) {
         if (this.fences != null) {
+			/* 
+			Array of the number of fences that have the same y and this y is between the y of the starting point and the ending point of fencedChecked (if fenceChecked is vertical, and x if it's horizontal)
+			And the x of the starting point or ending point of those fences must be equals to the x of the new fence (if fenceChecked is vertical, and y if it's horizontal)
+			In this array there is for each index (the y (if vertical) or x (if horizontal) coordinate of the new fence) the number of fences that correspond to the statements above
+			*/
+			int[] numberOfFencesAlignedAndHitting = new int[fenceChecked.getLength()]; 
+			for(int i=0; i<fenceChecked.getLength(); i++) {
+				numberOfFencesAlignedAndHitting[i] = 0;
+			}
+
             for (Fence fence : this.fences) {
                 // over each other
                 if (fenceChecked.getStart().equals(fence.getStart()) && fenceChecked.getOrientation().equals(fence.getOrientation())) {
@@ -797,16 +807,19 @@ public class Board {
                                     if(fence.getStart().getY() < fenceChecked.getStart().getY() && fenceChecked.getStart().getY() < fence.getEnd().getY()){
                                         return true;
                                     }
-                                }
+                                } else if(fenceChecked.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceChecked.getEnd().getX()
+									&& (fenceChecked.getStart().getY() == fence.getStart().getY() || fence.getEnd().getY() == fenceChecked.getStart().getY())) {
+									numberOfFencesAlignedAndHitting[fence.getStart().getX() - fenceChecked.getStart().getX()]++;
+								}
                             }
                             break;
                         case VERTICAL:
                             if (fence.getOrientation() == Orientation.VERTICAL && fence.getStart().getX() == fenceChecked.getStart().getX()) {
-                                for (int i = 0; i < fence.getLength(); i++) {
-                                    if (fenceChecked.getStart().getY() + i == fence.getStart().getY()) {
+								for (int i = 0; i < fence.getLength(); i++) {
+									if (fenceChecked.getStart().getY() + i == fence.getStart().getY()) {
                                         return true;
                                     } else if (fenceChecked.getEnd().getY() - 1 - i == fence.getEnd().getY() - 1) {
-                                        return true;
+										return true;
                                     }
                                 }
                             } else if (fence.getOrientation() == Orientation.HORIZONTAL) {
@@ -814,7 +827,10 @@ public class Board {
                                     if(fenceChecked.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceChecked.getEnd().getY()){
                                         return true;
                                     }
-                                }
+                                } else if(fenceChecked.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceChecked.getEnd().getY()
+									&& (fenceChecked.getStart().getX() == fence.getStart().getX() || fence.getEnd().getX() == fenceChecked.getStart().getX())) {
+									numberOfFencesAlignedAndHitting[fence.getStart().getY() - fenceChecked.getStart().getY()]++;
+								}
                             }
                             break;
                         default:
@@ -822,7 +838,27 @@ public class Board {
                     }
                 }
             }
+			switch (fenceChecked.getOrientation()) {
+				case HORIZONTAL:
+					for(int nbFences : numberOfFencesAlignedAndHitting) {
+						if(nbFences > 1) { 
+							// it's not a 'T' shape but a 'X' shape
+							return true;
+						}
+					}
+					break;
+				case VERTICAL:
+					for(int nbFences : numberOfFencesAlignedAndHitting) {
+						if(nbFences > 1) { 
+							// it's not a 'T' shape but a 'X' shape
+							return true;
+						}
+					}
+					break;
+				default:
+					break;
+			}
         }
-        return false;
+		return false;
     }
 }
