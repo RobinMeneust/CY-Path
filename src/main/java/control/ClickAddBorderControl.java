@@ -17,11 +17,13 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 	private CYPathFX cyPathFX;
 	private GameFX game;
 	private Button actionButton;
+	private Fence fence;
 
-	public ClickAddBorderControl(CYPathFX cyPathFX, GameFX game, Button actionButton) {
+	public ClickAddBorderControl(CYPathFX cyPathFX, GameFX game, Button actionButton, Fence fence) {
 		this.cyPathFX = cyPathFX;
 		this.game = game;
 		this.actionButton = actionButton;
+		this.fence = fence;
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 					pStartFenceCoord.setY((pStartCell.getY() - 1) / 2);
 
 
-					fence = new Fence(this.game.getBoard().getFenceLength(), this.cyPathFX.getFenceOrientation(), pStartFenceCoord);
+					fence = new Fence(this.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
 
 					try {
 						if (this.game.getBoard().placeFence(this.game.getCurrentPlayerIndex(), fence)) {

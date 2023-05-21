@@ -61,6 +61,10 @@ public class Fence {
 		this(length,Orientation.HORIZONTAL,new Point(0,0),new Point(length,0));
 	}
 
+	public Fence(Orientation orientation){
+		this(2, orientation, new Point(0,0),new Point(2,0));
+	}
+
 	
 	/** 
 	 * Get the length of the fence

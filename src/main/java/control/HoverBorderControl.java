@@ -14,9 +14,11 @@ import presentation.CYPathFX;
 public class HoverBorderControl implements EventHandler<MouseEvent> {
 
 	private CYPathFX cyPathFX;
+	private Fence fence;
 
-	public HoverBorderControl(CYPathFX cyPathFX) {
+	public HoverBorderControl(CYPathFX cyPathFX, Fence fence) {
 		this.cyPathFX = cyPathFX;
+		this.fence = fence;
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 						pStartFenceCoord.setY((pStartCell.getY() - 1) / 2);
 
 
-						if (this.cyPathFX.getFenceOrientation() == Orientation.HORIZONTAL) {
+						if (this.fence.getOrientation() == Orientation.HORIZONTAL) {
 							Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), Orientation.HORIZONTAL, pStartFenceCoord);
 							if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
 								// we take the row above the cell
@@ -69,7 +71,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 									}
 								}
 							}
-						} else if (this.cyPathFX.getFenceOrientation() == Orientation.VERTICAL) {
+						} else if (this.fence.getOrientation() == Orientation.VERTICAL) {
 							Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), Orientation.VERTICAL, pStartFenceCoord);
 							if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
 								int x = pStartCell.getX() - 1;
