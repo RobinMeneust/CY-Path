@@ -12,10 +12,7 @@ import javax.swing.JOptionPane;
  */
 
 import abstraction.*;
-import control.ActionButtonControl;
-import control.ClickAddBorderControl;
-import control.FenceOrientationControl;
-import control.HoverBorderControl;
+import control.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -32,10 +29,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 
 public class CYPathFX extends Application {
     /**
@@ -45,7 +41,6 @@ public class CYPathFX extends Application {
     private Button actionButton;
     public GameFX game;
     public GridPane gPane;
-    private Orientation fenceOrientation;
     private Fence fence;
     public LinkedList<Line> prevHighlightedFencesList;
     public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
@@ -117,7 +112,6 @@ public class CYPathFX extends Application {
         loadButton.setOnAction(e -> loadGame());
         
 
-        
         buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton);
     }
 
@@ -193,7 +187,7 @@ public class CYPathFX extends Application {
 
         Player[] players = new Player[nbPlayers];
         for (int i = 0; i < nbPlayers; i++){
-            players[i] = new Player("Anonymous player" + i);
+            players[i] = new Player("Player" + i);
         }
         try {
             this.game = new GameFX(players,20, 9, 9);
@@ -207,6 +201,11 @@ public class CYPathFX extends Application {
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
         actionButton.textProperty().bind(this.game.getAction());
+
+        Text currentPlayerText = new Text();
+        CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
+        this.game.addObserver(currentPlayerTextControl);
+        buttonsHBox.getChildren().add(currentPlayerText);
 
         //We click on the button two times for update the first player action
         actionButton.fire();
@@ -344,23 +343,17 @@ public class CYPathFX extends Application {
     }
 
     public void addCircleToCell(GridPane gridPane, int rowIndex, int columnIndex, ColorPawn color) {
-        // System.out.println("AJOUT column index = " + columnIndex + "row index = " + rowIndex);
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        // System.out.println("Circle en cours d'ajout");
         if(stack != null) {
             Circle circle = createPlayerCircle(color);
             stack.getChildren().add(circle);
-            // System.out.println("Circle ajouté");
         }
     }
     
     public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
-        // System.out.println("SUPPRR column index = " + columnIndex + "row index = " + rowIndex);
-        // System.out.println("Circle en cours de suppression");
         if(stack != null) {
             stack.getChildren().removeIf(node -> node instanceof Circle);
-            // System.out.println("Circle supprimé");
         }
     }
 
@@ -374,7 +367,6 @@ public class CYPathFX extends Application {
 	 * @return The specific node from the GridPane we were looking for.
 	 */
     public Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
-        
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
                 return node;
@@ -453,7 +445,15 @@ public class CYPathFX extends Application {
         String fileName = JOptionPane.showInputDialog("Choose a name for your save file");
         if(fileName != null) {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
-            saveDataObject.save(fileName);
+            Alert alert = null;
+            if(saveDataObject.save(fileName)) {
+                alert = new Alert(AlertType.INFORMATION);
+                alert.setContentText("Game saved");
+            } else {
+                alert = new Alert(AlertType.ERROR);
+                alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
+            }
+            alert.showAndWait();
         }
     }
 

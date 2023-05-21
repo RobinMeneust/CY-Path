@@ -5,6 +5,11 @@ package abstraction;
  */
 
 public class GameNotInitializedException extends Exception {
+    /**
+     * Constructor of GameNotInitializedException.
+     * Add the error message to the exception: "ERROR: Pawn index out of bounds"
+     */
+
     public GameNotInitializedException() {
         super("ERROR: The game must be initialized");
     }

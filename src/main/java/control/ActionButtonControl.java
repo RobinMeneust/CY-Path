@@ -35,7 +35,7 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
             }
 
             //Update fenceCounter
-            this.cyPathFX.fenceCounter.setText(""+this.cyPathFX.game.getBoard().getPawn(this.cyPathFX.game.getCurrentPlayerIndex()).getAvailableFences());
+            this.cyPathFX.fenceCounter.setText(this.cyPathFX.game.getBoard().getPawn(this.cyPathFX.game.getCurrentPlayerIndex()).getAvailableFences()+" fence(s) remaining.");
         } catch (IncorrectPawnIndexException e) {
             System.err.println("ERROR: abstraction.Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
             System.exit(-1);
