@@ -135,30 +135,27 @@ public class CYPathFX extends Application {
         this.primaryStage.setScene(this.newGameMenuScene);
     }
 
+    public void prepareGameScene(int nPlayer){
+        try {    
+            initializeGame(nPlayer);
+            createGameScene();
+            goToGameScene();
+        } catch (GameNotInitializedException err) {
+            err.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
     public void createNewGameScene() {
         BorderPane root = new BorderPane();
         
         Button twoPlayersModeButton = new Button("2 Players");
         twoPlayersModeButton.setOnAction(e -> {
-            try {    
-                initializeGame(2);
-                createGameScene();
-                goToGameScene();
-            } catch (GameNotInitializedException err) {
-                err.printStackTrace();
-                System.exit(-1);
-            }
+            prepareGameScene(2);
         });
         Button fourPlayersModeButton = new Button("4 Players");
         fourPlayersModeButton.setOnAction(e -> {
-            try {    
-                initializeGame(4);
-                createGameScene();
-                goToGameScene();
-            } catch (GameNotInitializedException err) {
-                err.printStackTrace();
-                System.exit(-1);
-            }
+            prepareGameScene(4);
         });
 
         Button goBack = new Button("Main Menu");
@@ -212,13 +209,19 @@ public class CYPathFX extends Application {
 
         this.game.isEndGame.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
+                Button newGameButton = new Button("New game");
+                newGameButton.setOnAction(e -> {
+                    prepareGameScene(this.game.getNbPlayers());
+                });
+
                 Text winner = new Text("Winner is " + this.game.getBoard().getWinner());
                 
                 this.gPane.setDisable(true);
                 buttonsHBox.getChildren().clear();
-                buttonsHBox.getChildren().addAll(winner,goBack);    
+                buttonsHBox.getChildren().addAll(winner,newGameButton,goBack);    
                 buttonsHBox.setStyle("-fx-alignment: center;");  
                 buttonsHBox.setSpacing(10);
+
             } 
         });
 
