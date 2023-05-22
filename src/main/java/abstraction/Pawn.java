@@ -26,10 +26,8 @@ public class Pawn implements Cloneable{
      * 
      * @param position        (Point) : coordinates of the current pawn
      * @param id              (int) : id of the pawn
-     * @param availableFences (int) : number of barriers still available for a
-     *                        player
-     * @param startingSide    (Side) : side of the game board from which the pawn
-     *                        leaves
+     * @param availableFences (int) : number of barriers still available for a player
+     * @param startingSide    (Side) : side of the game board from which the pawn move
      * @param color           (Color) : color of a pawn
      * @param board           (Board) : current board game
      * @param player          (Player) : the player who has the pawn
@@ -38,7 +36,7 @@ public class Pawn implements Cloneable{
     public Pawn(Point position, int id, int availableFences, Side startingSide, ColorPawn color, Board board, Player player){
         this.position = position;
         this.id = id;
-        this.availableFences = board.getGame().getNbFences() / board.getGame().getNbPlayers();
+        this.availableFences = board.getGame().getNbMaxTotalFences() / board.getGame().getBoard().getNbPawns();
         this.board = board;
         this.startingSide = startingSide;
         this.color = color;
@@ -66,6 +64,27 @@ public class Pawn implements Cloneable{
         this.color = color;
         this.player = player;
     }
+
+    /**
+     * Create a point from its id and color. It is necessary to take into
+     * account its starting point, position, and the availableFences of the player.
+     * 
+     * @param id (int) : id of the pawn
+     * @param startingSide (Side) : side of the game board from which the pawn
+     * @param color (Color) : color of a pawn
+     * @param position (Point) : current position of the pawn
+     * @param availableFences (int) number of fences that the player can again place
+     */
+
+     public Pawn(int id, Side startingSide, ColorPawn color, Point position, int availableFences){
+        this.position = position;
+        this.id = id;
+        this.availableFences = availableFences;
+        this.board = null;
+        this.startingSide = startingSide;
+        this.color = color;
+        this.player = null;
+    }
     
     /**
      * Accessor to recover the position of a pawn
@@ -75,6 +94,10 @@ public class Pawn implements Cloneable{
 
     public Point getPosition() {
         return position;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
@@ -149,7 +172,9 @@ public class Pawn implements Cloneable{
 
     public void setBoard(Board board) {
         this.board = board;
-        this.position = board.getGrid().getCenterOfSide(startingSide);
+        if(this.position == null) {
+            this.position = board.getGrid().getCenterOfSide(startingSide);
+        }
     }
 
     /**

@@ -1,6 +1,5 @@
 package abstraction;
 
-
 /** 
  * Importing classes from the java.io package
  * 
@@ -10,7 +9,7 @@ package abstraction;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.InvalidPathException;
+//import java.nio.file.InvalidPathException;
 
 /**
  * Importing classes from the java.nio package
@@ -25,8 +24,8 @@ import java.nio.file.Paths;
  * Importing classes from the org.json package
  */
 
- import org.json.JSONObject;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * This class stores the elements of the current part in a .json file
@@ -44,8 +43,9 @@ public class SaveDataInJSONFile {
     private int maxNbFences;
     private Fence[] listFences;
     private Pawn[] listPawns;
+    private int currentPawnIndex;
 
-    private String folderPath = "./src/main/resources/data/saves"; // TODO: Needs to be changed so that it works in the .jar
+    private String folderPath = "./src/main/resources/data/saves";
 
     /**
      * Create a constructor that groups the elements that make up a backup file of a
@@ -56,14 +56,16 @@ public class SaveDataInJSONFile {
      * @param listFences   (Fence) : list of fences placed on the board
      * @param maxNbFences (int) : number of fences placed on the board
      * @param listPawns    (int) : list of pawns of all players of the CY-PATH party
+     * @param currentPawnIndex (int) : index of the current player (that will play in the first round)
      */
 
-    public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int maxNbFences, Pawn[] listPawns) {
+    public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int maxNbFences, Pawn[] listPawns, int currentPawnIndex) {
         this.rows = rows;
         this.columns = columns;
         this.listFences = listFences;
         this.maxNbFences = maxNbFences;
         this.listPawns = listPawns;
+        this.currentPawnIndex = currentPawnIndex;
     }
 
     private static boolean isFileNameDuplicate(String folderPath, String fileName) {
@@ -82,7 +84,7 @@ public class SaveDataInJSONFile {
         return false;
     }
 
-    public static File createFile(String folderPath, String fileName) throws FileNameIsDuplicate {
+    public static File createFile(String folderPath, String fileName) throws FileNameIsDuplicateException {
         File file = null;
 
         new File(folderPath).mkdirs(); // Create the folder if it doesn't exist
@@ -91,42 +93,54 @@ public class SaveDataInJSONFile {
             Path filePath = folder.resolve(fileName);
             file = filePath.toFile();
         } else {
-            throw new FileNameIsDuplicate();
+            throw new FileNameIsDuplicateException();
         }
         return file;
     }
 
-    public boolean save(String fileName) {
+    public void save(String fileName) throws FileNameIsDuplicateException, IOException {
         File newFile = null;
         try {
             newFile = createFile(this.folderPath, fileName+".json");
-        } catch (FileNameIsDuplicate e) {
-            return false;
+        } catch (FileNameIsDuplicateException e) {
+            throw e;
         }
 
         JSONObject gameObjects = new JSONObject();
         gameObjects.put("rows", rows);
         gameObjects.put("columns", columns);
         gameObjects.put("maxNbFences", maxNbFences);
+        gameObjects.put("currentPawnIndex", currentPawnIndex);
 
         
-        CustomJSONArray gameElementsListFences = new CustomJSONArray();
+        JSONArray gameElementsListFences = new JSONArray();
         
         for (int i = 0; i < listFences.length; i++) {
             JSONObject fenceObject = new JSONObject();
-            fenceObject.put("start", listFences[i].getStart());
-            fenceObject.put("end", listFences[i].getEnd());
+
+            JSONObject pointObject1 = new JSONObject();
+            pointObject1.put("x", listFences[i].getStart().getX());
+            pointObject1.put("y", listFences[i].getStart().getY());
+            fenceObject.put("start", pointObject1);
+            JSONObject pointObject2 = new JSONObject();
+            pointObject2.put("x", listFences[i].getEnd().getX());
+            pointObject2.put("y", listFences[i].getEnd().getY());
+            fenceObject.put("end", pointObject2);
+
             fenceObject.put("orientation", listFences[i].getOrientation());
+            
             gameElementsListFences.put(fenceObject);
         }
 
         gameObjects.put("listFences", gameElementsListFences);
 
-        CustomJSONArray gameElementsListPawns = new CustomJSONArray();
+        JSONArray gameElementsListPawns = new JSONArray();
 
         for (int i = 0; i < listPawns.length; i++) {
             JSONObject pawnObject = new JSONObject();
 
+            pawnObject.put("id",listPawns[i].getId());
+            pawnObject.put("startingSide",listPawns[i].getStartingSide());
             pawnObject.put("color",listPawns[i].getColor().toString());
             JSONObject pointObject = new JSONObject();
             pointObject.put("x", listPawns[i].getPosition().getX());
@@ -134,7 +148,7 @@ public class SaveDataInJSONFile {
             pawnObject.put("pos",pointObject);
             pawnObject.put("nbRemainingFences",listPawns[i].getAvailableFences());
 
-            gameElementsListPawns.put(listPawns[i].getId(),pawnObject);
+            gameElementsListPawns.put(pawnObject);
         }
 
         gameObjects.put("listPawns", gameElementsListPawns);
@@ -143,11 +157,8 @@ public class SaveDataInJSONFile {
             file.write(gameObjects.toString());
             file.flush();
             file.close();
-            System.out.println("The backup was successfully performed !");
-            return true;
         } catch (IOException e) {
-            System.out.println("An error occurred while saving : " + e.getMessage());
+            throw e;
         }
-        return false;
     }
 }

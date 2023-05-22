@@ -325,6 +325,7 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/20 16:40
 		* Estimated end : 2023/05/20 17:10
 		* Real end : 2023/05/20 17:45
+		* NOTE: Its design was reworked on 2023/05/22 18:20
 	11.2 New game button and its event (launch a new game)
 		* PROGRESS: DONE
 		* Who: Robin
@@ -332,11 +333,11 @@ The task's priority is sorted in ascending order
 		* Estimated end : 2023/05/20 18:15
 		* Real end : 2023/05/20 18:30
 	11.3 Load Game and save game buttons and their events (load and launch a game or save it)
-		* PROGRESS: ON_HOLD (needs 7. & 8. tasks)
+		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/21 12:45
 		* Estimated end :  2023/05/21 13:45
-		* Real end :
+		* Real end : 2023/05/22 18:15
 		* NOTE: Real end is later because tasks 8 was in progress
 
 

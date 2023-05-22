@@ -65,6 +65,11 @@ public class Fence {
 		this(2, orientation, new Point(0,0),new Point(2,0));
 	}
 
+	public Fence(Orientation orientation, Point start, Point end) {
+		this(Point.getDistance(start, end), orientation, new Point(start), new Point(end));
+
+	}
+
 	
 	/** 
 	 * Get the length of the fence

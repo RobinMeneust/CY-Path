@@ -1,14 +1,16 @@
-package abstraction; /**
+package abstraction; 
+
+/**
  * Importing java classes needed for the Board class
  * 
  * Importing classes from the java.util package
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
+
+import presentation.CYPath;
 
 /**
  * This class represents the game board on which players will play.
@@ -19,19 +21,40 @@ import java.util.Scanner;
 
 public class Board {
 	/**
-	 * State the Board's class attributes
-	 */
-	
+	 * Number of columns in the board
+	 */	
 	private int nbCols;
+	/**
+	 * Number of rows in the board
+	 */	
 	private int nbRows;
-	private int size;
+	/**
+	 * Undirected graph used to check if a fence is between two cell
+	 */	
 	private Grid grid;
+	/**
+	 * Game playing on this board
+	 */	
 	private GameAbstract game;
+	/**
+	 * Fences placed on the board
+	 */
 	private ArrayList<Fence> fences;
-	private int nbPlacedFences;
+	/**
+	 * Pawns placed on the board
+	 */
 	private Pawn[] pawns;
+	/**
+	 * Length of the fences
+	 */
 	private int fenceLength;
+	/**
+	 * Id of the pawn that won. If there is no winner it's equal to -1
+	 */
 	private int winner;
+	/**
+	 * List of the possible moves for the current round (used to avoid rechecking the same position twice)
+	 */
 	private List<Point> currentPossibleMoves;
 	
 	/**
@@ -40,31 +63,33 @@ public class Board {
 	 * @param nbCols Number of columns of the game board
 	 * @param nbRows Number of rows of the game board
 	 * @param game Object extending GameAbstract, that contains the components of the current game (list of players, rules...)
-	 * @param playersPawns Map associating players to their pawn
+	 * @param pawns Array of the pawns that are placed on the board
 	 */
 
-	public Board(int nbCols, int nbRows, GameAbstract game, HashMap<Player,Pawn> playersPawns) {
+	public Board(int nbCols, int nbRows, GameAbstract game, Pawn[] pawns) {
 		this.nbCols = nbCols;
 		this.nbRows = nbRows;
-		this.size = nbCols * nbRows;
 		this.grid = new Grid(nbRows, nbCols);
 		this.game = game;
 		this.fences = null;
 		this.fenceLength = 2;
 		this.winner = -1;
-
-		if(game != null && game.getNbFences() > 0){
-			this.fences = new ArrayList<Fence>(game.getNbFences());
+		
+		if(game != null && game.getNbMaxTotalFences() > 0){
+			this.fences = new ArrayList<Fence>(game.getNbMaxTotalFences());
 		}
 		
-		this.nbPlacedFences = 0;
-		this.pawns = new Pawn[game.getNbPlayers()];
-		int i = 0;
-		for(Player p : playersPawns.keySet()){
-			pawns[i] = playersPawns.get(p);
-			pawns[i].setBoard(this);
-			i++;
-		}
+		this.pawns = pawns;
+	}
+
+	/**
+	 * Get the number of pawns in this board
+	 * 
+	 * @return Number of pawns
+	 */
+
+	public int getNbPawns() {
+		return this.pawns.length;
 	}
 
 	/**
@@ -77,11 +102,23 @@ public class Board {
 		return fenceLength;
 	}
 
+	/**
+	 * Get an array of the fences placed on this board
+	 * 
+	 * @return Array of fences
+	 */
+
 	public Fence[] getFencesArray() {
 		Fence[] fencesArray = new Fence[this.fences.size()];
 		this.fences.toArray(fencesArray);
 		return fencesArray;
 	}
+
+	/**
+	 * Get an array of the pawns on this board
+	 * 
+	 * @return Array of pawns
+	 */
 
 	public Pawn[] getPawnsArray() {
 		Pawn[] clone = new Pawn[this.pawns.length];
@@ -91,16 +128,6 @@ public class Board {
 			}
 		} catch(CloneNotSupportedException e) {};
 		return clone;
-	}
-
-	/**
-	 * Get the size of the game board
-	 * 
-	 * @return Number of cells in the board
-	 */
-
-	public int getSize() {
-		return this.size;
 	}
 
 	/**
@@ -121,16 +148,6 @@ public class Board {
 
 	public int getNbRows() {
 		return nbRows;
-	}
-
-	/**
-	 * Get the number of remaining fences to place on the game board
-	 * 
-	 * @return Remaining fences to place
-	 */
-
-	public int getAvailableFences() {
-		return this.game.getNbFences() - this.nbPlacedFences;
 	}
 
 	/**
@@ -169,9 +186,6 @@ public class Board {
 		}
 	}
 
-
-	
-
 	/**
 	 * Get a string from the user that corresponds to the position where the player wants to move his pawn
 	 * 
@@ -179,8 +193,7 @@ public class Board {
 	 */
 
 	public String chooseOrientation(){
-		Scanner scanner = new Scanner(System.in);
-		String orientation = scanner.next();
+		String orientation = CYPath.scanner.next();
 		return orientation;
 	}
 
@@ -284,7 +297,6 @@ public class Board {
 
 	public LinkedList<Point> listPossibleMoves(Point position){
 		LinkedList<Point> listPossibleMovements = new LinkedList<Point>();
-
 		/* 
 		The following points are defined by considering the position and looking at one of the 4 directions (top,left,right,bottom).
 		It's shaped like a 'T' 
@@ -308,37 +320,17 @@ public class Board {
 			listPossibleMovements.addAll(allPossibleMoves);
 		}
 
-		//We test the top position
-		posTested = new Point(position.getX(), position.getY() - 1);
-		posBehindTested = new Point(position.getX(), position.getY() - 2);
-		posLeftTested = new Point(position.getX() - 1, position.getY() - 1);
-		posRightTested = new Point(position.getX() + 1, position.getY() - 1);
+		// Right rotation
+		for(int i=0; i<3; i++) {
+			posTested = Point.rightRotation(posTested, position);
+			posBehindTested = Point.rightRotation(posBehindTested, position);
+			posLeftTested = Point.rightRotation(posBehindTested, position);
+			posRightTested = Point.rightRotation(posBehindTested, position);
 
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
-		if(!allPossibleMoves.contains(position)){
-			listPossibleMovements.addAll(allPossibleMoves);
-		}
-
-		//We test the left position
-		posTested = new Point(position.getX() - 1, position.getY());
-		posBehindTested = new Point(position.getX() - 2, position.getY());
-		posLeftTested = new Point(position.getX() - 1, position.getY() + 1);
-		posRightTested = new Point(position.getX() - 1, position.getY() - 1);
-
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
-		if(!allPossibleMoves.contains(position)){
-			listPossibleMovements.addAll(allPossibleMoves);
-		}
-
-		//We test the right position
-		posTested = new Point(position.getX() + 1, position.getY());
-		posBehindTested = new Point(position.getX() + 2, position.getY());
-		posLeftTested = new Point(position.getX() + 1, position.getY() - 1);
-		posRightTested = new Point(position.getX() + 1, position.getY() + 1);
-
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
-		if(!allPossibleMoves.contains(position)){
-			listPossibleMovements.addAll(allPossibleMoves);
+			allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
+			if(!allPossibleMoves.contains(position)){
+				listPossibleMovements.addAll(allPossibleMoves);
+			}
 		}
 		return listPossibleMovements;
     }
@@ -359,15 +351,10 @@ public class Board {
 		return null;
 	}
 
-
 	public List<Point> getCurrentPossibleMoves() throws IncorrectPawnIndexException {
 		if(this.currentPossibleMoves == null) {
-			try {
-				Pawn pawn = this.getPawn(this.getGame().getCurrentPlayerIndex());
-				this.setCurrentPossibleMoves(this.listPossibleMoves(pawn.getPosition()));
-			} catch (IncorrectPawnIndexException e) {
-				throw e;
-			}
+			Pawn pawn = this.game.getCurrentPawn();
+			this.setCurrentPossibleMoves(this.listPossibleMoves(pawn.getPosition()));
 		}
 		return currentPossibleMoves;
 	}
@@ -404,7 +391,6 @@ public class Board {
 		return " ";
 	}
 
-		
 	/** 
 	 * Display the current board with its pawns, fences and cells
 	 * 
@@ -557,8 +543,6 @@ public class Board {
 
 		try {			
 			// Check if the new position is valid
-
-			System.out.println("Move pawn");
 			if(this.isPawnPosValid(newPawnPos)) {
 				this.getPawn(pawnId).setPosition(newPawnPos);
 				this.checkWin();
@@ -573,7 +557,6 @@ public class Board {
 		return false;
 	}
 
-	
 	/** 
 	 * Place a fence at the given position for the given pawn if it can be placed
 	 * 
@@ -603,7 +586,6 @@ public class Board {
 		return false;
 	}
 
-	
 	/** 
 	 * Check if the given Fence can be placed
 	 * 
@@ -640,7 +622,6 @@ public class Board {
 		return false;
 	}
 
-	
 	/** 
 	 * Set the winner to the given pawnId
 	 * 
@@ -657,6 +638,7 @@ public class Board {
 	 * 
 	 * @return Winner's id
 	 */
+
 	public int getWinner() {
 		return this.winner;
 	}
@@ -666,7 +648,6 @@ public class Board {
 	 */
 
 	public void checkWin(){
-		System.out.println("CHECK");
 		for(int i = 0; i < this.game.getNbPlayers(); i++){
 			switch (this.pawns[i].getStartingSide()){
 				case BOTTOM:
@@ -695,6 +676,76 @@ public class Board {
 	}
 
 	/**
+	 * Check if two fences are intersecting
+	 * 
+	 * @param f1 Fence 1
+	 * @param f2 Fence 2
+	 * @return True if the fences are intersecting and false otherwise
+	 */
+
+	public boolean areIntersecting(Fence f1, Fence f2) {
+		if(f1.getOrientation() == Orientation.HORIZONTAL){
+			if(f2.getOrientation() == Orientation.VERTICAL && isStrictlyBetween(Orientation.VERTICAL, f1.getStart(), f2.getStart(),f2.getEnd()) && isStrictlyBetween(Orientation.HORIZONTAL, f2.getStart(), f1.getStart(),f1.getEnd())) {
+				return true;
+			}
+		} else {
+			if (f2.getOrientation() == Orientation.HORIZONTAL){
+				if(f2.getOrientation() == Orientation.HORIZONTAL && isStrictlyBetween(Orientation.HORIZONTAL, f1.getStart(), f2.getStart(),f2.getEnd()) && isStrictlyBetween(Orientation.VERTICAL, f2.getStart(), f1.getStart(),f1.getEnd())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if a point is strictly between 2 others for one coordinate (x or y)
+	 * 
+	 * @param orientation Orientation giving the coordinates compared (x if horizontal and y if vertical)
+	 * @param pTested Point tested
+	 * @param inf Lower bound
+	 * @param sup Upper bound
+	 * @return True if the point is between the two others for the orientation considered
+	 */
+
+	 public boolean isStrictlyBetween(Orientation orientation, Point pTested, Point inf, Point sup) {
+		if(orientation == Orientation.HORIZONTAL) {
+			return (inf.getX() < pTested.getX() && pTested.getX() < sup.getX());
+		} else {
+			return (inf.getY() < pTested.getY() && pTested.getY() < sup.getY());
+		}
+	}
+
+	/**
+	 * Check if 2 fences are parallel, one the same line and share some points
+	 * 
+	 * @param f1 Fence 1
+	 * @param f2 Fence 2
+	 * @return True if the 2 fences are coincidents
+	 */
+
+	public boolean areCoincidents(Fence f1, Fence f2) {
+		if(f1.getOrientation() == f2.getOrientation()) {
+			// Same orientation
+			if(f1.getStart().equals(f2.getStart()) || f1.getEnd().equals(f2.getEnd())){
+				// End or start at the same point
+				return true;
+			}else if(f1.getOrientation() == Orientation.HORIZONTAL && f2.getStart().getY() == f1.getStart().getY()) {
+				// Same row
+				if(isStrictlyBetween(Orientation.HORIZONTAL, f1.getEnd(), f2.getStart(), f2.getEnd()) || isStrictlyBetween(Orientation.HORIZONTAL, f2.getEnd(), f1.getStart(), f1.getEnd())) {
+					return true;
+				}
+			} else if(f1.getOrientation() == Orientation.VERTICAL && f2.getStart().getX() == f1.getStart().getX()) {
+				// Same column
+				if(isStrictlyBetween(Orientation.VERTICAL, f1.getEnd(), f2.getStart(), f2.getEnd()) || isStrictlyBetween(Orientation.VERTICAL, f2.getEnd(), f1.getStart(), f1.getEnd())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Check if the fence to be added overlaps with others
 	 * 
 	 * @param fenceChecked The fence checked
@@ -703,56 +754,10 @@ public class Board {
 
     public boolean isFenceOverlapping(Fence fenceChecked) {
         if (this.fences != null) {
-			/* 
-			Array of the number of fences that have the same y and this y is between the y of the starting point and the ending point of fencedChecked (if fenceChecked is vertical, and x if it's horizontal)
-			And the x of the starting point or ending point of those fences must be equals to the x of the new fence (if fenceChecked is vertical, and y if it's horizontal)
-			In this array there is for each index (the y (if vertical) or x (if horizontal) coordinate of the new fence) the number of fences that correspond to the statements above
-			*/
-
             for (Fence fence : this.fences) {
-                // over each other
-                if (fenceChecked.getStart().equals(fence.getStart()) && fenceChecked.getOrientation().equals(fence.getOrientation())) {
-                    return true;
-                } else {
-                    switch (fenceChecked.getOrientation()) {
-                        case HORIZONTAL:
-                            if (fence.getOrientation() == Orientation.HORIZONTAL && fence.getStart().getY() == fenceChecked.getStart().getY()) {
-                                for (int i = 0; i < fence.getLength(); i++) {
-                                    if (fenceChecked.getStart().getX() + i == fence.getStart().getX()) {
-                                        return true;
-                                    } else if (fenceChecked.getEnd().getX() - 1 - i == fence.getEnd().getX() - 1) {
-                                        return true;
-                                    }
-                                }
-                            } else if (fence.getOrientation() == Orientation.VERTICAL) {
-                                if(fenceChecked.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceChecked.getEnd().getX()){
-                                    if(fence.getStart().getY() < fenceChecked.getStart().getY() && fenceChecked.getStart().getY() < fence.getEnd().getY()){
-                                        return true;
-                                    }
-                                }
-                            }
-                            break;
-                        case VERTICAL:
-                            if (fence.getOrientation() == Orientation.VERTICAL && fence.getStart().getX() == fenceChecked.getStart().getX()) {
-								for (int i = 0; i < fence.getLength(); i++) {
-									if (fenceChecked.getStart().getY() + i == fence.getStart().getY()) {
-                                        return true;
-                                    } else if (fenceChecked.getEnd().getY() - 1 - i == fence.getEnd().getY() - 1) {
-										return true;
-                                    }
-                                }
-                            } else if (fence.getOrientation() == Orientation.HORIZONTAL) {
-                                if(fence.getStart().getX() < fenceChecked.getStart().getX() && fenceChecked.getStart().getX() < fence.getEnd().getX()){
-                                    if(fenceChecked.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceChecked.getEnd().getY()){
-                                        return true;
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
+				if(areIntersecting(fence,fenceChecked) || areCoincidents(fence,fenceChecked)) {
+					return true;
+				}
             }
         }
 		return false;

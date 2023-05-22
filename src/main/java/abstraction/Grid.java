@@ -328,7 +328,6 @@ public class Grid {
 					}
 				}
 			}
-			// TODO : Check if there is an infinite loop here
 		}
 		return false;
 	}
