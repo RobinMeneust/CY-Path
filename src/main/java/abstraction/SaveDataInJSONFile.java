@@ -43,6 +43,7 @@ public class SaveDataInJSONFile {
     private int maxNbFences;
     private Fence[] listFences;
     private Pawn[] listPawns;
+    private int currentPawnIndex;
 
     private String folderPath = "./src/main/resources/data/saves"; // TODO: Needs to be changed so that it works in the .jar
 
@@ -55,14 +56,16 @@ public class SaveDataInJSONFile {
      * @param listFences   (Fence) : list of fences placed on the board
      * @param maxNbFences (int) : number of fences placed on the board
      * @param listPawns    (int) : list of pawns of all players of the CY-PATH party
+     * @param currentPawnIndex (int) : index of the current player (that will play in the first round)
      */
 
-    public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int maxNbFences, Pawn[] listPawns) {
+    public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int maxNbFences, Pawn[] listPawns, int currentPawnIndex) {
         this.rows = rows;
         this.columns = columns;
         this.listFences = listFences;
         this.maxNbFences = maxNbFences;
         this.listPawns = listPawns;
+        this.currentPawnIndex = currentPawnIndex;
     }
 
     private static boolean isFileNameDuplicate(String folderPath, String fileName) {
@@ -107,6 +110,7 @@ public class SaveDataInJSONFile {
         gameObjects.put("rows", rows);
         gameObjects.put("columns", columns);
         gameObjects.put("maxNbFences", maxNbFences);
+        gameObjects.put("currentPawnIndex", currentPawnIndex);
 
         
         JSONArray gameElementsListFences = new JSONArray();

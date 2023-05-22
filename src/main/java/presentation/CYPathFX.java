@@ -1,5 +1,8 @@
 package presentation;
 
+import java.io.File;
+import java.util.HashMap;
+
 /**
  * Importing java classes needed for the CYPathFX class
  */
@@ -29,7 +32,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
@@ -95,11 +100,7 @@ public class CYPathFX extends Application {
         if(this.gameScene != null) {
             Button continueGameButton = new Button("Continue current game");
             continueGameButton.setOnAction(e -> {
-                try {
-                    goToGameScene();
-                    // The GameNotInitializedException should not be thrown here since gameScene is not null
-                    // But even if it's thrown it's not an issue, we can just prevent the user from going back to its exited game and start a new one
-                } catch (GameNotInitializedException err) {}
+                goToGameScene();
             });
             buttonsMenuHBox.getChildren().add(continueGameButton);
         }
@@ -139,7 +140,8 @@ public class CYPathFX extends Application {
         Button twoPlayersModeButton = new Button("2 Players");
         twoPlayersModeButton.setOnAction(e -> {
             try {    
-                createGameScene(2);
+                initializeGame(2);
+                createGameScene();
                 goToGameScene();
             } catch (GameNotInitializedException err) {
                 System.err.println(err);
@@ -149,7 +151,8 @@ public class CYPathFX extends Application {
         Button fourPlayersModeButton = new Button("4 Players");
         fourPlayersModeButton.setOnAction(e -> {
             try {    
-                createGameScene(4);
+                initializeGame(4);
+                createGameScene();
                 goToGameScene();
             } catch (GameNotInitializedException err) {
                 System.err.println(err);
@@ -169,33 +172,38 @@ public class CYPathFX extends Application {
         this.newGameMenuScene = new Scene(root);
     }
 
-    public void createGameScene(int nbPlayers) {
+    public void initializeGame(int nbPlayers) {
+        Player[] players = new Player[nbPlayers];
+        HashMap<Integer, Player> playersPawnIndex = new HashMap<Integer, Player>(4);
+        for (int i = 0; i < nbPlayers; i++){
+            players[i] = new Player("Player" + i);
+            playersPawnIndex.put(i, players[i]);
+        }
+        try {
+            this.game = new GameFX(players,20, 9, 9, playersPawnIndex);
+        } catch (InvalidNumberOfPlayersException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
+    public void createGameScene() throws GameNotInitializedException {
+        if(this.game == null) {
+            throw new GameNotInitializedException();
+        }
         BorderPane rootGameScene = new BorderPane();
         
         Button goBack = new Button("Main Menu");
         goBack.setOnAction(e -> {
             goToMainMenuScene();
         });
-
+        this.actionButton.setOnAction(new ActionButtonControl(this, this.actionButton, this.game));
+        
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
 
         HBox buttonsHBox = new HBox();
         buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
-
-        // Initialize game
-
-        Player[] players = new Player[nbPlayers];
-        for (int i = 0; i < nbPlayers; i++){
-            players[i] = new Player("Player" + i);
-        }
-        try {
-            this.game = new GameFX(players,20, 9, 9);
-            this.actionButton.setOnAction(new ActionButtonControl(this, this.actionButton, this.game));
-        } catch (InvalidNumberOfPlayersException e) {
-            System.err.println(e);
-            System.exit(-1);
-        }
         this.gPane = createBoard();
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
@@ -218,11 +226,9 @@ public class CYPathFX extends Application {
         CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
         this.game.addObserver(currentPlayerTextControl);
         buttonsHBox.getChildren().add(currentPlayerText);
-
         //We click on the button two times for update the first player action
         actionButton.fire();
         actionButton.fire();
-
         //Create a thread to run in the terminal
         if(this.terminalThread != null && this.terminalThread.isAlive()) {
             this.terminalThread.interrupt();
@@ -236,9 +242,16 @@ public class CYPathFX extends Application {
         this.terminalThread.start();
     }
 
-    public void goToGameScene() throws GameNotInitializedException {
+    public void goToGameScene()  {
         if(this.gameScene == null) {
-            throw new GameNotInitializedException();
+            try {
+                createGameScene();
+            } catch (GameNotInitializedException e) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setContentText(""+e);
+                alert.showAndWait();
+                goToMainMenuScene();
+            }
         }
 
         this.primaryStage.setScene(gameScene);
@@ -273,6 +286,7 @@ public class CYPathFX extends Application {
         Color cellColor = Color.rgb(230, 230, 230);
         Circle[] pawnCircles = new Circle[this.game.getNbPlayers()];
 
+        System.out.println(this.game.getBoard().getPawnsArray());
         try {
             for (int k = 0; k < this.game.getNbPlayers(); k++) {
                 pawnCircles[k] = this.createPlayerCircle(this.game.getBoard().getPawn(k).getColor());
@@ -306,7 +320,7 @@ public class CYPathFX extends Application {
                 cellStackPane.getChildren().add(cell);
                 //System.out.println("column = " + j +" ligne = " + i);                
 
-                // Add player circles to the middle of each side
+                // Add player circles to their position
                 try {
                     for (int l = 0; l < this.game.getNbPlayers(); l++) {
                         if (this.game.getBoard().getPawn(l).getPosition().equals(new Point((j-1)/2, (i-1)/2))) {
@@ -338,6 +352,34 @@ public class CYPathFX extends Application {
         for (int i = 0; i < sizeBoardColumns; i++) {
             gPane.getColumnConstraints().add(new ColumnConstraints(cellSize));
             gPane.getColumnConstraints().add(new ColumnConstraints(lineWidth));
+        }
+
+        // Add fences to board
+        for(Fence f : this.game.getBoard().getFencesArray()) {
+            Point pStartFenceGPaneCoord = new Point(f.getStart().getX()*2,f.getStart().getY()*2);
+            Point pEndFenceGPaneCoord = new Point(f.getEnd().getX()*2,f.getEnd().getY()*2);
+            
+            if(f.getOrientation() == Orientation.HORIZONTAL) {
+                int y = pStartFenceGPaneCoord.getY();
+                for(int x = pStartFenceGPaneCoord.getX(); x < pEndFenceGPaneCoord.getX(); x++) {
+                    Node n = this.getNodeFromGridPane(gPane, y, x);
+                    if(n instanceof Line) {
+                        Line l = (Line) n;
+                        l.setStroke(Color.BLACK);
+                        l.toFront();
+                    }
+                }
+            } else {
+                int x = pStartFenceGPaneCoord.getX();
+                for(int y = pStartFenceGPaneCoord.getY(); y < pEndFenceGPaneCoord.getY(); y++) {
+                    Node n = this.getNodeFromGridPane(gPane, y, x);
+                    if(n instanceof Line) {
+                        Line l = (Line) n;
+                        l.setStroke(Color.BLACK);
+                        l.toFront();
+                    }
+                }
+            }
         }
     
         return gPane;
@@ -441,7 +483,43 @@ public class CYPathFX extends Application {
     }
 
     private void loadGame()  {
-        // TODO
+        String saveDefaultPath = "./src/main/resources/data/saves";
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a file");
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
+        new File(saveDefaultPath).mkdirs();
+        fileChooser.setInitialDirectory(new File(saveDefaultPath));
+
+        File file = fileChooser.showOpenDialog(this.primaryStage);
+
+        
+        if(file != null) {
+            LoadDataFromJSONFile loadDataObject = new LoadDataFromJSONFile();
+            Alert alert = null;
+            try {
+                loadDataObject.load(file.getAbsolutePath());
+                HashMap<Integer,Player> playersPawnIndex = new HashMap<Integer,Player>(4);
+                Player[] players = new Player[loadDataObject.getPawns().length];
+                for(int i=0; i<players.length; i++) {
+                    players[i] = new Player("Player"+i);
+                    playersPawnIndex.put(i, players[i]);
+                }
+                this.game = new GameFX(players, loadDataObject.getMaxNbFences(), loadDataObject.getRows(), loadDataObject.getColumns(), playersPawnIndex, loadDataObject.getPawns(), loadDataObject.getCurrentPawnIndex());
+                for(Fence f : loadDataObject.getListFences()){
+                    this.game.getBoard().addFenceToData(f);
+                }
+
+                alert = new Alert(AlertType.INFORMATION);
+                alert.setContentText("Game successfully loaded");
+                alert.showAndWait();
+                this.goToGameScene();
+            } catch (Exception e) {
+                alert = new Alert(AlertType.ERROR);
+                alert.setContentText("Error while loading the game.\n\n"+e);
+                e.printStackTrace();
+                alert.showAndWait();
+            }
+        }
     }
 
     private void saveGame() {
@@ -457,7 +535,7 @@ public class CYPathFX extends Application {
         }
 
         if(fileName != null) {
-            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
+            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbMaxTotalFences(), this.game.getBoard().getPawnsArray(), this.game.getCurrentPawnIndex());
             Alert alert = null;
             try {
                 saveDataObject.save(fileName);
@@ -467,6 +545,7 @@ public class CYPathFX extends Application {
             } catch(Exception e) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
+                alert.showAndWait();
             }
         }
     }

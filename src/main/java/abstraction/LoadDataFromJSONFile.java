@@ -53,10 +53,9 @@ public class LoadDataFromJSONFile {
     private int rows;
     private int columns;
     private int maxNbFences;
-    private Fence[] listFences;
-    private Pawn[] listPawns;
-
-    private String folderPath = "./src/main/resources/data/saves"; // TODO: Needs to be changed so that it works in the .jar
+    private ArrayList<Fence> listFences;
+    private Pawn[] pawns;
+    private int currentPawnIndex;
 
     /**
      * Create a constructor that retrieves the elements that make up a backup file of a part of CY-PATH
@@ -65,43 +64,53 @@ public class LoadDataFromJSONFile {
      * @param columns      (int) : number of rows of the game board
      * @param listFences   (Fence) : list of fences placed on the board
      * @param placedFences (int) : number of fences placed on the board
-     * @param listPawns    (int) : list of pawns of all players of the CY-PATH party
+     * @param pawns        (Pawn[]) : list of pawns of all players of the CY-PATH party
      */
 
-    public LoadDataFromJSONFile(int rows, int columns, Fence[] listFences, int maxNbFences, Pawn[] listPawns) {
-        this.rows = rows;
-        this.columns = columns;
-        this.listFences = listFences;
-        this.maxNbFences = maxNbFences;
-        this.listPawns = listPawns;
+    public LoadDataFromJSONFile() {
+        this.rows = 0;
+        this.columns = 0;
+        this.listFences = null;
+        this.maxNbFences = 0;
+        this.pawns = null;
+        this.currentPawnIndex = 0;
+    }
+    
+
+    public int getRows() {
+        return rows;
     }
 
-    public static boolean isFileNameExist(String folderPath, String fileName) {
-        File folder = new File(folderPath);
-        File[] filesInFolder = folder.listFiles();
 
-        if (filesInFolder != null) {
-            for (File file : filesInFolder) {
-                if (file.getName().equals(fileName)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    public int getColumns() {
+        return columns;
     }
 
-    public static File loadFile(String folderPath, String fileName) throws FileNameNotExistException {
-        File file = null;
 
-        if(!isFileNameExist(folderPath, fileName)) {
-            Path folder = Paths.get(folderPath);
-            Path filePath = folder.resolve(fileName);
-            file = filePath.toFile();
+    public int getMaxNbFences() {
+        return maxNbFences;
+    }
+
+
+    public ArrayList<Fence> getListFences() {
+        return listFences;
+    }
+
+    public Pawn[] getPawns() {
+        return pawns;
+    }
+
+    public int getCurrentPawnIndex() {
+        return currentPawnIndex;
+    }
+
+    public static File loadFile(String filePath) throws FileNameNotExistException {
+        File file = new File(filePath);
+        if(file != null && file.isFile()) {
+            return file;
         } else {
             throw new FileNameNotExistException();
         }
-        return file;
     }
 
     /**
@@ -109,14 +118,15 @@ public class LoadDataFromJSONFile {
     *
     * @param fileName (String)
     * @throws FileNameNotExistException
+     * @throws IOException
+     * @throws ParseException
     */
 
-    public void load(String fileName, boolean isGameFX, Player[] players) throws FileNameNotExistException, InvalidNumberOfPlayersException {
+    public void load(String filePath) throws FileNameNotExistException, IOException, ParseException {
         File savedFile = null;
-        GameAbstract loadedGame = null;
-                
+        
         try {
-            savedFile = loadFile(this.folderPath, fileName);
+            savedFile = loadFile(filePath);
         } catch (FileNameNotExistException e) {
             throw e;
         }
@@ -124,58 +134,48 @@ public class LoadDataFromJSONFile {
         try {
             JSONParser parser = new JSONParser();
 
-            JSONObject gameObjects = (JSONObject) parser.parse(new FileReader(folderPath+fileName+".json"));
-
-            String json = gameObjects.toJSONString();
-
-            rows = (int) gameObjects.get("rows");
-            columns = (int) gameObjects.get("columns");
-            maxNbFences = (int) gameObjects.get("maxNbFences");
-
+            JSONObject gameObjects = (JSONObject) parser.parse(new FileReader(savedFile.getAbsolutePath()));
+            this.rows = ((Number) gameObjects.get("rows")).intValue();
+            this.columns = ((Number) gameObjects.get("columns")).intValue();
+            this.maxNbFences = ((Number) gameObjects.get("maxNbFences")).intValue();
+            this.currentPawnIndex = ((Number) gameObjects.get("currentPawnIndex")).intValue();
             JSONArray listFences = (JSONArray)gameObjects.get("listFences");
             Iterator iteratorFence = listFences.iterator();
-            ArrayList<Fence> arrayListFence = new ArrayList<Fence>(listFences.size());
+            this.listFences = new ArrayList<Fence>(listFences.size());
+
             while(iteratorFence.hasNext()) {
                 JSONObject fenceJSON = (JSONObject) iteratorFence.next();
-                String orientation = (String) fenceJSON.get("orientation");
+                String orientation = (String) fenceJSON.get("orientation").toString();
                 JSONObject start = (JSONObject) fenceJSON.get("start");
-                int startX = (int) start.get("x");
-                int startY = (int) start.get("y");
-                JSONObject end = (JSONObject) fenceJSON.get("start");
-                int endX = (int) end.get("x");
-                int endY = (int) end.get("y");
-                arrayListFence.add(new Fence(Orientation.valueOf(orientation), new Point(startX, startY), new Point(endX, endY)));
+                int startX = ((Number) start.get("x")).intValue();
+                int startY = ((Number) start.get("y")).intValue();
+                JSONObject end = (JSONObject) fenceJSON.get("end");
+                int endX = ((Number) end.get("x")).intValue();
+                int endY = ((Number) end.get("y")).intValue();
+                this.listFences.add(new Fence(Orientation.valueOf(orientation), new Point(startX, startY), new Point(endX, endY)));
             }
 
             JSONArray listPawns = (JSONArray)gameObjects.get("listPawns");
             Iterator iteratorPawns = listPawns.iterator();
-            ArrayList<Pawn> arrayListPawn = new ArrayList<Pawn>(listPawns.size());
+            this.pawns = new Pawn[listPawns.size()];
+            int i = 0;
             while(iteratorPawns.hasNext()) {
                 JSONObject pawnJSON = (JSONObject) iteratorPawns.next();
-                int id = (int) pawnJSON.get("id");
-                String startingSide = (String) pawnJSON.get("startingSide");
-                String color = (String) pawnJSON.get("color");
+                int id = ((Number) pawnJSON.get("id")).intValue();
+                String startingSide = (String) pawnJSON.get("startingSide").toString();
+                String color = (String) pawnJSON.get("color").toString();
                 JSONObject position = (JSONObject) pawnJSON.get("pos");
-                int positionX = (int) position.get("x");
-                int positionY = (int) position.get("y");
-                int availableFences = (int) pawnJSON.get("availableFences");
-                arrayListPawn.add(new Pawn(id, Side.valueOf(startingSide), ColorPawn.valueOf(color), new Point(positionX, positionY), availableFences));
+                int positionX = ((Number) position.get("x")).intValue();
+                int positionY = ((Number) position.get("y")).intValue();
+                int nbRemainingFences = ((Number) pawnJSON.get("nbRemainingFences")).intValue();
+                this.pawns[i] = new Pawn(id, Side.valueOf(startingSide), ColorPawn.valueOf(color), new Point(positionX, positionY), nbRemainingFences);
+                i++;
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw e;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if(isGameFX) {
-                loadedGame = new GameFX(players, maxNbFences, rows, columns);
-            } else {
-                loadedGame = new GameConsole(players, maxNbFences, rows, columns);
-            }
-        } catch (InvalidNumberOfPlayersException e) {
             throw e;
         }
     }

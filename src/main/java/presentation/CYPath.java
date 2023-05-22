@@ -9,6 +9,7 @@ package presentation;
 import abstraction.GameConsole;
 import abstraction.Player;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -51,13 +52,15 @@ public class CYPath {
                     nbPlayer = Integer.parseInt(userInput);
                 }
             }
+            HashMap<Integer,Player> playersPawnIndex = new HashMap<Integer,Player>(4);
 
             Player[] players= new Player[nbPlayer];
             for (int i = 0; i < nbPlayer; i++){
-                players[i] = new Player("Anonymous player" + i);
+                players[i] = new Player("Player" + i);
+                playersPawnIndex.put(i,players[i]);
             }
             try {
-                GameConsole game = new GameConsole(players,20, 9, 9);
+                GameConsole game = new GameConsole(players,20, 9, 9,playersPawnIndex);
                 game.launch();
             } catch (Exception e) {
                 System.err.println(e);

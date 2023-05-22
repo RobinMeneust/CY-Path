@@ -24,6 +24,7 @@ Please note that CYPath.jar needs to be with the lib directory in target whereas
 - Java must be installed (was tested on Java 19.0.2)
 - JavaFX must be installed (JDK version) (was tested on 17.0.7)
 - Maven is required (was tested on 3.9.2)
+- Json simple
 
 Change `19` to your JDK version in pom.xml at the line :
 `<java.version>19</java.version>`
@@ -55,6 +56,7 @@ or
 - Going to the menu and recreating a game cause an error with the Thread object used in CYPathFX
 - The "continue Game Button" doesn't work (and isn't even display) for now
 - If there are 4 players aligned and trapped in a 1x4 corridor with no fences left to be placed, then the game is stuck. It should be considered as a draw
+- For now when a file name is already used for a save we don't ask to overwrite the file
 
 ## How to play
 
