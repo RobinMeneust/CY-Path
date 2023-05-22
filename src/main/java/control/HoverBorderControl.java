@@ -70,7 +70,10 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 							}
 						} else {
 							// It's not a valid fence so we just color one line of it (above the cell since it's horizontal)
-							highlightLine(GridPane.getRowIndex(stackPane) - 1, GridPane.getColumnIndex(stackPane), Color.DARKRED);
+							int y = pStartCell.getY() - 1;
+							for (int i = pStartCell.getX(); i < pStartCell.getX() + 2 * fence.getLength(); i += 2) {
+								highlightLine(i, y, Color.DARKRED);
+							}
 						}
 					} else if (this.fence.getOrientation() == Orientation.VERTICAL) {
 						Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), Orientation.VERTICAL, pStartFenceCoord);
@@ -81,7 +84,10 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 							}
 						} else {
 							// It's not a valid fence so we just color one line of it (on the left of the cell since it's vertical)
-							highlightLine(GridPane.getRowIndex(stackPane), GridPane.getColumnIndex(stackPane) - 1, Color.DARKRED);
+							int x = pStartCell.getX() - 1;
+							for (int i = pStartCell.getY(); i < pStartCell.getY() + 2 * fence.getLength(); i += 2) {
+								highlightLine(x, i, Color.DARKRED);
+							}
 						}
 					}
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {

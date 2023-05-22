@@ -676,6 +676,76 @@ public class Board {
 	}
 
 	/**
+	 * Check if two fences are intersecting
+	 * 
+	 * @param f1 Fence 1
+	 * @param f2 Fence 2
+	 * @return True if the fences are intersecting and false otherwise
+	 */
+
+	public boolean areIntersecting(Fence f1, Fence f2) {
+		if(f1.getOrientation() == Orientation.HORIZONTAL){
+			if(f2.getOrientation() == Orientation.VERTICAL && isStrictlyBetween(Orientation.VERTICAL, f1.getStart(), f2.getStart(),f2.getEnd()) && isStrictlyBetween(Orientation.HORIZONTAL, f2.getStart(), f1.getStart(),f1.getEnd())) {
+				return true;
+			}
+		} else {
+			if (f2.getOrientation() == Orientation.HORIZONTAL){
+				if(f2.getOrientation() == Orientation.HORIZONTAL && isStrictlyBetween(Orientation.HORIZONTAL, f1.getStart(), f2.getStart(),f2.getEnd()) && isStrictlyBetween(Orientation.VERTICAL, f2.getStart(), f1.getStart(),f1.getEnd())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check if a point is strictly between 2 others for one coordinate (x or y)
+	 * 
+	 * @param orientation Orientation giving the coordinates compared (x if horizontal and y if vertical)
+	 * @param pTested Point tested
+	 * @param inf Lower bound
+	 * @param sup Upper bound
+	 * @return True if the point is between the two others for the orientation considered
+	 */
+
+	 public boolean isStrictlyBetween(Orientation orientation, Point pTested, Point inf, Point sup) {
+		if(orientation == Orientation.HORIZONTAL) {
+			return (inf.getX() < pTested.getX() && pTested.getX() < sup.getX());
+		} else {
+			return (inf.getY() < pTested.getY() && pTested.getY() < sup.getY());
+		}
+	}
+
+	/**
+	 * Check if 2 fences are parallel, one the same line and share some points
+	 * 
+	 * @param f1 Fence 1
+	 * @param f2 Fence 2
+	 * @return True if the 2 fences are coincidents
+	 */
+
+	public boolean areCoincidents(Fence f1, Fence f2) {
+		if(f1.getOrientation() == f2.getOrientation()) {
+			// Same orientation
+			if(f1.getStart().equals(f2.getStart()) || f1.getEnd().equals(f2.getEnd())){
+				// End or start at the same point
+				return true;
+			}else if(f1.getOrientation() == Orientation.HORIZONTAL && f2.getStart().getY() == f1.getStart().getY()) {
+				// Same row
+				if(isStrictlyBetween(Orientation.HORIZONTAL, f1.getEnd(), f2.getStart(), f2.getEnd()) || isStrictlyBetween(Orientation.HORIZONTAL, f2.getEnd(), f1.getStart(), f1.getEnd())) {
+					return true;
+				}
+			} else if(f1.getOrientation() == Orientation.VERTICAL && f2.getStart().getX() == f1.getStart().getX()) {
+				// Same column
+				if(isStrictlyBetween(Orientation.VERTICAL, f1.getEnd(), f2.getStart(), f2.getEnd()) || isStrictlyBetween(Orientation.VERTICAL, f2.getEnd(), f1.getStart(), f1.getEnd())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Check if the fence to be added overlaps with others
 	 * 
 	 * @param fenceChecked The fence checked
@@ -684,56 +754,10 @@ public class Board {
 
     public boolean isFenceOverlapping(Fence fenceChecked) {
         if (this.fences != null) {
-			/* 
-			Array of the number of fences that have the same y and this y is between the y of the starting point and the ending point of fencedChecked (if fenceChecked is vertical, and x if it's horizontal)
-			And the x of the starting point or ending point of those fences must be equals to the x of the new fence (if fenceChecked is vertical, and y if it's horizontal)
-			In this array there is for each index (the y (if vertical) or x (if horizontal) coordinate of the new fence) the number of fences that correspond to the statements above
-			*/
-
             for (Fence fence : this.fences) {
-                // over each other
-                if (fenceChecked.getStart().equals(fence.getStart()) && fenceChecked.getOrientation().equals(fence.getOrientation())) {
-                    return true;
-                } else {
-                    switch (fenceChecked.getOrientation()) {
-                        case HORIZONTAL:
-                            if (fence.getOrientation() == Orientation.HORIZONTAL && fence.getStart().getY() == fenceChecked.getStart().getY()) {
-                                for (int i = 0; i < fence.getLength(); i++) {
-                                    if (fenceChecked.getStart().getX() + i == fence.getStart().getX()) {
-                                        return true;
-                                    } else if (fenceChecked.getEnd().getX() - 1 - i == fence.getEnd().getX() - 1) {
-                                        return true;
-                                    }
-                                }
-                            } else if (fence.getOrientation() == Orientation.VERTICAL) {
-                                if(fenceChecked.getStart().getX() < fence.getStart().getX() && fence.getStart().getX() < fenceChecked.getEnd().getX()){
-                                    if(fence.getStart().getY() < fenceChecked.getStart().getY() && fenceChecked.getStart().getY() < fence.getEnd().getY()){
-                                        return true;
-                                    }
-                                }
-                            }
-                            break;
-                        case VERTICAL:
-                            if (fence.getOrientation() == Orientation.VERTICAL && fence.getStart().getX() == fenceChecked.getStart().getX()) {
-								for (int i = 0; i < fence.getLength(); i++) {
-									if (fenceChecked.getStart().getY() + i == fence.getStart().getY()) {
-                                        return true;
-                                    } else if (fenceChecked.getEnd().getY() - 1 - i == fence.getEnd().getY() - 1) {
-										return true;
-                                    }
-                                }
-                            } else if (fence.getOrientation() == Orientation.HORIZONTAL) {
-                                if(fence.getStart().getX() < fenceChecked.getStart().getX() && fenceChecked.getStart().getX() < fence.getEnd().getX()){
-                                    if(fenceChecked.getStart().getY() < fence.getStart().getY() && fence.getStart().getY() < fenceChecked.getEnd().getY()){
-                                        return true;
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
+				if(areIntersecting(fence,fenceChecked) || areCoincidents(fence,fenceChecked)) {
+					return true;
+				}
             }
         }
 		return false;

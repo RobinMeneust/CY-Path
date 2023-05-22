@@ -177,6 +177,14 @@ public class Point {
         return Point.sum(newPoint, center);
     }
 
+    /**
+     * Sums 2 points by adding the x coordinates for x and the y coordinated for y
+     * 
+     * @param p1 Point 1
+     * @param p2 Point 2
+     * @return Point got from the sum of point 1 and point 2
+     */
+
     public static Point sum(Point p1, Point p2) {
         return new Point(p1.getX()+p2.getX(), p1.getY()+p2.getY());
     }
