@@ -195,17 +195,17 @@ The task's priority is sorted in ascending order
 
 8. Load a save:
 	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
-		* PROGRESS: IN PROGRESS
+		* PROGRESS: DONE
 		* Who: Yann
 		* Start : 2023/05/19 10:00
 		* Estimated end : 2023/05/19 10:10
-		* Real end : 
+		* Real end : 2023/05/22 03:26
 	8.2 Decode the file containing the save and load it, check if the format is valid,
-		* PROGRESS: IN PROGRESS
+		* PROGRESS: DONE
 		* Who: Yann
 		* Start : 2023/05/19 10:15
 		* Estimated end : 2023/05/19 11:30
-		* Real end :
+		* Real end : 2023/05/22 03:26
 
 9. Create a user interface using JavaFX:
 	9.0 Set up
