@@ -20,15 +20,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-/**
- * Importing classes from the java.nio package
- * 
- * It provides features for handling non-blocking I/O operations, as well as efficient handling of binary data, such as data transfer between channels and data buffers.
- */
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-//import java.nio.file.NoSuchFileException;
 
 /**
  * Importing classes from the org.json.simple package
@@ -140,7 +131,7 @@ public class LoadDataFromJSONFile {
             this.maxNbFences = ((Number) gameObjects.get("maxNbFences")).intValue();
             this.currentPawnIndex = ((Number) gameObjects.get("currentPawnIndex")).intValue();
             JSONArray listFences = (JSONArray)gameObjects.get("listFences");
-            Iterator iteratorFence = listFences.iterator();
+            Iterator<?> iteratorFence = listFences.iterator();
             this.listFences = new ArrayList<Fence>(listFences.size());
 
             while(iteratorFence.hasNext()) {
@@ -156,7 +147,7 @@ public class LoadDataFromJSONFile {
             }
 
             JSONArray listPawns = (JSONArray)gameObjects.get("listPawns");
-            Iterator iteratorPawns = listPawns.iterator();
+            Iterator<?> iteratorPawns = listPawns.iterator();
             this.pawns = new Pawn[listPawns.size()];
             int i = 0;
             while(iteratorPawns.hasNext()) {

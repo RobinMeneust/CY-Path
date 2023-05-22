@@ -38,6 +38,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
+@SuppressWarnings("deprecation")
 public class CYPathFX extends Application {
     /**
      * State the CYPATH's class attributes
@@ -61,6 +62,8 @@ public class CYPathFX extends Application {
     private Scene newGameMenuScene;
     private Scene gameScene;
 
+    private Button continueGameButton;
+
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
         this.possibleCellColor = Color.rgb(172, 255, 214);
@@ -76,6 +79,11 @@ public class CYPathFX extends Application {
         this.primaryStage = primaryStage;
         this.terminalThread = null;
         this.fenceCounter = new Text("0");
+        this.continueGameButton = new Button("Continue current game");
+        this.continueGameButton.setOnAction(e -> {
+            goToGameScene();
+        });
+        this.continueGameButton.setManaged(false);
 
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
@@ -97,14 +105,6 @@ public class CYPathFX extends Application {
         HBox buttonsMenuHBox = new HBox();
         rootMainMenu.setCenter(buttonsMenuHBox);
 
-        if(this.gameScene != null) {
-            Button continueGameButton = new Button("Continue current game");
-            continueGameButton.setOnAction(e -> {
-                goToGameScene();
-            });
-            buttonsMenuHBox.getChildren().add(continueGameButton);
-        }
-
         Button newGameMenuButton = new Button("New Game");
         newGameMenuButton.setOnAction(e -> goToNewGameMenu());
 
@@ -113,13 +113,16 @@ public class CYPathFX extends Application {
         loadButton.setOnAction(e -> loadGame());
 
 
-        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton);
+        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, continueGameButton);
     }
 
     public void goToMainMenuScene() {
         if(this.mainMenuScene == null) {
             createMainMenuScene();
         }
+
+        this.continueGameButton.setManaged(this.game != null);
+        
         this.primaryStage.setScene(this.mainMenuScene);
         if(!this.primaryStage.isShowing()) {
             this.primaryStage.show();

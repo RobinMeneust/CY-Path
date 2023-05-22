@@ -1,6 +1,6 @@
 package abstraction;
 
-import java.util.Scanner;
+import presentation.CYPath;
 
 /**
  * This class corresponds to all elements that are related to a point in a CY-PATH game.
@@ -146,14 +146,13 @@ public class Point {
 	 */
 
 	public static Point choosePoint() {
-		Scanner scanner = new Scanner(System.in);
 		System.out.println();
 
 		System.out.print("X : ");
-		int x = Integer.parseInt(scanner.next());
+		int x = Integer.parseInt(CYPath.scanner.next());
 		System.out.println();
 		System.out.print("Y : ");	
-		int y = Integer.parseInt(scanner.next());
+		int y = Integer.parseInt(CYPath.scanner.next());
 		
 		return new Point(x,y);
 	}

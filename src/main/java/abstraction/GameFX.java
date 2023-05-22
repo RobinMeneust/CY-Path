@@ -1,4 +1,4 @@
-package abstraction; 
+package abstraction;
 
 import java.util.HashMap;
 
@@ -21,6 +21,7 @@ import javafx.beans.property.StringProperty;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
+@SuppressWarnings("deprecation")
 public class GameFX extends GameAbstract {
     private StringProperty action;
     private boolean isEndTurn;
@@ -82,8 +83,6 @@ public class GameFX extends GameAbstract {
 		// The game is now in progress
 		this.setState(GameState.IN_PROGRESS);
 
-        //String response = "";
-        //Scanner scanner = new Scanner(System.in);
         Pawn currentPawn = null;
 
         try {

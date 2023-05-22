@@ -45,7 +45,7 @@ public class SaveDataInJSONFile {
     private Pawn[] listPawns;
     private int currentPawnIndex;
 
-    private String folderPath = "./src/main/resources/data/saves"; // TODO: Needs to be changed so that it works in the .jar
+    private String folderPath = "./src/main/resources/data/saves";
 
     /**
      * Create a constructor that groups the elements that make up a backup file of a

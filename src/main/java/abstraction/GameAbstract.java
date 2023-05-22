@@ -9,6 +9,7 @@ import java.util.Observable;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
+@SuppressWarnings("deprecation")
 public abstract class GameAbstract extends Observable {
 	/**
 	 * State the Game's class attributes

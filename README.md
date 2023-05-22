@@ -17,14 +17,15 @@ Quoridor can be played by either 2 or 4 players.
 
 ## Important
 
-Please note that CYPath.jar needs to be with the lib directory in target whereas CYPathStandalone.jar doesn't
+- Please note that CYPath.jar needs to be with the lib directory in target or you need to specify the libraries location (look at the sections below) whereas CYPathStandalone.jar doesn't
+- The jar executables can be found in the github action of this project (Continuous Integration) in the summary of a commit, in the artifacts section
 
 ## Installation
 
 - Java must be installed (was tested on Java 19.0.2)
 - JavaFX must be installed (JDK version) (was tested on 17.0.7)
-- Maven is required (was tested on 3.9.2)
-- Json simple
+- Maven is required to compile (was tested on 3.9.2)
+- org.json and json-simple are required for saving and loading files
 
 Change `19` to your JDK version in pom.xml at the line :
 `<java.version>19</java.version>`
@@ -41,11 +42,13 @@ or just `mvn clean prepare-package jar:jar` to create the not standalone executa
 
 ## Execution
 
-`mvn clean javafx:run`
+`mvn clean javafx:run` (use maven)
 
 or
 
-`java -jar target/CYPath.jar` (or `java -jar target/CYPathStandalone.jar`) if you have the executable jar file
+`java --module-path LIB_PATH --add-modules MODULES -jar CYPath.jar` and change LIB_PATH with the lib/ folder of javafx and the other requirements. And LIBRARIES with the modules names (javafx.controls, ...)
+
+or `java -jar target/CYPathStandalone.jar` : it may not work since it's not made specifically for your system configuration
 
 ## Known Bugs/Issues to be fixed
 
@@ -55,7 +58,7 @@ or
 - We can't load a game
 - Going to the menu and recreating a game cause an error with the Thread object used in CYPathFX
 - The "continue Game Button" doesn't work (and isn't even display) for now
-- If there are 4 players aligned and trapped in a 1x4 corridor with no fences left to be placed, then the game is stuck. It should be considered as a draw
+- If there are 4 players aligned and trapped in a 1x4 corridor with no fences left to be placed, then the game is stuck. It should be considered as a draw, or we shoudl skip the turn of the players that can't move
 - For now when a file name is already used for a save we don't ask to overwrite the file
 
 ## How to play

@@ -23,7 +23,7 @@
     </properties>
     
     <dependencies>
-        <!-- For Json Simple -->
+        <!-- For Json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>

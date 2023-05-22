@@ -4,11 +4,12 @@ package abstraction; /**
  * Importing classes from the java.util package
  */
 
-import java.util.Scanner;
-import java.io.File;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+
+import presentation.CYPath;
 
 /**
  * Current game launched in console mode
@@ -44,7 +45,6 @@ public class GameConsole extends GameAbstract {
 		this.setState(GameState.IN_PROGRESS);
 
         String response = "";
-        Scanner scanner = new Scanner(System.in);
         Pawn currentPawn = null;
 
         try {
@@ -60,7 +60,7 @@ public class GameConsole extends GameAbstract {
                 } else{
                     do {
                         System.out.println("What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))");
-                        response = scanner.nextLine();
+                        response = CYPath.scanner.nextLine();
                         response = response.toUpperCase();
                         
                         if(response.matches("S(AVE)?")) {
@@ -68,7 +68,7 @@ public class GameConsole extends GameAbstract {
                             do {
                                 try {
                                     System.out.println("What is the name of your save file ? (without extension) :");
-                                    String fileName = scanner.nextLine();
+                                    String fileName = CYPath.scanner.nextLine();
 
                                     SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbMaxTotalFences(), this.getBoard().getPawnsArray(), this.getCurrentPawnIndex());
                                     saveDataObject.save(fileName);

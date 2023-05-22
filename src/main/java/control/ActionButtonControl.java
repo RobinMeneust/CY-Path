@@ -1,7 +1,6 @@
 package control;
 
 import abstraction.GameFX;
-import abstraction.IncorrectPawnIndexException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import presentation.CYPathFX;

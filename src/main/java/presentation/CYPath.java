@@ -19,6 +19,7 @@ import java.util.Scanner;
  */
 
 public class CYPath {
+    public static final Scanner scanner = new Scanner(System.in);
     /** 
      * Main method
      * Launch the game in console mode or window mode
@@ -29,11 +30,10 @@ public class CYPath {
     public static void main(String[] args) {
         // Initialize game
         System.out.println("Welcome to CY-Path.\n");
-        Scanner sc = new Scanner(System.in);
         String line = "";
         do{
             System.out.println("Type 'c' if you want to play in console mode or in a window with visuals 'w'");
-            line = sc.nextLine();
+            line = CYPath.scanner.nextLine();
             line = line.toUpperCase();
         } while(!line.equals("W") && !line.equals("C"));
 
@@ -47,7 +47,7 @@ public class CYPath {
             int nbPlayer = 0;
             while(nbPlayer != 2 && nbPlayer != 4){
                 System.out.println("How many players do you want ? (2 or 4)");
-                String userInput = sc.nextLine();
+                String userInput = CYPath.scanner.nextLine();
                 if(userInput.equals("2") || userInput.equals("4")){
                     nbPlayer = Integer.parseInt(userInput);
                 }
@@ -66,5 +66,6 @@ public class CYPath {
                 System.err.println(e);
             }
         }
+        CYPath.scanner.close();
     }
 }

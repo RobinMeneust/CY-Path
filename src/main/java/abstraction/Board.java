@@ -7,10 +7,10 @@ package abstraction;
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
+
+import presentation.CYPath;
 
 /**
  * This class represents the game board on which players will play.
@@ -164,8 +164,7 @@ public class Board {
 	 */
 
 	public String chooseOrientation(){
-		Scanner scanner = new Scanner(System.in);
-		String orientation = scanner.next();
+		String orientation = CYPath.scanner.next();
 		return orientation;
 	}
 

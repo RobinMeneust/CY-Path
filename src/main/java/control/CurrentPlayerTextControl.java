@@ -11,6 +11,8 @@ import java.util.Observer;
  *
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
+
+@SuppressWarnings("deprecation")
 public class CurrentPlayerTextControl implements Observer {
 	private Text currentPlayer;
 	private GameAbstract game;
