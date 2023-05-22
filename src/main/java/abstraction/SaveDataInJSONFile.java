@@ -58,11 +58,11 @@ public class SaveDataInJSONFile {
      * @param listPawns    (int) : list of pawns of all players of the CY-PATH party
      */
 
-    public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int placedFences, Pawn[] listPawns) {
+    public SaveDataInJSONFile(int rows, int columns, Fence[] listFences, int maxNbFences, Pawn[] listPawns) {
         this.rows = rows;
         this.columns = columns;
         this.listFences = listFences;
-        this.maxNbFences = placedFences;
+        this.maxNbFences = maxNbFences;
         this.listPawns = listPawns;
     }
 

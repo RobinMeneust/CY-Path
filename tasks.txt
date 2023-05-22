@@ -293,7 +293,7 @@ The task's priority is sorted in ascending order
 			* Estimated end : 2023/05/18 21:00
 			* Real end : 2023/05/18 23:20
 		10.1.2 Add an event to place the fence when a border (where a fence can be added) is clicked
-			* PROGRESS: IN_PROGRESS
+			* PROGRESS: DONE
 			* Who: Robin
 			* Start : 2023/05/20 13:00
 			* Estimated end : 2023/05/20 16:30
@@ -332,7 +332,7 @@ The task's priority is sorted in ascending order
 		* Estimated end : 2023/05/20 18:15
 		* Real end : 2023/05/20 18:30
 	11.3 Load Game and save game buttons and their events (load and launch a game or save it)
-		* PROGRESS: IN_PROGRESS (needs 7. & 8. tasks)
+		* PROGRESS: ON_HOLD (needs 7. & 8. tasks)
 		* Who: Robin
 		* Start : 2023/05/21 12:45
 		* Estimated end :  2023/05/21 13:45

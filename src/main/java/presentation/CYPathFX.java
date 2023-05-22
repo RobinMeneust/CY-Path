@@ -3,8 +3,7 @@ package presentation; /**
  */
 
 import java.util.LinkedList;
-
-import javax.swing.JOptionPane;
+import java.util.Optional;
 
 /**
  * Importing javafx classes needed for the CYPathFX class
@@ -437,7 +436,17 @@ public class CYPathFX extends Application {
     }
 
     private void saveGame() {
-        String fileName = JOptionPane.showInputDialog("Choose a name for your save file");
+        TextInputDialog dialog = new TextInputDialog("save");
+        dialog.setContentText("Choose a name for your save file");
+        
+        dialog.showAndWait();
+        Optional<String> dialogResult = dialog.showAndWait();
+        String fileName = null;
+
+        if (dialogResult.isPresent()){
+            fileName = dialogResult.get();
+        }
+
         if(fileName != null) {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
             Alert alert = null;
