@@ -118,7 +118,8 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 					StackPane parentStackPane = (StackPane) sourceCell.getParent();
 					int columnIndex = GridPane.getColumnIndex(parentStackPane);
 					int rowIndex = GridPane.getRowIndex(parentStackPane);
-					pawn.setPosition(new Point(columnIndex / 2, rowIndex / 2));
+					
+					this.game.getBoard().movePawn(this.game.getPawn(this.game.getCurrentPlayer()).getId(), new Point(columnIndex / 2, rowIndex / 2));
 
 					this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());
 					//the information is transmitted to the terminal

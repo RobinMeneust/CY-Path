@@ -555,11 +555,10 @@ public class Board {
 			return false;
 		}
 
-		try {
-			Pawn pawn = this.getPawn(pawnId);
-			
+		try {			
 			// Check if the new position is valid
 
+			System.out.println("Move pawn");
 			if(this.isPawnPosValid(newPawnPos)) {
 				this.getPawn(pawnId).setPosition(newPawnPos);
 				this.checkWin();
@@ -667,6 +666,7 @@ public class Board {
 	 */
 
 	public void checkWin(){
+		System.out.println("CHECK");
 		for(int i = 0; i < this.game.getNbPlayers(); i++){
 			switch (this.pawns[i].getStartingSide()){
 				case BOTTOM:
