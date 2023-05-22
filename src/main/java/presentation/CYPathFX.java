@@ -136,7 +136,7 @@ public class CYPathFX extends Application {
     }
 
     public void prepareGameScene(int nPlayer){
-        try {    
+        try {
             initializeGame(nPlayer);
             createGameScene();
             goToGameScene();
@@ -525,6 +525,7 @@ public class CYPathFX extends Application {
                     players[i] = new Player("Player"+i);
                     playersPawnIndex.put(i, players[i]);
                 }
+
                 this.game = new GameFX(players, loadDataObject.getMaxNbFences(), loadDataObject.getRows(), loadDataObject.getColumns(), playersPawnIndex, loadDataObject.getPawns(), loadDataObject.getCurrentPawnIndex());
                 for(Fence f : loadDataObject.getListFences()){
                     this.game.getBoard().addFenceToData(f);
@@ -533,6 +534,7 @@ public class CYPathFX extends Application {
                 alert = new Alert(AlertType.INFORMATION);
                 alert.setContentText("Game successfully loaded");
                 alert.showAndWait();
+                this.createGameScene();
                 this.goToGameScene();
             } catch (Exception e) {
                 alert = new Alert(AlertType.ERROR);

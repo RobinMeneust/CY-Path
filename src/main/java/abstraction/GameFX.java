@@ -28,7 +28,6 @@ public class GameFX extends GameAbstract {
     private StringProperty action;
     private boolean isEndTurn;
     public BooleanProperty isEndGame;
-	public static Integer PLAYER_WINNER;
 
    /**
 	 * Create a GameFX object by giving all of its attributes

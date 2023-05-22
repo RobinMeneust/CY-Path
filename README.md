@@ -52,12 +52,9 @@ or `java -jar target/CYPathStandalone.jar` : it may not work since it's not made
 
 ## Known Bugs/Issues to be fixed
 
-- When you win the program stops. In a future update we may want to go to the main menu after winning a game
 - Javadoc isn't complete so `mvn javadoc:jar` may generate errors
 - For now entering an illegal file name for the save causes a crash
-- We can't load a game
-- Going to the menu and recreating a game cause an error with the Thread object used in CYPathFX
-- The "continue Game Button" doesn't work (and isn't even display) for now
+- The content of the save file isn't checked in this version
 - If there are 4 players aligned and trapped in a 1x4 corridor with no fences left to be placed, then the game is stuck. It should be considered as a draw, or we shoudl skip the turn of the players that can't move
 - For now when a file name is already used for a save we don't ask to overwrite the file
 

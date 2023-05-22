@@ -133,7 +133,6 @@ public class LoadDataFromJSONFile {
             JSONArray listFences = (JSONArray)gameObjects.get("listFences");
             Iterator<?> iteratorFence = listFences.iterator();
             this.listFences = new ArrayList<Fence>(listFences.size());
-
             while(iteratorFence.hasNext()) {
                 JSONObject fenceJSON = (JSONObject) iteratorFence.next();
                 String orientation = (String) fenceJSON.get("orientation").toString();

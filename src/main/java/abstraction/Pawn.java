@@ -96,6 +96,10 @@ public class Pawn implements Cloneable{
         return position;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     /**
      * Accessor to assign the position of a pawn to the current pawn
      * 

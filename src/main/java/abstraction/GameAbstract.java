@@ -41,13 +41,13 @@ public abstract class GameAbstract extends Observable {
 		this.players = players;
 
 		Pawn[] pawns = new Pawn[players.length];
-		for(int i=0; i<players.length;i++) {
+		for(int i=0; i<pawns.length;i++) {
 			pawns[i] = new Pawn(i, Side.values()[i], ColorPawn.values()[i], playersPawnIndex.get(i), nbMaxTotalFences, players.length);
 		}
 
 		this.board = new Board(nbCols, nbRows, this, pawns);
-		for(int i=0; i<players.length;i++) {
-			pawns[i].setBoard(this.getBoard());
+		for(int i=0; i<pawns.length;i++) {
+			pawns[i].setBoard(this.board);
 		}
 		this.currentPawnIndex = 0;
 	}
@@ -59,8 +59,12 @@ public abstract class GameAbstract extends Observable {
 		}
 		this.nbMaxTotalFences = nbMaxTotalFences;
 		this.players = players;
-
+		
 		this.board = new Board(nbCols, nbRows, this, pawns);
+		for(int i=0; i<pawns.length;i++) {
+			pawns[i].setPlayer(playersPawnIndex.get(i));
+			pawns[i].setBoard(this.board);
+		}
 		this.currentPawnIndex = currentPawnIndex;
 	}
 
