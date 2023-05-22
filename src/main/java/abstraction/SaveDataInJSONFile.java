@@ -9,7 +9,6 @@ package abstraction;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-//import java.nio.file.InvalidPathException;
 
 /**
  * Importing classes from the java.nio package
@@ -41,8 +40,8 @@ public class SaveDataInJSONFile {
     private int rows;
     private int columns;
     private int maxNbFences;
-    private Fence[] listFences;
     private Pawn[] listPawns;
+    private Fence[] listFences;
     private int currentPawnIndex;
 
     private String folderPath = "./src/main/resources/data/saves";
@@ -51,11 +50,11 @@ public class SaveDataInJSONFile {
      * Create a constructor that groups the elements that make up a backup file of a
      * part of CY-PATH
      * 
-     * @param rows         (int) : number of columns of the game board
-     * @param columns      (int) : number of rows of the game board
-     * @param listFences   (Fence) : list of fences placed on the board
+     * @param rows (int) : number of columns of the game board
+     * @param columns (int) : number of rows of the game board
+     * @param listFences (Fence) : list of fences placed on the board
      * @param maxNbFences (int) : number of fences placed on the board
-     * @param listPawns    (int) : list of pawns of all players of the CY-PATH party
+     * @param listPawns (int) : list of pawns of all players of the CY-PATH party
      * @param currentPawnIndex (int) : index of the current player (that will play in the first round)
      */
 
@@ -76,7 +75,6 @@ public class SaveDataInJSONFile {
             for (File file : filesInFolder) {
                 if (file.getName().equals(fileName)) {
                     return true;
-                    /* It will be better to do : throw new FileAlreadyExistsException */
                 }
             }
         }
@@ -87,7 +85,11 @@ public class SaveDataInJSONFile {
     public static File createFile(String folderPath, String fileName) throws FileNameIsDuplicateException {
         File file = null;
 
-        new File(folderPath).mkdirs(); // Create the folder if it doesn't exist
+        /*
+         * Create the folder if it does not exist
+         */
+        new File(folderPath).mkdirs();
+        
         if (!isFileNameDuplicate(folderPath, fileName)) {
             Path folder = Paths.get(folderPath);
             Path filePath = folder.resolve(fileName);
@@ -95,16 +97,33 @@ public class SaveDataInJSONFile {
         } else {
             throw new FileNameIsDuplicateException();
         }
+
         return file;
+    }
+
+    public static void replaceExistingJSONFile(String filePath, JSONObject jsonObject) {
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            try {
+                //String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
+
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(jsonObject.toString());
+                fileWriter.flush();
+                fileWriter.close();
+
+                System.out.println("The JSON file has been replaced successfully.");
+            } catch (IOException e) {
+                System.out.println("Error while reading or writing file : " + e.getMessage());
+            }
+        } else {
+            System.out.println("The file does not exist.");
+        }
     }
 
     public void save(String fileName) throws FileNameIsDuplicateException, IOException {
         File newFile = null;
-        try {
-            newFile = createFile(this.folderPath, fileName+".json");
-        } catch (FileNameIsDuplicateException e) {
-            throw e;
-        }
 
         JSONObject gameObjects = new JSONObject();
         gameObjects.put("rows", rows);
@@ -112,7 +131,6 @@ public class SaveDataInJSONFile {
         gameObjects.put("maxNbFences", maxNbFences);
         gameObjects.put("currentPawnIndex", currentPawnIndex);
 
-        
         JSONArray gameElementsListFences = new JSONArray();
         
         for (int i = 0; i < listFences.length; i++) {
@@ -153,10 +171,16 @@ public class SaveDataInJSONFile {
 
         gameObjects.put("listPawns", gameElementsListPawns);
 
-        try (FileWriter file = new FileWriter(newFile)) {
+        try {
+            newFile = createFile(this.folderPath, fileName+".json");
+            FileWriter file = new FileWriter(newFile);
+
             file.write(gameObjects.toString());
             file.flush();
             file.close();
+        } catch (FileNameIsDuplicateException e) {
+            String overFilePath = this.folderPath+"/"+fileName+".json";
+            replaceExistingJSONFile(overFilePath, gameObjects);
         } catch (IOException e) {
             throw e;
         }
