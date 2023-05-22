@@ -214,7 +214,12 @@ public class CYPathFX extends Application {
                     prepareGameScene(this.game.getNbPlayers());
                 });
 
-                Text winner = new Text("Winner is " + this.game.getBoard().getWinner());
+                Text winner = null;
+                try {
+                    winner = new Text("Winner is " + this.game.getBoard().getPawn(this.game.getBoard().getWinner()).getColor().toString());
+                } catch (IncorrectPawnIndexException e1) {
+                    e1.printStackTrace();
+                }
                 
                 this.gPane.setDisable(true);
                 buttonsHBox.getChildren().clear();
