@@ -1,0 +1,1 @@
+{"listPawns":[{"color":"YELLOW","pos":{"x":4,"y":8},"nbRemainingFences":5},{"color":"BLUE","pos":{"x":4,"y":0},"nbRemainingFences":5},{"color":"RED","pos":{"x":0,"y":4},"nbRemainingFences":5},{"color":"GREEN","pos":{"x":8,"y":4},"nbRemainingFences":5}],"columns":9,"maxNbFences":20,"rows":9,"listFences":[]}
