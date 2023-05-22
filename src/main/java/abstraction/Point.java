@@ -159,4 +159,25 @@ public class Point {
             throw e;
         }
 	}
+
+    /**
+     * Rotate a point around a center
+     * 
+     * @param oldPoint Position of the point
+     * @param center Position of the center of the rotation
+     * @return Point rotated
+     */
+
+    public static Point rightRotation(Point oldPoint, Point center) {
+        Point newPoint = new Point(oldPoint.getX()-center.getX(), oldPoint.getY()-center.getY());
+        int temp = -1*newPoint.getX();
+        newPoint.setX(newPoint.getY());
+        newPoint.setY(temp);
+
+        return Point.sum(newPoint, center);
+    }
+
+    public static Point sum(Point p1, Point p2) {
+        return new Point(p1.getX()+p2.getX(), p1.getY()+p2.getY());
+    }
 }

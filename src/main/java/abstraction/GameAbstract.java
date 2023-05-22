@@ -72,11 +72,9 @@ public abstract class GameAbstract extends Observable {
 	public Pawn getCurrentPawn() {
 		Pawn current = null;
 		try {
-			current = this.getBoard().getPawn(getCurrentPawnIndex());
-			return current;
+			current = this.getBoard().getPawn(this.getCurrentPawnIndex());
 		} catch (IncorrectPawnIndexException e) {
-			// It should not happen since the current pawn index needs to be positive and lesser than the number of pawns
-			// So if this is catched it's link to other errors
+			// Since the current pawn index is lesser than the number of pawns it shouldn't happen, so the index is incorrect, so we exit the program
 			e.printStackTrace();
 			System.exit(-1);
 		}

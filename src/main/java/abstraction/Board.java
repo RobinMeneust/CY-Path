@@ -21,18 +21,40 @@ import presentation.CYPath;
 
 public class Board {
 	/**
-	 * State the Board's class attributes
-	 */
-	
+	 * Number of columns in the board
+	 */	
 	private int nbCols;
+	/**
+	 * Number of rows in the board
+	 */	
 	private int nbRows;
-	private int size;
+	/**
+	 * Undirected graph used to check if a fence is between two cell
+	 */	
 	private Grid grid;
+	/**
+	 * Game playing on this board
+	 */	
 	private GameAbstract game;
+	/**
+	 * Fences placed on the board
+	 */
 	private ArrayList<Fence> fences;
+	/**
+	 * Pawns placed on the board
+	 */
 	private Pawn[] pawns;
+	/**
+	 * Length of the fences
+	 */
 	private int fenceLength;
+	/**
+	 * Id of the pawn that won. If there is no winner it's equal to -1
+	 */
 	private int winner;
+	/**
+	 * List of the possible moves for the current round (used to avoid rechecking the same position twice)
+	 */
 	private List<Point> currentPossibleMoves;
 	
 	/**
@@ -41,25 +63,30 @@ public class Board {
 	 * @param nbCols Number of columns of the game board
 	 * @param nbRows Number of rows of the game board
 	 * @param game Object extending GameAbstract, that contains the components of the current game (list of players, rules...)
+	 * @param pawns Array of the pawns that are placed on the board
 	 */
 
 	public Board(int nbCols, int nbRows, GameAbstract game, Pawn[] pawns) {
 		this.nbCols = nbCols;
 		this.nbRows = nbRows;
-		this.size = nbCols * nbRows;
 		this.grid = new Grid(nbRows, nbCols);
 		this.game = game;
 		this.fences = null;
 		this.fenceLength = 2;
 		this.winner = -1;
 		
-
 		if(game != null && game.getNbMaxTotalFences() > 0){
 			this.fences = new ArrayList<Fence>(game.getNbMaxTotalFences());
 		}
 		
 		this.pawns = pawns;
 	}
+
+	/**
+	 * Get the number of pawns in this board
+	 * 
+	 * @return Number of pawns
+	 */
 
 	public int getNbPawns() {
 		return this.pawns.length;
@@ -75,11 +102,23 @@ public class Board {
 		return fenceLength;
 	}
 
+	/**
+	 * Get an array of the fences placed on this board
+	 * 
+	 * @return Array of fences
+	 */
+
 	public Fence[] getFencesArray() {
 		Fence[] fencesArray = new Fence[this.fences.size()];
 		this.fences.toArray(fencesArray);
 		return fencesArray;
 	}
+
+	/**
+	 * Get an array of the pawns on this board
+	 * 
+	 * @return Array of pawns
+	 */
 
 	public Pawn[] getPawnsArray() {
 		Pawn[] clone = new Pawn[this.pawns.length];
@@ -89,16 +128,6 @@ public class Board {
 			}
 		} catch(CloneNotSupportedException e) {};
 		return clone;
-	}
-
-	/**
-	 * Get the size of the game board
-	 * 
-	 * @return Number of cells in the board
-	 */
-
-	public int getSize() {
-		return this.size;
 	}
 
 	/**
@@ -291,37 +320,17 @@ public class Board {
 			listPossibleMovements.addAll(allPossibleMoves);
 		}
 
-		//We test the top position
-		posTested = new Point(position.getX(), position.getY() - 1);
-		posBehindTested = new Point(position.getX(), position.getY() - 2);
-		posLeftTested = new Point(position.getX() - 1, position.getY() - 1);
-		posRightTested = new Point(position.getX() + 1, position.getY() - 1);
+		// Right rotation
+		for(int i=0; i<3; i++) {
+			posTested = Point.rightRotation(posTested, position);
+			posBehindTested = Point.rightRotation(posBehindTested, position);
+			posLeftTested = Point.rightRotation(posBehindTested, position);
+			posRightTested = Point.rightRotation(posBehindTested, position);
 
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
-		if(!allPossibleMoves.contains(position)){
-			listPossibleMovements.addAll(allPossibleMoves);
-		}
-
-		//We test the left position
-		posTested = new Point(position.getX() - 1, position.getY());
-		posBehindTested = new Point(position.getX() - 2, position.getY());
-		posLeftTested = new Point(position.getX() - 1, position.getY() + 1);
-		posRightTested = new Point(position.getX() - 1, position.getY() - 1);
-
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
-		if(!allPossibleMoves.contains(position)){
-			listPossibleMovements.addAll(allPossibleMoves);
-		}
-
-		//We test the right position
-		posTested = new Point(position.getX() + 1, position.getY());
-		posBehindTested = new Point(position.getX() + 2, position.getY());
-		posLeftTested = new Point(position.getX() + 1, position.getY() - 1);
-		posRightTested = new Point(position.getX() + 1, position.getY() + 1);
-
-		allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
-		if(!allPossibleMoves.contains(position)){
-			listPossibleMovements.addAll(allPossibleMoves);
+			allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
+			if(!allPossibleMoves.contains(position)){
+				listPossibleMovements.addAll(allPossibleMoves);
+			}
 		}
 		return listPossibleMovements;
     }
@@ -344,12 +353,8 @@ public class Board {
 
 	public List<Point> getCurrentPossibleMoves() throws IncorrectPawnIndexException {
 		if(this.currentPossibleMoves == null) {
-			try {
-				Pawn pawn = this.getPawn(this.getGame().getCurrentPawnIndex());
-				this.setCurrentPossibleMoves(this.listPossibleMoves(pawn.getPosition()));
-			} catch (IncorrectPawnIndexException e) {
-				throw e;
-			}
+			Pawn pawn = this.game.getCurrentPawn();
+			this.setCurrentPossibleMoves(this.listPossibleMoves(pawn.getPosition()));
 		}
 		return currentPossibleMoves;
 	}

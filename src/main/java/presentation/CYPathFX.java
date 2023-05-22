@@ -318,7 +318,7 @@ public class CYPathFX extends Application {
 
                 // Add player circles to their position
                 try {
-                    for (int l = 0; l < this.game.getNbPlayers(); l++) {
+                    for (int l = 0; l < this.game.getBoard().getNbPawns(); l++) {
                         if (this.game.getBoard().getPawn(l).getPosition().equals(new Point((j-1)/2, (i-1)/2))) {
                             cellStackPane.getChildren().add(pawnCircles[l]);
                         }
@@ -350,7 +350,12 @@ public class CYPathFX extends Application {
             gPane.getColumnConstraints().add(new ColumnConstraints(lineWidth));
         }
 
-        // Add fences to board
+        // Add fences to board (after loading a game from a save)
+        addFencesToBoard(gPane);
+        return gPane;
+    }
+
+    private void addFencesToBoard(GridPane gPane){
         for(Fence f : this.game.getBoard().getFencesArray()) {
             Point pStartFenceGPaneCoord = new Point(f.getStart().getX()*2,f.getStart().getY()*2);
             Point pEndFenceGPaneCoord = new Point(f.getEnd().getX()*2,f.getEnd().getY()*2);
@@ -377,10 +382,8 @@ public class CYPathFX extends Application {
                 }
             }
         }
-    
-        return gPane;
     }
-    
+
     private Circle createPlayerCircle(ColorPawn colorP) {
         Circle circle = new Circle(15, colorP.toColorFX());
         circle.setStroke(Color.BLACK);
@@ -454,16 +457,26 @@ public class CYPathFX extends Application {
 
             if( node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
-                try {
-                    rec.setFill(this.game.getBoard().getPawn(this.game.getCurrentPawnIndex()).getColor().toColorPossibleMove());
-                    this.previousPossibleCells.add(rec);
-
-                    //Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
-                }catch (IncorrectPawnIndexException err){
-                    System.err.println(err);
-                }
+                rec.setFill(this.game.getCurrentPawn().getColor().toColorPossibleMove());
+                this.previousPossibleCells.add(rec);
             }
         }
+    }
+
+    public static Point gameCoordToGPaneCoord(Node node) {
+        Point coord = new Point(0, 0);
+        coord.setX(GridPane.getColumnIndex(node));
+        coord.setY(GridPane.getRowIndex(node));
+
+        return coord;
+    }
+
+    public static Point gPaneCoordToGameCoord(Point gPaneCoord) {   
+        Point coord = new Point(0, 0);
+        coord.setX(gPaneCoord.getX() / 2);
+        coord.setY(gPaneCoord.getY() / 2);
+        
+        return coord;
     }
 
     /**

@@ -64,19 +64,10 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 			}
 			if (!this.cyPathFX.isMoveMode() && this.cyPathFX.prevHighlightedFencesList != null && event.getButton() == MouseButton.PRIMARY) {
 				//Update data
-				Fence fence = null;
-				Point pStartCell = new Point(0, 0);
-				Point pStartFenceCoord = new Point(0, 0);
-
-				// Convert from grid coordinates to fence coordinates
-				pStartCell.setX(GridPane.getColumnIndex(stackPane));
-				pStartCell.setY(GridPane.getRowIndex(stackPane));
-
-				pStartFenceCoord.setX((pStartCell.getX() - 1) / 2);
-				pStartFenceCoord.setY((pStartCell.getY() - 1) / 2);
-
-
-				fence = new Fence(this.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
+				Point pStartCell = CYPathFX.gameCoordToGPaneCoord(stackPane);
+				Point pStartFenceCoord = CYPathFX.gPaneCoordToGameCoord(new Point(pStartCell.getX()-1,pStartCell.getY()-1)); // get the upper left corner of the cell
+				
+				Fence fence = new Fence(this.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
 
 				try {
 					if (this.game.getBoard().placeFence(this.game.getCurrentPawnIndex(), fence)) {
@@ -84,10 +75,9 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 						for (Line l : this.cyPathFX.prevHighlightedFencesList) {
 							l.setStroke(Color.BLACK);
 							l.toFront();
-							// Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved
 						}
+						// Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved in the next round
 						this.cyPathFX.prevHighlightedFencesList.clear();
-
 
 						this.game.setIsEndTurn(true);
 
@@ -110,7 +100,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 				}
 			} else if (this.cyPathFX.isMoveMode() && this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell)) {
 				try {
-					Pawn pawn = this.game.getBoard().getPawn(this.game.getCurrentPawnIndex());
+					Pawn pawn = this.game.getCurrentPawn();
 
 					// We move circle (pawn of the player) to its new location
 					this.cyPathFX.removeCircleFromCell(this.cyPathFX.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
@@ -120,6 +110,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 					int rowIndex = GridPane.getRowIndex(parentStackPane);
 					
 					this.game.getBoard().movePawn(this.game.getCurrentPawn().getId(), new Point(columnIndex / 2, rowIndex / 2));
+					
 
 					this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());
 					//the information is transmitted to the terminal
