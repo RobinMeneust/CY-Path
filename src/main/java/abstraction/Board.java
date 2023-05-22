@@ -1,4 +1,6 @@
-package abstraction; /**
+package abstraction; 
+
+/**
  * Importing java classes needed for the Board class
  * 
  * Importing classes from the java.util package
@@ -169,9 +171,6 @@ public class Board {
 		}
 	}
 
-
-	
-
 	/**
 	 * Get a string from the user that corresponds to the position where the player wants to move his pawn
 	 * 
@@ -284,7 +283,6 @@ public class Board {
 
 	public LinkedList<Point> listPossibleMoves(Point position){
 		LinkedList<Point> listPossibleMovements = new LinkedList<Point>();
-
 		/* 
 		The following points are defined by considering the position and looking at one of the 4 directions (top,left,right,bottom).
 		It's shaped like a 'T' 
@@ -359,7 +357,6 @@ public class Board {
 		return null;
 	}
 
-
 	public List<Point> getCurrentPossibleMoves() throws IncorrectPawnIndexException {
 		if(this.currentPossibleMoves == null) {
 			try {
@@ -404,7 +401,6 @@ public class Board {
 		return " ";
 	}
 
-		
 	/** 
 	 * Display the current board with its pawns, fences and cells
 	 * 
@@ -573,7 +569,6 @@ public class Board {
 		return false;
 	}
 
-	
 	/** 
 	 * Place a fence at the given position for the given pawn if it can be placed
 	 * 
@@ -603,7 +598,6 @@ public class Board {
 		return false;
 	}
 
-	
 	/** 
 	 * Check if the given Fence can be placed
 	 * 
@@ -640,7 +634,6 @@ public class Board {
 		return false;
 	}
 
-	
 	/** 
 	 * Set the winner to the given pawnId
 	 * 
@@ -657,6 +650,7 @@ public class Board {
 	 * 
 	 * @return Winner's id
 	 */
+
 	public int getWinner() {
 		return this.winner;
 	}

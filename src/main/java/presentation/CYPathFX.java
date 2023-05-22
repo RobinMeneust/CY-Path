@@ -1,4 +1,6 @@
-package presentation; /**
+package presentation;
+
+/**
  * Importing java classes needed for the CYPathFX class
  */
 
@@ -234,11 +236,9 @@ public class CYPathFX extends Application {
         return moveMode;
     }
 
-
     public void setMoveMode(boolean moveMode) {
         this.moveMode = moveMode;
     }
-
 
     public Line createLineBorder(int xStart, int yStart, int xEnd, int yEnd, Color color, int lineWidth) {
         Line border = new Line(xStart,yStart,xEnd,yEnd);
@@ -353,7 +353,6 @@ public class CYPathFX extends Application {
         }
     }
 
-
     /**
 	 * Get a specific node from the GridPane.
 	 * 
@@ -362,6 +361,7 @@ public class CYPathFX extends Application {
      * @param col the column from the node we want.
 	 * @return The specific node from the GridPane we were looking for.
 	 */
+
     public Node getNodeFromGridPane(GridPane gridPane, int row, int col) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
@@ -379,7 +379,6 @@ public class CYPathFX extends Application {
         }
         return null;
     }
-
 
     /**
 	 * Color all the cells that the player can move to.
@@ -429,8 +428,6 @@ public class CYPathFX extends Application {
         }
     }
 
-
-
     private void loadGame()  {
         // TODO
     }
@@ -450,14 +447,15 @@ public class CYPathFX extends Application {
         if(fileName != null) {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbFences(), this.game.getBoard().getPawnsArray());
             Alert alert = null;
-            if(saveDataObject.save(fileName)) {
+            try {
+                saveDataObject.save(fileName);
                 alert = new Alert(AlertType.INFORMATION);
                 alert.setContentText("Game saved");
-            } else {
+                alert.showAndWait();
+            } catch(Exception e) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
             }
-            alert.showAndWait();
         }
     }
 

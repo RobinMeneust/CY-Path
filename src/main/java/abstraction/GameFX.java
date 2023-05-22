@@ -1,4 +1,6 @@
-package abstraction; /**
+package abstraction; 
+
+/**
  * Importing java classes needed for the GameFX class
  * 
  * Importing classes from the java.util package

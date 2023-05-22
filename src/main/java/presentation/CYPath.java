@@ -1,4 +1,6 @@
-package presentation; /**
+package presentation; 
+
+/**
  * Importing java classes needed for the CYPath class
  * 
  * Importing classes from the java.util package

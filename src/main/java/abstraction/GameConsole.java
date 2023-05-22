@@ -6,6 +6,7 @@ package abstraction; /**
 
 import java.util.Scanner;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -57,11 +58,21 @@ public class GameConsole extends GameAbstract {
                         response = response.toUpperCase();
                         
                         if(response.matches("S(AVE)?")) {
-                            System.out.println("What is the name of your save file? (without extension) :");
-                            String fileName = scanner.nextLine();
+                            boolean isValidSave = false;
+                            do {
+                                try {
+                                    System.out.println("What is the name of your save file ? (without extension) :");
+                                    String fileName = scanner.nextLine();
 
-                            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbFences(), this.getBoard().getPawnsArray());
-                            saveDataObject.save(fileName);
+                                    SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbFences(), this.getBoard().getPawnsArray());
+                                    saveDataObject.save(fileName);
+                                    isValidSave = true;
+                                } catch (FileNameIsDuplicateException e) {
+                                    System.err.println("Error: the name of the file is already used, write a new name save file :");
+                                } catch (IOException e) {
+                                    System.err.println("Error: there is an error during saving game, write a new name save file :");
+                                }
+                            } while (!isValidSave);
                         }
                     }while(!response.matches("M(OVE)?") && !response.matches("F(ENCE)?"));
                 }

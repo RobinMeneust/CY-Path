@@ -66,6 +66,27 @@ public class Pawn implements Cloneable{
         this.color = color;
         this.player = player;
     }
+
+    /**
+     * Create a point from its id and color. It is necessary to take into
+     * account its starting point, position, and the availableFences of the player.
+     * 
+     * @param id (int) : id of the pawn
+     * @param startingSide (Side) : side of the game board from which the pawn
+     * @param color (Color) : color of a pawn
+     * @param position (Point) : current position of the pawn
+     * @param availableFences (int) number of fences that the player can again place
+     */
+
+     public Pawn(int id, Side startingSide, ColorPawn color, Point position, int availableFences){
+        this.position = position;
+        this.id = id;
+        this.availableFences = availableFences;
+        this.board = null;
+        this.startingSide = startingSide;
+        this.color = color;
+        this.player = null;
+    }
     
     /**
      * Accessor to recover the position of a pawn
