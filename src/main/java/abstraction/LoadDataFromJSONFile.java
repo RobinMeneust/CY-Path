@@ -50,12 +50,7 @@ public class LoadDataFromJSONFile {
 
     /**
      * Create a constructor that retrieves the elements that make up a backup file of a part of CY-PATH
-     * 
-     * @param rows         (int) : number of columns of the game board
-     * @param columns      (int) : number of rows of the game board
-     * @param listFences   (Fence) : list of fences placed on the board
-     * @param placedFences (int) : number of fences placed on the board
-     * @param pawns        (Pawn[]) : list of pawns of all players of the CY-PATH party
+
      */
 
     public LoadDataFromJSONFile() {
@@ -106,12 +101,12 @@ public class LoadDataFromJSONFile {
 
     /**
      * Procedure to load a game from a file save in the backup folder
-    *
-    * @param fileName (String)
-    * @throws FileNameNotExistException
+     *
+     * @param filePath (String)
+     * @throws FileNameNotExistException
      * @throws IOException
      * @throws ParseException
-    */
+     */
 
     public void load(String filePath) throws FileNameNotExistException, IOException, ParseException {
         File savedFile = null;
