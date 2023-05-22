@@ -7,6 +7,7 @@ package abstraction; /**
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,14 +20,19 @@ public class GameConsole extends GameAbstract {
     /**
 	 * Create a GameConsole object by giving all of its attributes
 	 * @param players Array of the players
-	 * @param nbFences Maximum number of fences that can be placed in total
+	 * @param nbMaxTotalFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board
 	 * @param nbCols Number of columns of the board
+     * @param playersPawnIndex Player associated to each pawn index associated
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
 	 */
 
-    public GameConsole(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
-        super(players, nbFences, nbRows, nbCols);
+    public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex) throws InvalidNumberOfPlayersException {
+        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex);
+    }
+
+    public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
+        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
     }
     
     /**
@@ -46,7 +52,7 @@ public class GameConsole extends GameAbstract {
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
 
                 System.out.println("Turn of player: " +  this.getCurrentPlayer());
-                currentPawn = this.getPawn(this.getCurrentPlayer());
+                currentPawn = this.getCurrentPawn();
                 System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
                 if(currentPawn.getAvailableFences() == 0){
                     response = "move";
@@ -64,7 +70,7 @@ public class GameConsole extends GameAbstract {
                                     System.out.println("What is the name of your save file ? (without extension) :");
                                     String fileName = scanner.nextLine();
 
-                                    SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbFences(), this.getBoard().getPawnsArray());
+                                    SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbMaxTotalFences(), this.getBoard().getPawnsArray(), this.getCurrentPawnIndex());
                                     saveDataObject.save(fileName);
                                     isValidSave = true;
                                 } catch (FileNameIsDuplicateException e) {
@@ -91,7 +97,7 @@ public class GameConsole extends GameAbstract {
 
                     do {
                         point = Point.choosePoint();
-                        isPawnPosValid = this.getBoard().movePawn(this.getPawn(getCurrentPlayer()).getId(), point);
+                        isPawnPosValid = this.getBoard().movePawn(this.getCurrentPawn().getId(), point);
                         if(!isPawnPosValid) {
                             System.out.println("The pawn can't move here\nTry again.");
                         }
@@ -118,7 +124,7 @@ public class GameConsole extends GameAbstract {
                         System.out.println("Where do you want to put your fence ? (X,Y)");
                         point = Point.choosePoint();
                         fence.setStart(point);
-                        isFenceValid = this.getBoard().placeFence(this.getPawn(getCurrentPlayer()).getId(), fence);
+                        isFenceValid = this.getBoard().placeFence(this.getCurrentPawn().getId(), fence);
                         if(!isFenceValid) {
                             System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
                         }

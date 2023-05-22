@@ -30,7 +30,6 @@ public class Board {
 	private Grid grid;
 	private GameAbstract game;
 	private ArrayList<Fence> fences;
-	private int nbPlacedFences;
 	private Pawn[] pawns;
 	private int fenceLength;
 	private int winner;
@@ -42,10 +41,9 @@ public class Board {
 	 * @param nbCols Number of columns of the game board
 	 * @param nbRows Number of rows of the game board
 	 * @param game Object extending GameAbstract, that contains the components of the current game (list of players, rules...)
-	 * @param playersPawns Map associating players to their pawn
 	 */
 
-	public Board(int nbCols, int nbRows, GameAbstract game, HashMap<Player,Pawn> playersPawns) {
+	public Board(int nbCols, int nbRows, GameAbstract game, Pawn[] pawns) {
 		this.nbCols = nbCols;
 		this.nbRows = nbRows;
 		this.size = nbCols * nbRows;
@@ -54,19 +52,17 @@ public class Board {
 		this.fences = null;
 		this.fenceLength = 2;
 		this.winner = -1;
+		
 
-		if(game != null && game.getNbFences() > 0){
-			this.fences = new ArrayList<Fence>(game.getNbFences());
+		if(game != null && game.getNbMaxTotalFences() > 0){
+			this.fences = new ArrayList<Fence>(game.getNbMaxTotalFences());
 		}
 		
-		this.nbPlacedFences = 0;
-		this.pawns = new Pawn[game.getNbPlayers()];
-		int i = 0;
-		for(Player p : playersPawns.keySet()){
-			pawns[i] = playersPawns.get(p);
-			pawns[i].setBoard(this);
-			i++;
-		}
+		this.pawns = pawns;
+	}
+
+	public int getNbPawns() {
+		return this.pawns.length;
 	}
 
 	/**
@@ -123,16 +119,6 @@ public class Board {
 
 	public int getNbRows() {
 		return nbRows;
-	}
-
-	/**
-	 * Get the number of remaining fences to place on the game board
-	 * 
-	 * @return Remaining fences to place
-	 */
-
-	public int getAvailableFences() {
-		return this.game.getNbFences() - this.nbPlacedFences;
 	}
 
 	/**
@@ -360,7 +346,7 @@ public class Board {
 	public List<Point> getCurrentPossibleMoves() throws IncorrectPawnIndexException {
 		if(this.currentPossibleMoves == null) {
 			try {
-				Pawn pawn = this.getPawn(this.getGame().getCurrentPlayerIndex());
+				Pawn pawn = this.getPawn(this.getGame().getCurrentPawnIndex());
 				this.setCurrentPossibleMoves(this.listPossibleMoves(pawn.getPosition()));
 			} catch (IncorrectPawnIndexException e) {
 				throw e;

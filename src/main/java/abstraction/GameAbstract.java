@@ -15,11 +15,10 @@ public abstract class GameAbstract extends Observable {
 	 */
 	
 	private GameState state;
-	private int nbFences;
+	private int nbMaxTotalFences;
 	private Player[] players;
 	private Board board;
-	private int currentPlayerIndex;
-	private HashMap<Player,Pawn> playersPawns;
+	private int currentPawnIndex;
 
 	/**
 	 * Create a GameAbstract object by giving all of its attributes
@@ -28,45 +27,59 @@ public abstract class GameAbstract extends Observable {
 	 * @param nbFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board
 	 * @param nbCols Number of columns of the board
+	 * @param playersPawnIndex Player associated to each pawn index associated
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
 	 */
 
-	public GameAbstract(Player[] players, int nbFences, int nbRows, int nbCols) throws InvalidNumberOfPlayersException {
+	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex) throws InvalidNumberOfPlayersException {
 		this.state = GameState.READY;
 		if(players == null || (players.length != 2 && players.length != 4)){
 			throw new InvalidNumberOfPlayersException();
 		}
-		this.nbFences = nbFences;
+		this.nbMaxTotalFences = nbMaxTotalFences;
 		this.players = players;
 
-		this.playersPawns = new HashMap<Player,Pawn>(4);
+		Pawn[] pawns = new Pawn[players.length];
+		for(int i=0; i<players.length;i++) {
+			pawns[i] = new Pawn(i, Side.values()[i], ColorPawn.values()[i], playersPawnIndex.get(i), nbMaxTotalFences, players.length);
+		}
+		
+		this.board = new Board(nbCols, nbRows, this, pawns);
+		for(int i=0; i<players.length;i++) {
+			pawns[i].setBoard(this.getBoard());
+		}
+		this.currentPawnIndex = 0;
+	}
+
+	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPawnIndex) throws InvalidNumberOfPlayersException {
+		this.state = GameState.READY;
+		if(players == null || (players.length != 2 && players.length != 4)){
+			throw new InvalidNumberOfPlayersException();
+		}
+		this.nbMaxTotalFences = nbMaxTotalFences;
+		this.players = players;
+	
+		this.board = new Board(nbCols, nbRows, this, pawns);
+		this.currentPawnIndex = currentPawnIndex;
+	}	
+
+
+	public int getCurrentPawnIndex() {
+		return this.currentPawnIndex;
+	}
+
+	public Pawn getCurrentPawn() {
+		Pawn current = null;
 		try {
-			for(int i=0; i<players.length;i++) {
-				Pawn pawn = new Pawn(i, Side.values()[i], ColorPawn.values()[i], this.getPlayer(i), this.getNbFences(), this.getNbPlayers());
-				playersPawns.put(players[i], pawn);
-			}
-		} catch(IncorrectPlayerIndexException e) {
-			// It should not happen since i is positive and lesser than the size of the players array
+			current = this.getBoard().getPawn(getCurrentPawnIndex());
+			return current;
+		} catch (IncorrectPawnIndexException e) {
+			// It should not happen since the current pawn index needs to be positive and lesser than the number of pawns
+			// So if this is catched it's link to other errors
 			System.err.println(e);
 			System.exit(-1);
 		}
-
-		this.board = new Board(nbCols, nbRows, this, playersPawns);
-		this.currentPlayerIndex = 0;
-	}
-
-	public Pawn getPawn(Player p) {
-		return this.playersPawns.get(p);
-	}
-
-	/**
-	 * Get the index of the current player
-	 * 
-	 * @return Index of the curretn player
-	 */
-
-	public int getCurrentPlayerIndex() {
-		return this.currentPlayerIndex;
+		return current;
 	}
 
 	/**
@@ -75,23 +88,24 @@ public abstract class GameAbstract extends Observable {
 	 * @param currentPlayer New current player index
 	 */
 
-	private void setCurrentPlayerIndex(int currentPlayer) {
-		if(currentPlayer>=0) {	
-			this.currentPlayerIndex = currentPlayer % this.getNbPlayers();
+	private void setCurrentPawnIndex(int currentPawn) {
+		if(currentPawn>=0) {	
+			this.currentPawnIndex = currentPawn % this.getNbPlayers();
 		}
 	}
 
 	protected void endPlayerTurn() {
-		int newPlayerIndex = (this.getCurrentPlayerIndex()+1) % this.getNbPlayers();
-		this.setCurrentPlayerIndex(newPlayerIndex);
+		int newPawnIndex = (this.getCurrentPawnIndex()+1) % this.getBoard().getNbPawns();
+		this.setCurrentPawnIndex(newPawnIndex);
 	}
 
 	public Player getCurrentPlayer() {
 		try {
-			return this.getPlayer(getCurrentPlayerIndex());
-		} catch (IncorrectPlayerIndexException e) {
+			int currentPawnIndex = getCurrentPawnIndex();
+			return this.getBoard().getPawn(currentPawnIndex).getPlayer();
+		} catch (IncorrectPawnIndexException e) {
 			// It should not happen since the currentPlayerIndex is positive and lesser than the size of the players array
-			System.err.println(e);
+			e.printStackTrace();
 			System.exit(-1);
 		}
 		return null;
@@ -133,6 +147,7 @@ public abstract class GameAbstract extends Observable {
 		return this.players.length;
 	}
 
+
 	/**
 	 * Get a player from its index
 	 * 
@@ -154,8 +169,8 @@ public abstract class GameAbstract extends Observable {
 	 * @return Maximum number of fences
 	 */
 
-	public int getNbFences() {
-		return nbFences;
+	public int getNbMaxTotalFences() {
+		return this.nbMaxTotalFences;
 	}
 
 	/**
