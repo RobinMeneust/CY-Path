@@ -202,6 +202,18 @@ public class CYPathFX extends Application {
         gameScene = new Scene(rootGameScene);
         actionButton.textProperty().bind(this.game.getAction());
 
+        this.game.isEndGame.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Text winner = new Text("Winner is " + this.game.getBoard().getWinner());
+                
+                this.gPane.setDisable(true);
+                buttonsHBox.getChildren().clear();
+                buttonsHBox.getChildren().addAll(winner,goBack);    
+                buttonsHBox.setStyle("-fx-alignment: center;");  
+                buttonsHBox.setSpacing(10);
+            } 
+        });
+
         Text currentPlayerText = new Text();
         CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
         this.game.addObserver(currentPlayerTextControl);

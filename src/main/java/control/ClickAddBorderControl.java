@@ -132,6 +132,12 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 							ev.printStackTrace();
 						}
 					}
+
+					if(this.game.getBoard().getWinner() != -1){
+						this.game.isEndGame.setValue(true);
+						System.out.println("finnnnnn");
+					}
+
 					//update button
 					actionButton.fire();
 					if (!(actionButton.getText().equals("Move"))) {
