@@ -39,13 +39,15 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
 		// Change the color of the cells to the default
 		this.cyPathFX.resetPossibleCells(this.game.getCurrentPawnIndex());
 		// Change the text inside the button depending on the action
-		if (this.actionButton.getText().equals("Move") && this.game.getCurrentPawn().getAvailableFences() > 0) {
+		if (this.actionButton.getText().equals("Place fence") && this.game.getCurrentPawn().getAvailableFences() > 0) {
 			this.game.setAction("Place fence");
 			this.cyPathFX.setMoveMode(false);
-		} else {
+			this.actionButton.setText("Move");
+		} else if(this.actionButton.getText().equals("Move")) {
 			this.cyPathFX.showPossibleCells(this.game.getCurrentPawnIndex());
 			this.game.setAction("Move");
 			this.cyPathFX.setMoveMode(true);
+			this.actionButton.setText("Place fence");
 		}
 
 		//Update fenceCounter

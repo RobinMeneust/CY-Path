@@ -28,6 +28,7 @@ public class GameFX extends GameAbstract {
     private StringProperty action;
     private boolean isEndTurn;
     public BooleanProperty isEndGame;
+	public static Integer PLAYER_WINNER;
 
    /**
 	 * Create a GameFX object by giving all of its attributes
@@ -41,14 +42,14 @@ public class GameFX extends GameAbstract {
 
     public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex) throws InvalidNumberOfPlayersException {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex);
-        this.action = new SimpleStringProperty("Move");
+        this.action = new SimpleStringProperty("Place fence");
         this.isEndTurn = false;
         this.isEndGame = new SimpleBooleanProperty(false);
     }
 
     public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
-        this.action = new SimpleStringProperty("Move");
+        this.action = new SimpleStringProperty("Place fence");
         this.isEndTurn = false;
         this.isEndGame = new SimpleBooleanProperty(false);
     }

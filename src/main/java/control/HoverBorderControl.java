@@ -113,7 +113,11 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 					sourceCell.setFill(this.cyPathFX.cellColorHover);
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-					sourceCell.setFill(this.cyPathFX.possibleCellColor);
+					try {
+						sourceCell.setFill(this.cyPathFX.game.getBoard().getPawn(this.cyPathFX.game.getCurrentPawnIndex()).getColor().toColorPossibleMove());
+					}catch (IncorrectPawnIndexException err){
+						System.err.println(err);
+					}
 				}
 			}
 		}

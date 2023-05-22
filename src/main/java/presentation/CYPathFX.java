@@ -50,7 +50,6 @@ public class CYPathFX extends Application {
     private Fence fence;
     public LinkedList<Line> prevHighlightedFencesList;
     public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
-    public Color possibleCellColor;
     public Color cellColorHover;
     private boolean moveMode;
     public Text fenceCounter;
@@ -66,13 +65,12 @@ public class CYPathFX extends Application {
 
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
-        this.possibleCellColor = Color.rgb(172, 255, 214);
         this.cellColorHover = Color.rgb(239,255,172);
         this.prevHighlightedFencesList = new LinkedList<Line>();
         this.moveMode = true;
         this.fence = new Fence(Orientation.HORIZONTAL);
         this.gPane = null;
-        this.actionButton = new Button("Move");
+        this.actionButton = new Button("Place fence");
         this.mainMenuScene = null;
         this.newGameMenuScene = null;
         this.gameScene = null;
@@ -211,7 +209,6 @@ public class CYPathFX extends Application {
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
-        actionButton.textProperty().bind(this.game.getAction());
 
         this.game.isEndGame.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -238,8 +235,6 @@ public class CYPathFX extends Application {
         }
         this.terminalThread = new Thread(() -> {
             this.game.launch();
-            Platform.exit();
-            System.exit(0);
         });
         this.terminalThread.setDaemon(true);
         this.terminalThread.start();
@@ -459,10 +454,14 @@ public class CYPathFX extends Application {
 
             if( node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
-                rec.setFill(possibleCellColor);
-                this.previousPossibleCells.add(rec);
+                try {
+                    rec.setFill(this.game.getBoard().getPawn(this.game.getCurrentPawnIndex()).getColor().toColorPossibleMove());
+                    this.previousPossibleCells.add(rec);
 
-                //Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
+                    //Point previousPosition = this.game.getBoard().getPawn(pawnId).getPosition();
+                }catch (IncorrectPawnIndexException err){
+                    System.err.println(err);
+                }
             }
         }
     }

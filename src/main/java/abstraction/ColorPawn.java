@@ -38,4 +38,19 @@ public enum ColorPawn {
                 return Color.BLACK;
         }
     }
+
+    public Color toColorPossibleMove(){
+        switch (this){
+            case GREEN:
+                return Color.LIGHTGREEN;
+            case YELLOW:
+                return Color.LIGHTYELLOW;
+            case BLUE:
+                return Color.LIGHTBLUE;
+            case RED:
+                return Color.LIGHTPINK;
+            default:
+                return Color.BLACK;
+        }
+    }
 }

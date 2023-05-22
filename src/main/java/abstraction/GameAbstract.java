@@ -25,7 +25,7 @@ public abstract class GameAbstract extends Observable {
 	 * Create a GameAbstract object by giving all of its attributes
 	 * 
 	 * @param players Array of the players
-	 * @param nbFences Maximum number of fences that can be placed in total
+	 * @param nbMaxTotalFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board
 	 * @param nbCols Number of columns of the board
 	 * @param playersPawnIndex Player associated to each pawn index associated
@@ -44,7 +44,7 @@ public abstract class GameAbstract extends Observable {
 		for(int i=0; i<players.length;i++) {
 			pawns[i] = new Pawn(i, Side.values()[i], ColorPawn.values()[i], playersPawnIndex.get(i), nbMaxTotalFences, players.length);
 		}
-		
+
 		this.board = new Board(nbCols, nbRows, this, pawns);
 		for(int i=0; i<players.length;i++) {
 			pawns[i].setBoard(this.getBoard());
@@ -59,10 +59,10 @@ public abstract class GameAbstract extends Observable {
 		}
 		this.nbMaxTotalFences = nbMaxTotalFences;
 		this.players = players;
-	
+
 		this.board = new Board(nbCols, nbRows, this, pawns);
 		this.currentPawnIndex = currentPawnIndex;
-	}	
+	}
 
 
 	public int getCurrentPawnIndex() {
@@ -86,11 +86,11 @@ public abstract class GameAbstract extends Observable {
 	/**
 	 * Set the current player index to the one with the givenIndex
 	 * 
-	 * @param currentPlayer New current player index
+	 * @param currentPawn New current player index
 	 */
 
 	private void setCurrentPawnIndex(int currentPawn) {
-		if(currentPawn>=0) {	
+		if(currentPawn>=0) {
 			this.currentPawnIndex = currentPawn % this.getNbPlayers();
 		}
 	}

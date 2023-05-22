@@ -100,7 +100,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 							}
 						}
 						//update button
-						actionButton.fire();
+						//actionButton.fire();
 					} else {
 						System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
 					}
@@ -139,7 +139,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 
 					//update button
 					actionButton.fire();
-					if (!(actionButton.getText().equals("Move"))) {
+					if (!(actionButton.getText().equals("Place fence"))) {
 						actionButton.fire();
 					}
 				} catch (IncorrectPawnIndexException err) {
