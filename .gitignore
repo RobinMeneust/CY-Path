@@ -12,3 +12,4 @@ target/maven-javadoc-plugin-stale-data.txt
 target/apidocs
 .vscode/
 src/main/resources/data/saves
+target/
