@@ -147,7 +147,7 @@ public class CYPathFX extends Application {
                 createGameScene();
                 goToGameScene();
             } catch (GameNotInitializedException err) {
-                System.err.println(err);
+                err.printStackTrace();
                 System.exit(-1);
             }
         });
@@ -158,7 +158,7 @@ public class CYPathFX extends Application {
                 createGameScene();
                 goToGameScene();
             } catch (GameNotInitializedException err) {
-                System.err.println(err);
+                err.printStackTrace();
                 System.exit(-1);
             }
         });
@@ -212,6 +212,18 @@ public class CYPathFX extends Application {
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
         actionButton.textProperty().bind(this.game.getAction());
+
+        this.game.isEndGame.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                Text winner = new Text("Winner is " + this.game.getBoard().getWinner());
+                
+                this.gPane.setDisable(true);
+                buttonsHBox.getChildren().clear();
+                buttonsHBox.getChildren().addAll(winner,goBack);    
+                buttonsHBox.setStyle("-fx-alignment: center;");  
+                buttonsHBox.setSpacing(10);
+            } 
+        });
 
         Text currentPlayerText = new Text();
         CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
@@ -277,13 +289,12 @@ public class CYPathFX extends Application {
         Color cellColor = Color.rgb(230, 230, 230);
         Circle[] pawnCircles = new Circle[this.game.getNbPlayers()];
 
-        System.out.println(this.game.getBoard().getPawnsArray());
         try {
             for (int k = 0; k < this.game.getNbPlayers(); k++) {
                 pawnCircles[k] = this.createPlayerCircle(this.game.getBoard().getPawn(k).getColor());
             }
         }catch (IncorrectPawnIndexException err){
-            System.err.println(err);
+            err.printStackTrace();
         }
 
         // First horizontal border (top)
@@ -308,8 +319,7 @@ public class CYPathFX extends Application {
                 cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
                 cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
                 cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.actionButton));
-                cellStackPane.getChildren().add(cell);
-                //System.out.println("column = " + j +" ligne = " + i);                
+                cellStackPane.getChildren().add(cell);              
 
                 // Add player circles to their position
                 try {
@@ -319,7 +329,7 @@ public class CYPathFX extends Application {
                         }
                     }
                 }catch (IncorrectPawnIndexException err){
-                    System.err.println(err);
+                    err.printStackTrace();
                 }
 
                 gPane.add(cellStackPane, j, i);
@@ -437,7 +447,7 @@ public class CYPathFX extends Application {
         try {
             possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
         } catch(IncorrectPawnIndexException err) {
-            System.err.println(err);
+            err.printStackTrace();
             System.exit(-1);
         }
         
@@ -446,7 +456,7 @@ public class CYPathFX extends Application {
             ObservableList<Node> children = stack.getChildren();
             int lastIndex = children.size() - 1;
             Node node = children.get(lastIndex);
-            // System.out.println(p.getX() + "," + p.getY());
+
             if( node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
                 rec.setFill(possibleCellColor);

@@ -1,5 +1,7 @@
 package abstraction;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import java.util.HashMap;
 
 /**
@@ -25,6 +27,7 @@ import javafx.beans.property.StringProperty;
 public class GameFX extends GameAbstract {
     private StringProperty action;
     private boolean isEndTurn;
+    public BooleanProperty isEndGame;
 
    /**
 	 * Create a GameFX object by giving all of its attributes
@@ -40,12 +43,14 @@ public class GameFX extends GameAbstract {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex);
         this.action = new SimpleStringProperty("Move");
         this.isEndTurn = false;
+        this.isEndGame = new SimpleBooleanProperty(false);
     }
 
     public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
         this.action = new SimpleStringProperty("Move");
         this.isEndTurn = false;
+        this.isEndGame = new SimpleBooleanProperty(false);
     }
 
     /**
@@ -85,41 +90,32 @@ public class GameFX extends GameAbstract {
 
         Pawn currentPawn = null;
 
-        try {
-            while(this.getBoard().getWinner() == -1){
-                this.getBoard().displayBoard(DisplayType.NO_COORD);
-                //Platform.runLater(() -> this.setAction("Move"));
+        while(true){
+            this.getBoard().displayBoard(DisplayType.NO_COORD);
+            //Platform.runLater(() -> this.setAction("Move"));
 
-                System.out.println("Turn of player: " + this.getCurrentPlayer());
+            System.out.println("Turn of player: " + this.getCurrentPlayer());
 
 				this.setChanged();
 				this.notifyObservers(this.getCurrentPawnIndex());
                 currentPawn = this.getCurrentPawn();
 
-                this.setIsEndTurn(false);
-                while (!this.getIsEndTurn()) {
-                    try {
-                        Thread.sleep(100); //Wait 100 milliseconds before checking again
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            this.setIsEndTurn(false);
+            while (!this.getIsEndTurn()) {
+                try {
+                    Thread.sleep(100); //Wait 100 milliseconds before checking again
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
-
-                //If button set Move
-                if("Move".equals(this.getAction().get())){
-                    System.out.println("Move in : " + currentPawn.getPosition());
-                } else if("Place fence".equals(this.getAction().get())) {
-                    System.out.println("Fence have been placed");
-                }
-                this.endPlayerTurn();
             }
-        
-            Pawn pawnWinner = this.getBoard().getPawn(this.getBoard().getWinner());
-            System.out.println("The winner is "+pawnWinner.getPlayer());
-            this.setState(GameState.FINISHED);
-        } catch (IncorrectPawnIndexException e) {
-            System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
-            System.exit(-1);
+
+            //If button set Move
+            if("Move".equals(this.getAction().get())){
+                System.out.println("Move in : " + currentPawn.getPosition());
+            } else if("Place fence".equals(this.getAction().get())) {
+                System.out.println("Fence have been placed");
+            }
+            this.endPlayerTurn();
         }
     }
 }

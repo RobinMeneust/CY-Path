@@ -16,7 +16,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>19</java.version>
+        <java.version>18</java.version>
         <javafx.version>16</javafx.version> <!-- It's set to 16 here to avoid issues with github CI (maven.yml) -->
         <javafx.main.class>presentation.CYPathFX</javafx.main.class>
         <main.class>presentation.CYPath</main.class>

@@ -77,7 +77,7 @@ public abstract class GameAbstract extends Observable {
 		} catch (IncorrectPawnIndexException e) {
 			// It should not happen since the current pawn index needs to be positive and lesser than the number of pawns
 			// So if this is catched it's link to other errors
-			System.err.println(e);
+			e.printStackTrace();
 			System.exit(-1);
 		}
 		return current;

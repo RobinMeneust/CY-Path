@@ -96,11 +96,13 @@ public class GameConsole extends GameAbstract {
                     System.out.println("Where do you want to go ?");
 
                     do {
-                        point = Point.choosePoint();
-                        isPawnPosValid = this.getBoard().movePawn(this.getCurrentPawn().getId(), point);
-                        if(!isPawnPosValid) {
-                            System.out.println("The pawn can't move here\nTry again.");
-                        }
+                        try {
+                            point = Point.choosePoint();
+                            isPawnPosValid = this.getBoard().movePawn(this.getCurrentPawn().getId(), point);
+                            if(!isPawnPosValid) {
+                                System.out.println("The pawn can't move here\nTry again.");
+                            }
+                        } catch (NumberFormatException e) {}
                     } while(!isPawnPosValid);
                 } else if (response.equals("F")) {
                     this.getBoard().displayBoard(DisplayType.COORD_LINE);

@@ -148,12 +148,15 @@ public class Point {
 	public static Point choosePoint() {
 		System.out.println();
 
-		System.out.print("X : ");
-		int x = Integer.parseInt(CYPath.scanner.next());
-		System.out.println();
-		System.out.print("Y : ");	
-		int y = Integer.parseInt(CYPath.scanner.next());
-		
-		return new Point(x,y);
+        try {
+            System.out.print("X : ");
+            int x = Integer.parseInt(CYPath.scanner.next());
+            System.out.println();
+            System.out.print("Y : ");	
+            int y = Integer.parseInt(CYPath.scanner.next());
+            return new Point(x,y);
+        } catch (NumberFormatException e) {
+            throw e;
+        }
 	}
 }

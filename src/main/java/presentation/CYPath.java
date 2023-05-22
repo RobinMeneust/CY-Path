@@ -43,14 +43,15 @@ public class CYPath {
         } else {
             // Console mode
             // Initialize game
-            System.out.println("Welcome to CY-Path.\n");
             int nbPlayer = 0;
             while(nbPlayer != 2 && nbPlayer != 4){
                 System.out.println("How many players do you want ? (2 or 4)");
                 String userInput = CYPath.scanner.nextLine();
-                if(userInput.equals("2") || userInput.equals("4")){
-                    nbPlayer = Integer.parseInt(userInput);
-                }
+                try {
+                    if(userInput.equals("2") || userInput.equals("4")){
+                        nbPlayer = Integer.parseInt(userInput);
+                    }
+                } catch (NumberFormatException e) {}
             }
             HashMap<Integer,Player> playersPawnIndex = new HashMap<Integer,Player>(4);
 
@@ -63,7 +64,7 @@ public class CYPath {
                 GameConsole game = new GameConsole(players,20, 9, 9,playersPawnIndex);
                 game.launch();
             } catch (Exception e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
         CYPath.scanner.close();

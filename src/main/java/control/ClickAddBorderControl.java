@@ -96,7 +96,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 							try {
 								Thread.sleep(100); //Wait 100 milliseconds before checking again
 							} catch (InterruptedException ev) {
-								ev.printStackTrace();
+								Thread.currentThread().interrupt();
 							}
 						}
 						//update button
@@ -129,16 +129,21 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 						try {
 							Thread.sleep(100); //Wait 100 milliseconds before checking again
 						} catch (InterruptedException ev) {
-							ev.printStackTrace();
+							Thread.currentThread().interrupt();
 						}
 					}
+
+					if(this.game.getBoard().getWinner() != -1){
+						this.game.isEndGame.setValue(true);
+					}
+
 					//update button
 					actionButton.fire();
 					if (!(actionButton.getText().equals("Move"))) {
 						actionButton.fire();
 					}
 				} catch (IncorrectPawnIndexException err) {
-					System.err.println(err);
+					err.printStackTrace();
 					System.exit(-1);
 				}
 			}
