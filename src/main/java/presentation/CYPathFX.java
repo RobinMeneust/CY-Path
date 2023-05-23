@@ -19,6 +19,7 @@ import control.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -33,7 +34,10 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -123,6 +127,8 @@ public class CYPathFX extends Application {
      */
     private Button continueGameButton;
 
+    private Button gameSkipTurnButton;
+
 
     /**
      * Method running at the launch of the graphical interface.
@@ -148,6 +154,7 @@ public class CYPathFX extends Application {
             goToGameScene();
         });
         this.continueGameButton.setManaged(false);
+        this.gameSkipTurnButton = null;
 
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
@@ -290,8 +297,17 @@ public class CYPathFX extends Application {
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
 
+        this.gameSkipTurnButton = new Button("Skip");
+        this.gameSkipTurnButton.setVisible(false);
+        this.gameSkipTurnButton.setOnAction(e -> {
+            this.game.setIsEndTurn(true);
+            this.gameSkipTurnButton.setVisible(false);
+            this.actionButton.fire();
+            this.actionButton.fire();
+        });
+        
         HBox buttonsHBox = new HBox();
-        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
+        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter,gameSkipTurnButton);
         this.gPane = createBoard();
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
@@ -591,6 +607,30 @@ public class CYPathFX extends Application {
     }
 
     /**
+     * Displays a pop-up window in the center of the screen.
+     *
+     * @param owner The owner stage of the pop-up.
+     */
+    private void showPopupWindow(Stage owner) {
+        //Creation of the pop-up window
+        Stage popupStage = new Stage(StageStyle.UTILITY);
+        popupStage.initModality(Modality.WINDOW_MODAL);
+        popupStage.initOwner(owner);
+        popupStage.setTitle("You can't move");
+        popupStage.setWidth(400);
+        popupStage.setHeight(80);
+
+        //Content of the pop-up window
+        Label label = new Label(this.game.getCurrentPawn().getColor().toString() + " can't move. Try to place a fence or skip your turn");
+        StackPane popupRoot = new StackPane(label);
+        popupRoot.setAlignment(Pos.CENTER);
+
+        //Adding content to the pop-up window
+        popupStage.setScene(new Scene(popupRoot));
+        popupStage.showAndWait();
+    }
+
+    /**
 	 * Color all the cells that the player can move to.
      * Change the cell's color if the player hover.
 	 * 
@@ -601,6 +641,13 @@ public class CYPathFX extends Application {
         LinkedList<Point> possibleMoves = null;
         try {
             possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
+
+            if(possibleMoves.isEmpty()){
+                System.out.println(this.game.getCurrentPawn().getColor().toString() + " pawn can't move");
+                showPopupWindow(primaryStage);
+                this.gameSkipTurnButton.setVisible(true);
+            }
+
         } catch(IncorrectPawnIndexException err) {
             err.printStackTrace();
             System.exit(-1);
