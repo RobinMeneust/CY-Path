@@ -140,7 +140,7 @@ The task's priority is sorted in ascending order
 				* Notes: function creation to avoid code repetition took me longer than expected.
 				* Update: 2023/05/17, Bug fix after changement in  the areConnected function
 			5.2.2.2 If the player can jump above another one but there is a fence behind, he can go diagonally
-				* PROGRESS: IN_PROGRESS
+				* PROGRESS: DONE
 				* Who: Thibault
 				* Start : 2023/05/16 18:30
 				* Estimated end : 2023/05/16 18:45 
@@ -339,6 +339,12 @@ The task's priority is sorted in ascending order
 		* Estimated end :  2023/05/21 13:45
 		* Real end : 2023/05/22 18:15
 		* NOTE: Real end is later because tasks 8 was in progress
+	11.4 Added the case of an already existing save file (overwrite) for the window mode
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/21 17:00
+		* Estimated end :  2023/05/21 17:30
+		* Real end : 2023/05/22 18:35
 
 
 The following tasks aren't mandatory:
