@@ -47,6 +47,10 @@ public class GameConsole extends GameAbstract {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
     }
 
+    /**
+     * Save the current game in a file
+     */
+
     private void saveGame() {
         SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbMaxTotalFences(), this.getBoard().getPawnsArray(), this.getCurrentPawnIndex());
         System.out.println("What is the name of your save file ? (without extension) :");
