@@ -12,8 +12,17 @@ import javafx.scene.control.Button;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 public class ActionButtonControl implements EventHandler<ActionEvent> {
+	/**
+	 * Button to choose the action
+	 */
 	private Button actionButton;
+	/**
+	 * Game currently playing to know the current action
+	 */
 	private GameFX game;
+	/**
+	 * Graphical interface
+	 */
 	private CYPathFX cyPathFX;
 
 	/**
