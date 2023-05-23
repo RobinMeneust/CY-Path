@@ -13,3 +13,4 @@ target/apidocs
 .vscode/
 src/main/resources/data/saves
 target/
+data/

@@ -133,7 +133,7 @@ public class CYPathFX extends Application {
     /**
      * Default path of save files
      */
-    private String saveDefaultPath = "./src/main/resources/data/saves";
+    private final String saveDefaultPath = "./data/saves";
 
 
     /**
@@ -805,7 +805,7 @@ public class CYPathFX extends Application {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbMaxTotalFences(), this.game.getBoard().getPawnsArray(), this.game.getCurrentPawnIndex());
             Alert alert = null;
             try {
-                saveDataObject.save(file.getAbsolutePath(), true);
+                saveDataObject.save(file, true);
                 alert = new Alert(AlertType.INFORMATION);
                 alert.setContentText("Game saved");
                 alert.showAndWait();

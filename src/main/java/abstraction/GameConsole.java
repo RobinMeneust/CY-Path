@@ -68,7 +68,7 @@ public class GameConsole extends GameAbstract {
                     saveDataObject.save(fileName, true);
                     System.out.println("Game successfully saved");
                 } catch (Exception err) {
-                    System.err.println("Error: there was an error while saving the game");
+                    System.err.println("Error: there was an error while saving the game and overwriting the file");
                 }
             } else {
                 System.out.println("Saving process cancelled");
