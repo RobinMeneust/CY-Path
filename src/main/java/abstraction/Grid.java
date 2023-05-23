@@ -1,4 +1,5 @@
-package abstraction; /**
+package abstraction;
+/*
  * Importing java classes needed for the Grid class
  * 
  * Importing classes from the java.util package
@@ -12,7 +13,7 @@ import java.util.Set;
 /**
  * Grid using as a data structure an undirected graph using an adjacency list
  * It contains a grid of nbRows x nbCols cells.
- * Each cells is an adjacency list containing all the cells connected to this one.
+ * Each cell is an adjacency list containing all the cells connected to this one.
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
@@ -175,7 +176,7 @@ public class Grid {
 	 * @param y1 Y coordinate of the first node
 	 * @param x2 X coordinate of the second node
 	 * @param y2 Y coordinate of the second node
-	 * @return
+	 * @return True if two node are connected, false otherwise
 	 */
 
 	public boolean areConnected(int x1, int y1, int x2, int y2) {
@@ -217,8 +218,8 @@ public class Grid {
 	/**
 	 * Get the list of neighbors of a node
 	 * 
-	 * @param node Node whose neigbors are searched
-	 * @return List of neigbors
+	 * @param node Node whose neighbors are searched
+	 * @return Set of neighbors from a node
 	 */
 
 	public HashSet<Point> getListNeighbors(Point node) {

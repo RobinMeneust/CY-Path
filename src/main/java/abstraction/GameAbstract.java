@@ -52,6 +52,18 @@ public abstract class GameAbstract extends Observable {
 		this.currentPawnIndex = 0;
 	}
 
+	/**
+	 * Create a GameAbstract object by giving all of its attributes
+	 *
+	 * @param players Array of the players
+	 * @param nbMaxTotalFences Maximum number of fences that can be placed in total
+	 * @param nbRows Number of rows of the board
+	 * @param nbCols Number of columns of the board
+	 * @param playersPawnIndex Player associated to each pawn index associated
+	 * @param pawns Table of pawns to be assigned for every player
+	 * @param currentPawnIndex Set the pawn ready to be played
+	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 */
 	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPawnIndex) throws InvalidNumberOfPlayersException {
 		this.state = GameState.READY;
 		if(players == null || (players.length != 2 && players.length != 4)){
@@ -69,10 +81,19 @@ public abstract class GameAbstract extends Observable {
 	}
 
 
+	/**
+	 * Get index of the pawn currently played
+	 * @return Index of current pawn played
+	 */
 	public int getCurrentPawnIndex() {
 		return this.currentPawnIndex;
 	}
 
+
+	/**
+	 * Get the pawn currently played
+	 * @return Current pawn being played
+	 */
 	public Pawn getCurrentPawn() {
 		Pawn current = null;
 		try {
@@ -97,11 +118,19 @@ public abstract class GameAbstract extends Observable {
 		}
 	}
 
+	/**
+	 * End the turn of the current pawn by changing the current pawn index to the next one.
+	 */
 	protected void endPlayerTurn() {
 		int newPawnIndex = (this.getCurrentPawnIndex()+1) % this.getBoard().getNbPawns();
 		this.setCurrentPawnIndex(newPawnIndex);
 	}
 
+
+	/**
+	 * Get the player currently playing from the index of the pawn currently playing.
+	 * @return Player currently playing
+	 */
 	public Player getCurrentPlayer() {
 		try {
 			int currentPawnIndex = getCurrentPawnIndex();

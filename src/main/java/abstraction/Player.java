@@ -17,7 +17,7 @@ public class Player {
     /**
      * Create a player from his username
      * 
-     * @param username (String)
+     * @param username Name of the player
      */
 
     public Player(String username){
@@ -27,37 +27,36 @@ public class Player {
 
 
     /**
-     * Accessor to recover the username of a player
+     * Get the username of a player
      * 
-     * @return (String) username
+     * @return Username of the player
      */
     public String getUsername() {
         return username;
     }
 
     /**
-     * Accessor to recover the numbers of wins of a player
+     * Get the numbers of wins of a player
      * 
-     * @return (int) nbWins
+     * @return Number of game won of the player
      */
     public int getNbWins() {
         return nbWins;
     }
 
     /**
-     * Accessor to assign the number of wins to a player
+     * Set the number of wins to a player
      * 
-     * @param nbWin (int)
+     * @param nbWin Number of winning game
      */
     public void setNbWins(int nbWin) {
         this.nbWins = nbWin;
     }
 
     /**
-     * Redefine 'toString' method of the Object class to display the username of a
-     * player
+     * Redefine 'toString' method of the Object class to display the username of a player
      * 
-     * @return (String) : a text
+     * @return String to display the user's username
      */
     @Override
     public String toString() {

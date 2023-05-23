@@ -1,6 +1,6 @@
 package abstraction; 
 
-/**
+/*
  * Importing java classes needed for the Board class
  * 
  * Importing classes from the java.util package
@@ -14,7 +14,8 @@ import presentation.CYPath;
 
 /**
  * This class represents the game board on which players will play.
- * It contains functions used to check if the player action is allowed or not (e.g mvoe out of the grid, ...)
+ * It contains functions used to check if the player action is allowed or not (e.g. move out of the grid, ...).
+ * It also helps displaying the board in the terminal.
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
@@ -49,7 +50,7 @@ public class Board {
 	 */
 	private int fenceLength;
 	/**
-	 * Id of the pawn that won. If there is no winner it's equal to -1
+	 * ID of the pawn that won. If there is no winner it's equal to -1
 	 */
 	private int winner;
 	/**
@@ -243,7 +244,7 @@ public class Board {
 	
 	/**
 	 * Check all the cells where a pawn can move to, from its starting position in one round and return it as a list.
-	 * Here the parameters are points arranged in a 'T' shape
+	 * Here the parameters are points arranged in a "T" shape
 	 * 
 	 * @param position Current pawn position
 	 * @param posTested Position tested
@@ -258,19 +259,19 @@ public class Board {
 		LinkedList<Point> listMove = new LinkedList<Point>();
 		/* 
 		The given points are defined by considering the position and looking at one of the 4 directions (top,left,right,bottom).
-		It's shaped like a 'T' 
+		It's shaped like a "T"
 		*/
 
 		// We check if the tested position is on the board and if the current position and the tested position are not separated by a fence
 		if(this.isCellOnTheBoard(posTested) && this.grid.areConnected(position,posTested)){
 			if(this.isPawnAtPos(posTested)) {
-				// There is a pawn so we can't go there, but we can maybe jump above it
+				// There is a pawn, so we can't go there, but we can maybe jump above it
 				if(this.isCellOnTheBoard(posBehindTested) && this.grid.areConnected(posTested,posBehindTested) && !this.isPawnAtPos(posBehindTested)){
 					// The cell just behind is free
 					listMove.add(posBehindTested);
 				}
 				else{
-					// If there is a fence behind the pawn we check if we can go leftside or rightside
+					// If there is a fence behind the pawn we check if we can go left side or right side
 					if(this.isCellOnTheBoard(posLeftTested) && this.grid.areConnected(posTested,posLeftTested) && !this.isPawnAtPos(posLeftTested)){
 						listMove.add(posLeftTested);
 					}
@@ -280,7 +281,7 @@ public class Board {
 				}
 			}
 			else {
-				// There is no pawn so we can go there and we can't go behind it
+				// There is no pawn, so we can go there, and we can't go behind it
 				listMove.add(posTested);
 			}
 		}
@@ -299,7 +300,7 @@ public class Board {
 		LinkedList<Point> listPossibleMovements = new LinkedList<Point>();
 		/* 
 		The following points are defined by considering the position and looking at one of the 4 directions (top,left,right,bottom).
-		It's shaped like a 'T' 
+		It's shaped like a "T"
 		*/
 
 		Point posTested = null;
@@ -351,6 +352,11 @@ public class Board {
 		return null;
 	}
 
+	/**
+	 * Get the possible moves from the current pawn being played.
+	 * @return List of possible moves from the current pawn.
+	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
+	 */
 	public List<Point> getCurrentPossibleMoves() throws IncorrectPawnIndexException {
 		if(this.currentPossibleMoves == null) {
 			Pawn pawn = this.game.getCurrentPawn();
@@ -359,7 +365,13 @@ public class Board {
 		return currentPossibleMoves;
 	}
 
-	public boolean isPawnPosValid(Point pos) throws IncorrectPawnIndexException {		
+	/**
+	 * Check if the position wanted is a position possible for the pawn to move to.
+	 * @param pos Position to test
+	 * @return True if the position tested is valid for the pawn to move, false otherwise
+	 * @throws IncorrectPawnIndexException If the pawn index is out of bounds
+	 */
+	public boolean isPawnPosValid(Point pos) throws IncorrectPawnIndexException {
 		try {
 			return this.getCurrentPossibleMoves().contains(pos);
 		} catch (IncorrectPawnIndexException e) {
@@ -367,10 +379,17 @@ public class Board {
 		}
 	}
 
+	/**
+	 * Change the list of possible moves for the current pawn
+	 * @param currentPossibleMoves List of possible move to set to the pawn
+	 */
 	private void setCurrentPossibleMoves(List<Point> currentPossibleMoves) {
 		this.currentPossibleMoves = currentPossibleMoves;
 	}
 
+	/**
+	 * Remove the list of possible moves for the current pawn
+	 */
 	private void clearCurrentPossibleMoves() {
 		this.currentPossibleMoves = null;
 	}
@@ -380,7 +399,7 @@ public class Board {
 	 * 
 	 * @param x X coordinate of the cell to be checked
 	 * @param y Y coordinate of the cell to be checked
-	 * @return Id of the pawn in the given cell. If there is none then it returns a single space ' '
+	 * @return ID of the pawn in the given cell. If there is none then it returns a single space ' '
 	 */
 
 	public String getCellContentText(int x, int y) {
@@ -431,7 +450,7 @@ public class Board {
 			if(type == DisplayType.COORD_CELL){
 				System.out.printf("%3d | ",y);
 			} else {
-				System.out.printf("    | ",y);
+				System.out.print("    | ");
 			}
 
 			for(int x=0; x<nbCols; x++) {
@@ -541,7 +560,7 @@ public class Board {
 			return false;
 		}
 
-		try {			
+		try {
 			// Check if the new position is valid
 			if(this.isPawnPosValid(newPawnPos)) {
 				this.getPawn(pawnId).setPosition(newPawnPos);
@@ -549,7 +568,7 @@ public class Board {
 				this.clearCurrentPossibleMoves();
 				return true;
 			}
-		
+
 		} catch (IncorrectPawnIndexException e) {
 			throw e;
 		}
@@ -721,10 +740,10 @@ public class Board {
 	 * 
 	 * @param f1 Fence 1
 	 * @param f2 Fence 2
-	 * @return True if the 2 fences are coincidents
+	 * @return True if the 2 fences are coincidences
 	 */
 
-	public boolean areCoincidents(Fence f1, Fence f2) {
+	public boolean areCoincident(Fence f1, Fence f2) {
 		if(f1.getOrientation() == f2.getOrientation()) {
 			// Same orientation
 			if(f1.getStart().equals(f2.getStart()) || f1.getEnd().equals(f2.getEnd())){
@@ -755,7 +774,7 @@ public class Board {
     public boolean isFenceOverlapping(Fence fenceChecked) {
         if (this.fences != null) {
             for (Fence fence : this.fences) {
-				if(areIntersecting(fence,fenceChecked) || areCoincidents(fence,fenceChecked)) {
+				if(areIntersecting(fence,fenceChecked) || areCoincident(fence,fenceChecked)) {
 					return true;
 				}
             }

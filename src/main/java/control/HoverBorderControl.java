@@ -68,7 +68,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 								highlightLine(i, y, Color.DARKGREEN);
 							}
 						} else {
-							// It's not a valid fence so we just color one line of it (above the cell since it's horizontal)
+							// It's not a valid fence, so we just color one line of it (above the cell since it's horizontal)
 							int y = pStartCell.getY() - 1;
 							for (int i = pStartCell.getX(); i < pStartCell.getX() + 2 * fence.getLength(); i += 2) {
 								highlightLine(i, y, Color.DARKRED);
@@ -82,7 +82,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 								highlightLine(x, i, Color.DARKGREEN);
 							}
 						} else {
-							// It's not a valid fence so we just color one line of it (on the left of the cell since it's vertical)
+							// It's not a valid fence, so we just color one line of it (on the left of the cell since it's vertical)
 							int x = pStartCell.getX() - 1;
 							for (int i = pStartCell.getY(); i < pStartCell.getY() + 2 * fence.getLength(); i += 2) {
 								highlightLine(x, i, Color.DARKRED);

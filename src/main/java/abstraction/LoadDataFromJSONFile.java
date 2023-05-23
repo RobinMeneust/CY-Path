@@ -1,6 +1,6 @@
 package abstraction;
 
-/**
+/*
  * Importing java classes needed for the SaveDataInJSONFile class
  * 
  * Importing classes from the java.util package
@@ -9,7 +9,7 @@ package abstraction;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/** 
+/*
  * Importing classes from the java.io package
  * 
  * It provides input/output functionality for read and write data operations.
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.FileNotFoundException;
 
 
-/**
+/*
  * Importing classes from the org.json.simple package
 */
 
@@ -33,7 +33,7 @@ import org.json.simple.parser.ParseException;
 /**
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  * 
- *         This class stores the elements of the current part in a .json file
+ * This class stores the elements of the current part in a .json file
  */
 
 public class LoadDataFromJSONFile {
@@ -50,7 +50,6 @@ public class LoadDataFromJSONFile {
 
     /**
      * Create a constructor that retrieves the elements that make up a backup file of a part of CY-PATH
-
      */
 
     public LoadDataFromJSONFile() {
@@ -61,35 +60,69 @@ public class LoadDataFromJSONFile {
         this.pawns = null;
         this.currentPawnIndex = 0;
     }
-    
 
+    /**
+     * Get the number of rows
+     *
+     * @return Number of rows
+     */
     public int getRows() {
         return rows;
     }
 
-
+    /**
+     * Get the number of columns
+     *
+     * @return Number of columns
+     */
     public int getColumns() {
         return columns;
     }
 
-
+    /**
+     * Get the number of maximum fence
+     *
+     * @return Number of maximum fence
+     */
     public int getMaxNbFences() {
         return maxNbFences;
     }
 
 
+    /**
+     * Get the list of every fence placed
+     *
+     * @return list of every fence placed
+     */
     public ArrayList<Fence> getListFences() {
         return listFences;
     }
 
+    /**
+     * Get the table of pawns
+     *
+     * @return Table of pawns
+     */
     public Pawn[] getPawns() {
         return pawns;
     }
 
+    /**
+     * Get the current index of the pawn playing
+     *
+     * @return Current index of the pawn playing
+     */
     public int getCurrentPawnIndex() {
         return currentPawnIndex;
     }
 
+
+    /**
+     * Get the file of the game from a filepath
+     * @param filePath Filepath of the file to load
+     * @return File wanted to be loaded
+     * @throws FileNameNotExistException If the file name entered doesn't exist
+     */
     public static File loadFile(String filePath) throws FileNameNotExistException {
         File file = new File(filePath);
         if(file != null && file.isFile()) {
@@ -102,8 +135,8 @@ public class LoadDataFromJSONFile {
     /**
      * Procedure to load a game from a file save in the backup folder
      *
-     * @param filePath (String)
-     * @throws FileNameNotExistException
+     * @param filePath Filepath of the file to load
+     * @throws FileNameNotExistException If the file name entered doesn't exist
      * @throws IOException
      * @throws ParseException
      */

@@ -1,6 +1,6 @@
 package abstraction;
 
-/** 
+/*
  * Importing classes from the java.io package
  * 
  * It provides input/output functionality for read and write data operations.
@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
+/*
  * Importing classes from the java.nio package
  * 
  * It provides features for handling non-blocking I/O operations, as well as efficient handling of binary data, such as data transfer between channels and data buffers.
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
+/*
  * Importing classes from the org.json package
  */
 
@@ -67,6 +67,12 @@ public class SaveDataInJSONFile {
         this.currentPawnIndex = currentPawnIndex;
     }
 
+    /**
+     * Check if the file name used of the save is a duplicate
+     * @param folderPath Path of the save folder
+     * @param fileName Name of the file
+     * @return True if the save's name file exits already, false otherwise
+     */
     private static boolean isFileNameDuplicate(String folderPath, String fileName) {
         File folder = new File(folderPath);
         File[] filesInFolder = folder.listFiles();
@@ -82,6 +88,13 @@ public class SaveDataInJSONFile {
         return false;
     }
 
+    /**
+     * Create the save file
+     * @param folderPath Path of the save folder
+     * @param fileName Name of the file
+     * @return The new empty save file
+     * @throws FileNameIsDuplicateException If the file name already exists
+     */
     public static File createFile(String folderPath, String fileName) throws FileNameIsDuplicateException {
         File file = null;
 
@@ -101,6 +114,11 @@ public class SaveDataInJSONFile {
         return file;
     }
 
+    /**
+     * Replace the content of the file with new content
+     * @param filePath Path of the save file
+     * @param jsonObject New JSON to be placed into the file
+     */
     public static void replaceExistingJSONFile(String filePath, JSONObject jsonObject) {
         File file = new File(filePath);
 
@@ -122,6 +140,12 @@ public class SaveDataInJSONFile {
         }
     }
 
+    /**
+     * Fill the save file with the information of the current game to be saved and used later
+     * @param fileName Path of the save file
+     * @throws FileNameIsDuplicateException If the file name already exists
+     * @throws IOException If the entry of the user is wrong
+     */
     public void save(String fileName) throws FileNameIsDuplicateException, IOException {
         File newFile = null;
 
