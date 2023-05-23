@@ -3,14 +3,14 @@ package presentation;
 import java.io.File;
 import java.util.HashMap;
 
-/**
+/*
  * Importing java classes needed for the CYPathFX class
  */
 
 import java.util.LinkedList;
 import java.util.Optional;
 
-/**
+/*
  * Importing javafx classes needed for the CYPathFX class
  */
 
@@ -41,7 +41,7 @@ import javafx.scene.control.Alert.AlertType;
 @SuppressWarnings("deprecation")
 public class CYPathFX extends Application {
     /**
-     * State the CYPATH's class attributes
+     * State the CY-PATH class attributes
      */
     
     public Button actionButton;
@@ -63,6 +63,11 @@ public class CYPathFX extends Application {
 
     private Button continueGameButton;
 
+    /**
+     * Method running at the launch of the graphical interface.
+     * @param primaryStage Stage of the window
+     * @throws Exception
+     */
     //JavaFX
     public void start(Stage primaryStage) throws Exception {
         this.cellColorHover = Color.rgb(239,255,172);
@@ -96,6 +101,9 @@ public class CYPathFX extends Application {
         goToMainMenuScene();
     }
 
+    /**
+     * Create the main menu scene
+     */
     public void createMainMenuScene() {
         BorderPane rootMainMenu = new BorderPane();
         this.mainMenuScene = new Scene(rootMainMenu);
@@ -114,6 +122,9 @@ public class CYPathFX extends Application {
         buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, continueGameButton);
     }
 
+    /**
+     * Change the scene to go the main menu
+     */
     public void goToMainMenuScene() {
         if(this.mainMenuScene == null) {
             createMainMenuScene();
@@ -127,6 +138,9 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Change the scene to the new game scene
+     */
     public void goToNewGameMenu() {
         if (this.newGameMenuScene == null) {
             createNewGameScene();
@@ -135,6 +149,10 @@ public class CYPathFX extends Application {
         this.primaryStage.setScene(this.newGameMenuScene);
     }
 
+    /**
+     * Prepare the game and game scene and then change the scene to the game scene
+     * @param nPlayer Number of players for the game
+     */
     public void prepareGameScene(int nPlayer){
         try {
             initializeGame(nPlayer);
@@ -146,6 +164,9 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Create the menu when creating a new game
+     */
     public void createNewGameScene() {
         BorderPane root = new BorderPane();
         
@@ -170,6 +191,10 @@ public class CYPathFX extends Application {
         this.newGameMenuScene = new Scene(root);
     }
 
+    /**
+     * Prepare the game to be launched with the graphical interface.
+     * @param nbPlayers Number of players for the game
+     */
     public void initializeGame(int nbPlayers) {
         Player[] players = new Player[nbPlayers];
         HashMap<Integer, Player> playersPawnIndex = new HashMap<Integer, Player>(4);
@@ -185,6 +210,10 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Create a new game scene, ready to by used py the players
+     * @throws GameNotInitializedException If the game is not initialised properly
+     */
     public void createGameScene() throws GameNotInitializedException {
         if(this.game == null) {
             throw new GameNotInitializedException();
@@ -248,6 +277,9 @@ public class CYPathFX extends Application {
         this.terminalThread.start();
     }
 
+    /**
+     * Change the scene to be the game by creating a new game scene.
+     */
     public void goToGameScene()  {
         if(this.gameScene == null) {
             try {
@@ -262,15 +294,34 @@ public class CYPathFX extends Application {
 
         this.primaryStage.setScene(gameScene);
     }
-    
+
+    /**
+     * Get the state of move mode.
+     * @return True if the mode is "Move", false if the mode is "Place fence"
+     */
     public boolean isMoveMode() {
         return moveMode;
     }
 
+    /**
+     * Change the mode of action
+     * The mode can be "Move" or "Place fence" with the state of moveMode.
+     * @param moveMode True if the mode is "Move", false if the mode is "Place fence"
+     */
     public void setMoveMode(boolean moveMode) {
         this.moveMode = moveMode;
     }
 
+    /**
+     * Create a line to be the border
+     * @param xStart X coordinate for the starting point
+     * @param yStart Y coordinate for the starting point
+     * @param xEnd X coordinate for the ending point
+     * @param yEnd Y coordinate for the ending point
+     * @param color Color of the line
+     * @param lineWidth Width of the line
+     * @return Line to be used as a border
+     */
     public Line createLineBorder(int xStart, int yStart, int xEnd, int yEnd, Color color, int lineWidth) {
         Line border = new Line(xStart,yStart,xEnd,yEnd);
         border.setStrokeWidth(lineWidth);
@@ -278,6 +329,11 @@ public class CYPathFX extends Application {
         return border;
     }
 
+    /**
+     * Create the grid for the player to play on.
+     * The grid is main element in the graphical interface of the game.
+     * @return GridPane with a grid drawn on it.
+     */
     public GridPane createBoard() {
         GridPane gPane = new GridPane();
         int sizeBoardRows = this.game.getBoard().getNbRows();
@@ -363,6 +419,10 @@ public class CYPathFX extends Application {
         return gPane;
     }
 
+    /**
+     * Add a fence on the board show the player graphical interface made with JavaFX
+     * @param gPane Grid shown to the player
+     */
     private void addFencesToBoard(GridPane gPane){
         for(Fence f : this.game.getBoard().getFencesArray()) {
             Point pStartFenceGPaneCoord = new Point(f.getStart().getX()*2,f.getStart().getY()*2);
@@ -392,6 +452,11 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Create a circle to be the pawn of the player
+     * @param colorP Color of the pawn
+     * @return Circle fill with a color
+     */
     private Circle createPlayerCircle(ColorPawn colorP) {
         Circle circle = new Circle(15, colorP.toColorFX());
         circle.setStroke(Color.BLACK);
@@ -399,6 +464,13 @@ public class CYPathFX extends Application {
         return circle;
     }
 
+    /**
+     * Add the pawn of the player, represented by a circle, to a specific cell with its coordinate.
+     * @param gridPane Grid shown to the player
+     * @param rowIndex Index of the circle's row in the grid pane
+     * @param columnIndex Index of the circle's column in the grid pane
+     * @param color Color of the circle
+     */
     public void addCircleToCell(GridPane gridPane, int rowIndex, int columnIndex, ColorPawn color) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
         if(stack != null) {
@@ -406,7 +478,13 @@ public class CYPathFX extends Application {
             stack.getChildren().add(circle);
         }
     }
-    
+
+    /**
+     * Remove the pawn of the player, represented by a circle, from a specific cell with its coordinate.
+     * @param gridPane Grid shown to the player
+     * @param rowIndex Index of the circle's row in the grid pane
+     * @param columnIndex Index of the circle's column in the grid pane
+     */
     public void removeCircleFromCell(GridPane gridPane, int rowIndex, int columnIndex) {
         StackPane stack = getCellStackPane(gridPane, rowIndex, columnIndex);
         if(stack != null) {
@@ -432,6 +510,13 @@ public class CYPathFX extends Application {
         return null;
     }
 
+    /**
+     * Get the stack pane from the grid pane with its coordinate.
+     * @param gridPane Grid shown to the player
+     * @param row Row number of the stack pane
+     * @param column Column number of the stack pane
+     * @return The stack pane at this coordinate
+     */
     public StackPane getCellStackPane(GridPane gridPane, int row, int column) {
         for (Node node : gridPane.getChildren()) {
             if (GridPane.getColumnIndex(node) == column && GridPane.getRowIndex(node) == row && node instanceof StackPane) {
@@ -471,6 +556,11 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Convert the GridPane coordinate to the coordinate used by the player
+     * @param node Node in the GridPane
+     * @return Position of the node in the GridPane
+     */
     public static Point gameCoordToGPaneCoord(Node node) {
         Point coord = new Point(0, 0);
         coord.setX(GridPane.getColumnIndex(node));
@@ -479,7 +569,12 @@ public class CYPathFX extends Application {
         return coord;
     }
 
-    public static Point gPaneCoordToGameCoord(Point gPaneCoord) {   
+    /**
+     * Convert the GridPane coordinate to the coordinate used by the player
+     * @param gPaneCoord Position in the GridPane
+     * @return Position of the node in the GridPane
+     */
+    public static Point gPaneCoordToGameCoord(Point gPaneCoord) {
         Point coord = new Point(0, 0);
         coord.setX(gPaneCoord.getX() / 2);
         coord.setY(gPaneCoord.getY() / 2);
@@ -503,6 +598,9 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Load a game from a file
+     */
     private void loadGame()  {
         String saveDefaultPath = "./src/main/resources/data/saves";
         FileChooser fileChooser = new FileChooser();
@@ -545,6 +643,10 @@ public class CYPathFX extends Application {
         }
     }
 
+
+    /**
+     * Save a game to a file
+     */
     private void saveGame() {
         TextInputDialog dialog = new TextInputDialog("save");
         dialog.setContentText("Choose a name for your save file");
@@ -573,6 +675,12 @@ public class CYPathFX extends Application {
         }
     }
 
+    /**
+     * Main method
+     * Launch the game in console mode or window mode
+     *
+     * @param args Command line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
