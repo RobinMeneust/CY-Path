@@ -34,6 +34,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 	 * @param actionButton	Reference to the action button
 	 * @param fence			Reference to the fence to be placed
 	 */
+
 	public ClickAddBorderControl(CYPathFX cyPathFX, GameFX game, Button actionButton, Fence fence) {
 		this.cyPathFX = cyPathFX;
 		this.game = game;
@@ -42,78 +43,28 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 	}
 
 	/**
-	 * Handler when a cell is clicked to place a fence.
-	 * This handler places a fence in the available row or column between two cells.
-	 * With that, a player can place a fence wherever he wants if the position of the wanted fence complies with the game's rules.
-	 * @param event	Event of the mouse when it's pressed
+	 * Place the selected fence on the board
+	 * 
+	 * @param stackPane Cell clicked. The fence is either in its left or upper border depending on its orientation
+	 * @throws IncorrectPawnIndexException If the current pawn index is incorrect or if its id is invalid
 	 */
-	@Override
-	public void handle(MouseEvent event) {
-		Object o = event.getSource();
-		if (o instanceof StackPane) {
-			StackPane stackPane = (StackPane) o;
-			Shape sourceCell = null;
 
-			// The cell retrieved may be just a rectangle or have a circle in it.
-			if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Rectangle) {
-				sourceCell = (Rectangle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-			} else if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Circle) {
-				sourceCell = (Circle) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
-			} else {
-				System.err.println("ERROR: Can't cast to a rectangle or a circle");
-			}
-			if (!this.cyPathFX.isMoveMode() && this.cyPathFX.prevHighlightedFencesList != null && event.getButton() == MouseButton.PRIMARY) {
-				//Update data
-				Point pStartCell = CYPathFX.gameCoordToGPaneCoord(stackPane);
-				Point pStartFenceCoord = CYPathFX.gPaneCoordToGameCoord(new Point(pStartCell.getX()-1,pStartCell.getY()-1)); // get the upper left corner of the cell
-				
-				Fence fence = new Fence(this.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
+	private void placeFenceOnBoard(StackPane stackPane) throws IncorrectPawnIndexException {
+		Point pStartFenceCoord = CYPathFX.gPaneCellCoordToGameCoord(CYPathFX.getGPaneNodeCoord(stackPane));
+		Fence fence = new Fence(this.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
 
-				try {
-					if (this.game.getBoard().placeFence(this.game.getCurrentPawnIndex(), fence)) {
-						// Add fence to the gridPane
-						for (Line l : this.cyPathFX.prevHighlightedFencesList) {
-							l.setStroke(Color.BLACK);
-							l.toFront();
-						}
-						// Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved in the next round
-						this.cyPathFX.prevHighlightedFencesList.clear();
-
-						this.game.setIsEndTurn(true);
-
-						//We wait the beginning of the next turn
-						while (this.game.getIsEndTurn()) {
-							try {
-								Thread.sleep(100); //Wait 100 milliseconds before checking again
-							} catch (InterruptedException ev) {
-								Thread.currentThread().interrupt();
-							}
-						}
-						//update button
-						//actionButton.fire();
-					} else {
-						System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+		try {
+			// If a fence is selected (highlighted)
+			if(this.cyPathFX.prevHighlightedFencesList != null){
+				if (this.game.getBoard().placeFence(this.game.getCurrentPawnIndex(), fence)) {
+					// Add fence to the gridPane
+					for (Line l : this.cyPathFX.prevHighlightedFencesList) {
+						l.setStroke(Color.BLACK);
+						l.toFront();
 					}
-				} catch (IncorrectPawnIndexException e) {
-					System.err.println("ERROR: Pawn index is incorrect. Check the number of players and the number of pawns and see if they are equals");
-					System.exit(-1);
-				}
-			} else if (this.cyPathFX.isMoveMode() && this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell)) {
-				try {
-					Pawn pawn = this.game.getCurrentPawn();
+					// Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved in the next round
+					this.cyPathFX.prevHighlightedFencesList.clear();
 
-					// We move circle (pawn of the player) to its new location
-					this.cyPathFX.removeCircleFromCell(this.cyPathFX.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
-
-					StackPane parentStackPane = (StackPane) sourceCell.getParent();
-					int columnIndex = GridPane.getColumnIndex(parentStackPane);
-					int rowIndex = GridPane.getRowIndex(parentStackPane);
-					
-					this.game.getBoard().movePawn(this.game.getCurrentPawn().getId(), new Point(columnIndex / 2, rowIndex / 2));
-					
-
-					this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());
-					//the information is transmitted to the terminal
 					this.game.setIsEndTurn(true);
 					//We wait the beginning of the next turn
 					while (this.game.getIsEndTurn()) {
@@ -123,20 +74,98 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 							Thread.currentThread().interrupt();
 						}
 					}
-
-					if(this.game.getBoard().getWinner() != -1){
-						this.game.isEndGame.setValue(true);
-					}
-
 					//update button
 					actionButton.fire();
-					if (!(actionButton.getText().equals("Place fence"))) {
-						actionButton.fire();
-					}
-				} catch (IncorrectPawnIndexException err) {
-					err.printStackTrace();
-					System.exit(-1);
+				} else {
+					System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
 				}
+			}
+		} catch (IncorrectPawnIndexException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * Place the current pawn at the selected position on the board
+	 * 
+	 * @param sourceCell Cell clicked. It must be either a Circle or a Rectangle
+	 * @throws IncorrectShapeException If the shape is not a Circle or a Rectangle
+	 * @throws IncorrectPawnIndexException If the current pawn index is incorrect or if its id is invalid
+	 */
+
+	private void placePawnOnBoard(Shape sourceCell) throws IncorrectShapeException, IncorrectPawnIndexException {
+		if(!(sourceCell instanceof Circle) && !(sourceCell instanceof Rectangle)){
+			throw new IncorrectShapeException();
+		}
+		try {
+			// If there are possible moves
+			if(this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell)) {
+				Pawn pawn = this.game.getCurrentPawn();
+
+				// We move circle (pawn of the player) to its new location
+				this.cyPathFX.removeCircleFromCell(this.cyPathFX.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
+
+				StackPane parentStackPane = (StackPane) sourceCell.getParent();
+				int columnIndex = GridPane.getColumnIndex(parentStackPane);
+				int rowIndex = GridPane.getRowIndex(parentStackPane);
+				
+				this.game.getBoard().movePawn(this.game.getCurrentPawn().getId(), new Point(columnIndex / 2, rowIndex / 2));
+				
+				this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());
+				//the information is transmitted to the terminal
+				this.game.setIsEndTurn(true);
+				//We wait the beginning of the next turn
+				while (this.game.getIsEndTurn()) {
+					try {
+						Thread.sleep(100); //Wait 100 milliseconds before checking again
+					} catch (InterruptedException ev) {
+						Thread.currentThread().interrupt();
+					}
+				}
+
+				if(this.game.getBoard().getWinner() != -1){
+					this.game.isEndGame.setValue(true);
+				}
+
+				//update button
+				actionButton.fire();
+				if (!(actionButton.getText().equals("Place fence"))) {
+					actionButton.fire();
+				}
+			}
+		} catch (IncorrectPawnIndexException err) {
+			throw err;
+		}
+	}
+
+	/**
+	 * Handler when a cell is clicked to place a fence.
+	 * This handler places a fence in the available row or column between two cells.
+	 * With that, a player can place a fence wherever he wants if the position of the wanted fence complies with the game's rules.
+	 * 
+	 * @param event	Event of the mouse when it's pressed
+	 */
+
+	@Override
+	public void handle(MouseEvent event) {
+		Object o = event.getSource();
+		if (o instanceof StackPane) {
+			StackPane stackPane = (StackPane) o;
+			Shape sourceCell = null;
+
+			try {
+				if (!this.cyPathFX.isMoveMode() && event.getButton() == MouseButton.PRIMARY) {
+					placeFenceOnBoard(stackPane);
+				} else if (this.cyPathFX.isMoveMode()) {
+					// The cell is a shape (rectangle if there is no pawn and circle if there is a pawn)
+					if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Shape) {
+						sourceCell = (Shape) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+					}
+					placePawnOnBoard(sourceCell);
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+				System.exit(-1);
 			}
 		}
 	}

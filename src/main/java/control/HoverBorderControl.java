@@ -43,63 +43,54 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 		Object o = event.getSource();
 		if (o instanceof StackPane) {
 			StackPane stackPane = (StackPane) o;
-			Node sourceNode = stackPane.getChildren().get(stackPane.getChildren().size() - 1);
+			Node sourceNode = stackPane.getChildren().get(stackPane.getChildren().size() - 1); // Get the last element (it's a pawn if there is one on the cell)
 			Shape sourceCell = null;
 			if (sourceNode instanceof Rectangle) {
 				sourceCell = (Rectangle) sourceNode;
 			} else if (sourceNode instanceof Circle) {
 				sourceCell = (Circle) sourceNode;
 			}else{
-				System.err.println("ERROR: Can't cast to a rectangle or a circle");
+				System.err.println("ERROR: Can't cast to a rectangle or a circle. The board content is invalid");
+				System.exit(-1);
 			}
 			// The player wants to place a fence
 			if (!this.cyPathFX.isMoveMode()) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED || event.getEventType() == MouseEvent.MOUSE_CLICKED) {
-					Point pStartCell = CYPathFX.gameCoordToGPaneCoord(stackPane);
-					Point pStartFenceCoord = CYPathFX.gPaneCoordToGameCoord(new Point(pStartCell.getX()-1,pStartCell.getY()-1)); // get the upper left corner of the cell
+					Point pStartCell = CYPathFX.getGPaneNodeCoord(stackPane);
+					Point pStartFenceCoord = CYPathFX.gPaneCellCoordToGameCoord(pStartCell);
 
-					// Depending on the orientation of the fence, a dummy fence will be displayed to show where it is possible to place a fence.
-					if (this.fence.getOrientation() == Orientation.HORIZONTAL) {
-						Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), Orientation.HORIZONTAL, pStartFenceCoord);
-						if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
-							// we take the row above the cell
-							int y = pStartCell.getY() - 1;
-							for (int i = pStartCell.getX(); i < pStartCell.getX() + 2 * fence.getLength(); i += 2) {
-								highlightLine(i, y, Color.DARKGREEN);
-							}
-						} else {
-							// It's not a valid fence, so we just color one line of it (above the cell since it's horizontal)
-							int y = pStartCell.getY() - 1;
-							for (int i = pStartCell.getX(); i < pStartCell.getX() + 2 * fence.getLength(); i += 2) {
-								highlightLine(i, y, Color.DARKRED);
-							}
-						}
-					} else if (this.fence.getOrientation() == Orientation.VERTICAL) {
-						Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), Orientation.VERTICAL, pStartFenceCoord);
-						if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
-							int x = pStartCell.getX() - 1;
-							for (int i = pStartCell.getY(); i < pStartCell.getY() + 2 * fence.getLength(); i += 2) {
-								highlightLine(x, i, Color.DARKGREEN);
-							}
-						} else {
-							// It's not a valid fence, so we just color one line of it (on the left of the cell since it's vertical)
-							int x = pStartCell.getX() - 1;
-							for (int i = pStartCell.getY(); i < pStartCell.getY() + 2 * fence.getLength(); i += 2) {
-								highlightLine(x, i, Color.DARKRED);
-							}
-						}
+					Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
+					if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
+						highlightFence(fence.getOrientation(), pStartCell, fence.getLength(), Color.DARKGREEN);
+					} else {
+						highlightFence(fence.getOrientation(), pStartCell, fence.getLength(), Color.DARKRED);
 					}
+
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-					// If the cursor moves from the current cell, we delete the current dummy fence for the next one to appear properly
+					// If the cursor moves from the current cell, we delete the current temporary fence for the next one to appear properly
 					this.resetHighlightedFences(this.cyPathFX);
 				}
-			// The player wants to move
+				// The player wants to move
 			} else if (this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell) && sourceCell != null) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
 					sourceCell.setFill(this.cyPathFX.cellColorHover);
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
 					sourceCell.setFill(this.cyPathFX.game.getCurrentPawn().getColor().toColorPossibleMove());
 				}
+			}
+		}
+	}
+
+	private void highlightFence(Orientation orientation, Point start, int length, Color color) {
+		if(orientation == Orientation.HORIZONTAL) {
+			int y = start.getY() - 1; // get the upper border
+			for (int i = start.getX(); i < start.getX() + 2 * length; i += 2) {
+				highlightLine(i, y, color);
+			}
+		} else {
+			int x = start.getX() - 1; // get the left border
+			for (int i = start.getY(); i < start.getY() + 2 * length; i += 2) {
+				highlightLine(x, i, color);
 			}
 		}
 	}
@@ -112,6 +103,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 	 * @param y The Y coordinate of the origin of the fence on the grid
 	 * @param newColor New color of the line
 	 */
+
 	private void highlightLine(int x, int y, Color newColor) {
 		Node n = this.cyPathFX.getNodeFromGridPane(this.cyPathFX.gPane, y, x);
 		if (n instanceof Line) {

@@ -96,7 +96,7 @@ public class CYPathFX extends Application {
         goToMainMenuScene();
     }
 
-    public void createMainMenuScene() {
+    private void createMainMenuScene() {
         BorderPane rootMainMenu = new BorderPane();
         this.mainMenuScene = new Scene(rootMainMenu);
         
@@ -114,7 +114,7 @@ public class CYPathFX extends Application {
         buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, continueGameButton);
     }
 
-    public void goToMainMenuScene() {
+    private void goToMainMenuScene() {
         if(this.mainMenuScene == null) {
             createMainMenuScene();
         }
@@ -127,7 +127,7 @@ public class CYPathFX extends Application {
         }
     }
 
-    public void goToNewGameMenu() {
+    private void goToNewGameMenu() {
         if (this.newGameMenuScene == null) {
             createNewGameScene();
         }
@@ -135,7 +135,7 @@ public class CYPathFX extends Application {
         this.primaryStage.setScene(this.newGameMenuScene);
     }
 
-    public void prepareGameScene(int nPlayer){
+    private void prepareGameScene(int nPlayer){
         try {
             initializeGame(nPlayer);
             createGameScene();
@@ -146,7 +146,7 @@ public class CYPathFX extends Application {
         }
     }
 
-    public void createNewGameScene() {
+    private void createNewGameScene() {
         BorderPane root = new BorderPane();
         
         Button twoPlayersModeButton = new Button("2 Players");
@@ -170,7 +170,7 @@ public class CYPathFX extends Application {
         this.newGameMenuScene = new Scene(root);
     }
 
-    public void initializeGame(int nbPlayers) {
+    private void initializeGame(int nbPlayers) {
         Player[] players = new Player[nbPlayers];
         HashMap<Integer, Player> playersPawnIndex = new HashMap<Integer, Player>(4);
         for (int i = 0; i < nbPlayers; i++){
@@ -185,7 +185,7 @@ public class CYPathFX extends Application {
         }
     }
 
-    public void createGameScene() throws GameNotInitializedException {
+    private void createGameScene() throws GameNotInitializedException {
         if(this.game == null) {
             throw new GameNotInitializedException();
         }
@@ -248,7 +248,7 @@ public class CYPathFX extends Application {
         this.terminalThread.start();
     }
 
-    public void goToGameScene()  {
+    private void goToGameScene()  {
         if(this.gameScene == null) {
             try {
                 createGameScene();
@@ -271,18 +271,49 @@ public class CYPathFX extends Application {
         this.moveMode = moveMode;
     }
 
-    public Line createLineBorder(int xStart, int yStart, int xEnd, int yEnd, Color color, int lineWidth) {
+    private Line createLineBorder(int xStart, int yStart, int xEnd, int yEnd, Color color, int lineWidth) {
         Line border = new Line(xStart,yStart,xEnd,yEnd);
         border.setStrokeWidth(lineWidth);
         border.setStroke(color);
         return border;
     }
 
+
+    /**
+     * Create a cell of the board and add it
+     * 
+     * @param parent Board where the cell is added
+     * @param row Row of the cell added
+     * @param col Column of the cell added
+     * @param size Size of the cell added (size = width = height)
+     * @param color Color of the cell background
+     */
+
+    private void createBoardCell(GridPane parent, int row, int col, int size, Color color) {
+        if(parent != null) {
+            StackPane cellStackPane = new StackPane(); // Create a new StackPane for every cell
+            Rectangle cell = new Rectangle(size, size);
+
+            cell.setFill(color);
+            cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
+            cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
+            cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.actionButton));
+            cellStackPane.getChildren().add(cell);       
+
+            // Check if there is a pawn on this cell and add it if there is one
+            Pawn pawn = this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row));
+            if(this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row)) != null) {
+                cellStackPane.getChildren().add(this.createPlayerCircle(pawn.getColor()));
+            }
+
+            parent.add(cellStackPane, col, row);
+        }
+    }
+
     public GridPane createBoard() {
         GridPane gPane = new GridPane();
         int sizeBoardRows = this.game.getBoard().getNbRows();
         int sizeBoardColumns = this.game.getBoard().getNbCols();
-        Rectangle cell = null;
         Line border = null;
         int lineLength = 50;
         int cellSize = 50;
@@ -290,15 +321,6 @@ public class CYPathFX extends Application {
         int lineLengthBorders = lineLength + lineWidth;
         Color borderColor = Color.LIGHTGRAY;
         Color cellColor = Color.rgb(230, 230, 230);
-        Circle[] pawnCircles = new Circle[this.game.getNbPlayers()];
-
-        try {
-            for (int k = 0; k < this.game.getNbPlayers(); k++) {
-                pawnCircles[k] = this.createPlayerCircle(this.game.getBoard().getPawn(k).getColor());
-            }
-        }catch (IncorrectPawnIndexException err){
-            err.printStackTrace();
-        }
 
         // First horizontal border (top)
         for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
@@ -313,31 +335,10 @@ public class CYPathFX extends Application {
             gPane.add(border, 0, i);
     
             for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
-                // Cells
-                StackPane cellStackPane = new StackPane(); // Create a new StackPane for every cell
-
-                // Cells
-                cell = new Rectangle(cellSize, cellSize);
-                cell.setFill(cellColor);
-                cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
-                cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
-                cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.actionButton));
-                cellStackPane.getChildren().add(cell);              
-
-                // Add player circles to their position
-                try {
-                    for (int l = 0; l < this.game.getBoard().getNbPawns(); l++) {
-                        if (this.game.getBoard().getPawn(l).getPosition().equals(new Point((j-1)/2, (i-1)/2))) {
-                            cellStackPane.getChildren().add(pawnCircles[l]);
-                        }
-                    }
-                }catch (IncorrectPawnIndexException err){
-                    err.printStackTrace();
-                }
-
-                gPane.add(cellStackPane, j, i);
+                // Cell
+                createBoardCell(gPane, i, j, cellSize, cellColor);
     
-                // Vertical borders
+                // Vertical border
                 border = createLineBorder(0, 0, 0, lineLength, borderColor, lineWidth);
                 gPane.add(border, j + 1, i);
             }
@@ -471,18 +472,22 @@ public class CYPathFX extends Application {
         }
     }
 
-    public static Point gameCoordToGPaneCoord(Node node) {
+    public static Point getGPaneNodeCoord(Node node) {
         Point coord = new Point(0, 0);
         coord.setX(GridPane.getColumnIndex(node));
         coord.setY(GridPane.getRowIndex(node));
 
         return coord;
     }
+    
+    public static Point gPaneCellCoordToGameCoord(Point gPaneCoord) {   
+        return gPaneCellCoordToGameCoord(gPaneCoord.getX(), gPaneCoord.getY());
+    }
 
-    public static Point gPaneCoordToGameCoord(Point gPaneCoord) {   
+    public static Point gPaneCellCoordToGameCoord(int x, int y) {   
         Point coord = new Point(0, 0);
-        coord.setX(gPaneCoord.getX() / 2);
-        coord.setY(gPaneCoord.getY() / 2);
+        coord.setX((x-1) / 2);
+        coord.setY((y-1) / 2);
         
         return coord;
     }

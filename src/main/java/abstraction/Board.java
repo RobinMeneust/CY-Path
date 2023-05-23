@@ -740,7 +740,7 @@ public class Board {
 	 * 
 	 * @param f1 Fence 1
 	 * @param f2 Fence 2
-	 * @return True if the 2 fences are coincidences
+	 * @return True if the 2 fences are coincident
 	 */
 
 	public boolean areCoincident(Fence f1, Fence f2) {
