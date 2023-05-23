@@ -22,9 +22,21 @@ import javafx.scene.control.Button;
 
 public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 
+	/**
+	 * Graphical interface
+	 */
 	private CYPathFX cyPathFX;
+	/**
+	 * Game currently playing to know the current action
+	 */
 	private GameFX game;
+	/**
+	 * Button to choose the action
+	 */
 	private Button actionButton;
+	/**
+	 * Fence going to be placed
+	 */
 	private Fence fence;
 
 	/**

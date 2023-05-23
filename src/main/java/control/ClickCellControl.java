@@ -15,9 +15,21 @@ import presentation.CYPathFX;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 public class ClickCellControl implements EventHandler<MouseEvent> {
+	/**
+	 * Graphical interface
+	 */
 	private CYPathFX cyPathFX;
+	/**
+	 * Fence wanted to interact with
+	 */
 	private Fence fence;
+	/**
+	 * Game currently playing
+	 */
 	private GameAbstract game;
+	/**
+	 * Button to choose the action
+	 */
 	private Button actionButton;
 
 

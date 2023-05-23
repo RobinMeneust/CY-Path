@@ -18,8 +18,13 @@ import presentation.CYPathFX;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 public class HoverBorderControl implements EventHandler<MouseEvent> {
-
+	/**
+	 * Graphical interface
+	 */
 	private CYPathFX cyPathFX;
+	/**
+	 * Fence wanted to be placed
+	 */
 	private Fence fence;
 
 	/**

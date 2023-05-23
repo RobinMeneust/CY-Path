@@ -14,7 +14,13 @@ import java.util.Observer;
 
 @SuppressWarnings("deprecation")
 public class CurrentPlayerTextControl implements Observer {
+	/**
+	 * Name of the current player
+	 */
 	private Text currentPlayer;
+	/**
+	 * Game currently playing to get current player's username
+	 */
 	private GameAbstract game;
 
 

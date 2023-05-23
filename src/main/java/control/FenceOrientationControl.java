@@ -13,7 +13,13 @@ import presentation.CYPathFX;
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 public class FenceOrientationControl implements EventHandler<MouseEvent> {
+    /**
+     * Graphical interface
+     */
     private CYPathFX cyPathFX;
+    /**
+     * Fence wanted to be rotated
+     */
     private Fence fence;
 
     /**
