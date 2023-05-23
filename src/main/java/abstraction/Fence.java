@@ -71,7 +71,6 @@ public class Fence {
 
 	/**
 	 * Create a Fence by giving only its orientation
-	 * It's the default constructor here
 	 * 
 	 * @param orientation orientation of the fence
 	 */
@@ -82,7 +81,6 @@ public class Fence {
 
 	/**
 	 * Create a Fence by giving its orientation but also the starting and ending point
-	 * It's the default constructor here
 	 * 
 	 * @param orientation orientation of the fence
 	 * @param start start coordinates of the fence
