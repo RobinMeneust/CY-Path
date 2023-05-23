@@ -8,7 +8,6 @@ import java.util.HashMap;
  */
 
 import java.util.LinkedList;
-import java.util.Optional;
 
 /*
  * Importing javafx classes needed for the CYPathFX class
@@ -37,7 +36,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -52,11 +53,6 @@ import javafx.scene.control.Alert.AlertType;
  */
 
 public class CYPathFX extends Application {
-    /**
-    * Default constructor.
-    * The default constructor is intentionally left empty as it is not used in the CYPath class.
-    */
-
     /**
      * The action button used in the game interface.
      */
@@ -132,6 +128,22 @@ public class CYPathFX extends Application {
      */
     private Button continueGameButton;
 
+    /**
+     * Button to skip a player's turn
+     */
+    private Button gameSkipTurnButton;
+
+    /**
+     * Default path of save files
+     */
+    private final String saveDefaultPath = "./data/saves";
+
+
+    /**
+     * Default constructor
+     */
+
+    public CYPathFX() {}
 
     /**
      * Method running at the launch of the graphical interface.
@@ -160,6 +172,7 @@ public class CYPathFX extends Application {
             goToGameScene();
         });
         this.continueGameButton.setManaged(false);
+        this.gameSkipTurnButton = null;
 
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
@@ -353,8 +366,17 @@ public class CYPathFX extends Application {
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
 
+        this.gameSkipTurnButton = new Button("Skip");
+        this.gameSkipTurnButton.setVisible(false);
+        this.gameSkipTurnButton.setOnAction(e -> {
+            this.game.setIsEndTurn(true);
+            this.gameSkipTurnButton.setVisible(false);
+            this.actionButton.fire();
+            this.actionButton.fire();
+        });
+        
         HBox buttonsHBox = new HBox();
-        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter);
+        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter,gameSkipTurnButton);
         this.gPane = createBoard();
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
@@ -654,6 +676,30 @@ public class CYPathFX extends Application {
     }
 
     /**
+     * Displays a pop-up window in the center of the screen.
+     *
+     * @param owner The owner stage of the pop-up.
+     */
+    private void showPopupWindow(Stage owner) {
+        //Creation of the pop-up window
+        Stage popupStage = new Stage(StageStyle.UTILITY);
+        popupStage.initModality(Modality.WINDOW_MODAL);
+        popupStage.initOwner(owner);
+        popupStage.setTitle("You can't move");
+        popupStage.setWidth(400);
+        popupStage.setHeight(80);
+
+        //Content of the pop-up window
+        Label label = new Label(this.game.getCurrentPawn().getColor().toString() + " can't move. Try to place a fence or skip your turn");
+        StackPane popupRoot = new StackPane(label);
+        popupRoot.setAlignment(Pos.CENTER);
+
+        //Adding content to the pop-up window
+        popupStage.setScene(new Scene(popupRoot));
+        popupStage.showAndWait();
+    }
+
+    /**
 	 * Color all the cells that the player can move to.
      * Change the cell's color if the player hover.
 	 * 
@@ -664,6 +710,13 @@ public class CYPathFX extends Application {
         LinkedList<Point> possibleMoves = null;
         try {
             possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
+
+            if(possibleMoves.isEmpty()){
+                System.out.println(this.game.getCurrentPawn().getColor().toString() + " pawn can't move");
+                showPopupWindow(primaryStage);
+                this.gameSkipTurnButton.setVisible(true);
+            }
+
         } catch(IncorrectPawnIndexException err) {
             err.printStackTrace();
             System.exit(-1);
@@ -745,7 +798,6 @@ public class CYPathFX extends Application {
      * Load a game from a file
      */
     private void loadGame()  {
-        String saveDefaultPath = "./src/main/resources/data/saves";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a file");
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
@@ -791,51 +843,24 @@ public class CYPathFX extends Application {
      * Save a game to a file
      */
     private void saveGame() {
-        boolean failure = false;
-        TextInputDialog dialog = new TextInputDialog("save");
-        ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
-        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Alert alertAlreadyExists = new Alert(AlertType.WARNING,"The file already exists.\nDo you want to overwrite it?",yesButton,noButton);
-        alertAlreadyExists.setTitle("File already exists");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a file");
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
+        new File(saveDefaultPath).mkdirs();
+        fileChooser.setInitialDirectory(new File(saveDefaultPath));
+        fileChooser.setInitialFileName("save.json");
 
-        dialog.setContentText("Choose a name for your save file");
+        File file = fileChooser.showSaveDialog(this.primaryStage);
         
-        dialog.showAndWait();
-        Optional<String> dialogResult = dialog.showAndWait();
-        String fileName = null;
-
-        if (dialogResult.isPresent()){
-            fileName = dialogResult.get();
-        }
-
-        if(fileName != null) {
+        if(file != null) {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbMaxTotalFences(), this.game.getBoard().getPawnsArray(), this.game.getCurrentPawnIndex());
             Alert alert = null;
             try {
-                saveDataObject.save(fileName, false);
+                saveDataObject.save(file, true);
                 alert = new Alert(AlertType.INFORMATION);
                 alert.setContentText("Game saved");
                 alert.showAndWait();
-            } catch(FileNameIsDuplicateException e) {
-                Optional<ButtonType> overwriteResult = alertAlreadyExists.showAndWait();
-                ButtonBar.ButtonData overwriteChoice = null;
-                if (overwriteResult.isPresent()) {
-                    overwriteChoice = overwriteResult.get().getButtonData();
-                }
-                if(overwriteChoice == ButtonBar.ButtonData.OK_DONE) {
-                    try {
-                        saveDataObject.save(fileName, true);
-                        alert = new Alert(AlertType.INFORMATION);
-                        alert.setContentText("Game saved");
-                        alert.showAndWait();
-                    } catch (Exception err) {
-                        failure = true;
-                    }
-                }
             } catch (Exception e) {
-                failure = true;
-            }
-            if(failure) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
                 alert.showAndWait();

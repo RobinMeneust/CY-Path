@@ -28,8 +28,10 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 	private Fence fence;
 
 	/**
-	 * @param cyPathFX	Reference to the JavaFX interface
-	 * @param fence		Reference to abstraction.Fence
+	 * Main constructor of HoverBorderControl
+	 * 
+	 * @param cyPathFX Reference to the JavaFX interface
+	 * @param fence Reference to Fence
 	 */
 
 	public HoverBorderControl(CYPathFX cyPathFX, Fence fence) {

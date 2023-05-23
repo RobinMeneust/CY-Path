@@ -163,6 +163,12 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/16 16:45
 		* Estimated end : 2023/05/16 16:50
 		* Real end : 2023/05/16 16:49
+	5.5 Ask at the end of a game if the player wants to restart or exit
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/23 17:50
+		* Estimated end : 2023/05/23 18:05
+		* Real end : 2023/05/23 18:15
 
 6. Create a console interface to be able to test the game:
 	6.1 Represent the cells of the grid in the console
@@ -336,61 +342,18 @@ The task's priority is sorted in ascending order
 		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/21 12:45
-		* Estimated end :  2023/05/21 13:45
+		* Estimated end : 2023/05/21 13:45
 		* Real end : 2023/05/22 18:15
 		* NOTE: Real end is later because tasks 8 was in progress
 	11.4 Added the case of an already existing save file (overwrite) for the window mode
 		* PROGRESS: DONE
 		* Who: Robin
 		* Start : 2023/05/21 17:00
-		* Estimated end :  2023/05/21 17:30
-		* Real end : 2023/05/22 18:35
-
-
-The following tasks aren't mandatory:
-
-12. Optional functionalities
-	12.1 Options button in main menu and options menu
-		12.1.1 Create the option button and an event that change the scene to the options menu
-			* PROGRESS: TO_DO
-			* Who: 
-			* Start : 
-			* Estimated end : 
-			* Real end :
-		12.1.2 Add options
-			12.1.2.1 Change controls
-				* PROGRESS: TO_DO
-				* Who: 
-				* Start : 
-				* Estimated end : 
-				* Real end :
-			12.1.2.2 Change screen resolution
-				* PROGRESS: TO_DO
-				* Who: 
-				* Start : 
-				* Estimated end : 
-				* Real end :
-			12.1.2.3 Change size of fences
-				* PROGRESS: TO_DO
-				* Who: 
-				* Start : 
-				* Estimated end : 
-				* Real end :
-			12.1.2.4 Change board size
-				* PROGRESS: TO_DO
-				* Who: 
-				* Start : 
-				* Estimated end : 
-				* Real end :
-			12.1.2.5 Change pawn color or image
-				* PROGRESS: TO_DO
-				* Who: 
-				* Start : 
-				* Estimated end : 
-				* Real end :
-	12.2 Add a singleplayer mode
-		* PROGRESS: TO_DO
-		* Who: 
-		* Start : 
-		* Estimated end : 
-		* Real end :
+		* Estimated end : 2023/05/23 17:30
+		* Real end : 2023/05/23 17:35
+	11.5 Added an exit button to leave the program
+		* PROGRESS: DONE
+		* Who: Robin
+		* Start : 2023/05/21 18:20
+		* Estimated end : 2023/05/23 18:30
+		* Real end : 2023/05/23 18:30

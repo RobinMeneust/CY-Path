@@ -59,7 +59,10 @@ public class SaveDataInJSONFile {
      */
     private int currentPawnIndex;
 
-    private String folderPath = "./src/main/resources/data/saves";
+    /**
+     * Default path of save files
+     */
+    private final String defaultFolderPath = "./data/saves";
 
     /**
      * Create a constructor that groups the elements that make up a backup file of a
@@ -157,13 +160,31 @@ public class SaveDataInJSONFile {
 
     /**
      * Fill the save file with the information of the current game to be saved and used later
-     * @param fileName Path of the save file
+     * @param fileName Name of the save file without its extension
+     * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
+     * @throws FileNameIsDuplicateException If the file name already exists
+     * @throws IOException If the entry of the user is wrong
+     */
+    public void save(String fileName, boolean doOverwrite) throws FileNameIsDuplicateException, IOException {
+        Path folder = Paths.get(this.defaultFolderPath);
+        Path filePath = folder.resolve(fileName+".json");
+        try {
+            save(filePath.toFile(), doOverwrite);
+        } catch(Exception e) {
+            throw e;
+        }
+    }
+
+
+    /**
+     * Fill the save file with the information of the current game to be saved and used later
+     * @param file File where the game is saved
      * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
      * @throws FileNameIsDuplicateException If the file name already exists
      * @throws IOException If the entry of the user is wrong
      */
     
-    public void save(String fileName, boolean doOverwrite) throws FileNameIsDuplicateException, IOException {
+    public void save(File file, boolean doOverwrite) throws FileNameIsDuplicateException, IOException {
         File newFile = null;
 
         JSONObject gameObjects = new JSONObject();
@@ -213,15 +234,17 @@ public class SaveDataInJSONFile {
         gameObjects.put("listPawns", gameElementsListPawns);
 
         try {
-            newFile = createFile(this.folderPath, fileName+".json");
-            FileWriter file = new FileWriter(newFile);
+            // Check if the file doesn't already exist and if it does then we save the game
+            newFile = createFile(file.getParent(), file.getName());
+            FileWriter fileWriter = new FileWriter(newFile);
 
-            file.write(gameObjects.toString());
-            file.flush();
-            file.close();
+            fileWriter.write(gameObjects.toString());
+            fileWriter.flush();
+            fileWriter.close();
         } catch (FileNameIsDuplicateException e) {
             if(doOverwrite){
-                String overFilePath = this.folderPath+"/"+fileName+".json";
+                // Another file has the same name but we overwrite it
+                String overFilePath = file.getAbsolutePath();
                 replaceExistingJSONFile(overFilePath, gameObjects);
             } else {
                 throw e;

@@ -58,7 +58,7 @@ public class GameFX extends GameAbstract {
     }
 
 	/**
-	 * Create a GameConsole object by giving all of its attributes
+	 * Create a GameFX object by giving all of its attributes
 	 * @param players Array of the players
 	 * @param nbMaxTotalFences Maximum number of fences that can be placed in total
 	 * @param nbRows Number of rows of the board
@@ -123,7 +123,6 @@ public class GameFX extends GameAbstract {
 
         while(true){
             this.getBoard().displayBoard(DisplayType.NO_COORD);
-            //Platform.runLater(() -> this.setAction("Move"));
 
             System.out.println("Turn of player: " + this.getCurrentPlayer());
 
