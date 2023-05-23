@@ -8,7 +8,6 @@ import java.util.HashMap;
  */
 
 import java.util.LinkedList;
-import java.util.Optional;
 
 /*
  * Importing javafx classes needed for the CYPathFX class
@@ -126,7 +125,15 @@ public class CYPathFX extends Application {
      */
     private Button continueGameButton;
 
+    /**
+     * Button to skip a player's turn
+     */
     private Button gameSkipTurnButton;
+
+    /**
+     * Default path of save files
+     */
+    private String saveDefaultPath = "./src/main/resources/data/saves";
 
 
     /**
@@ -740,7 +747,6 @@ public class CYPathFX extends Application {
      * Load a game from a file
      */
     private void loadGame()  {
-        String saveDefaultPath = "./src/main/resources/data/saves";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a file");
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
@@ -786,51 +792,24 @@ public class CYPathFX extends Application {
      * Save a game to a file
      */
     private void saveGame() {
-        boolean failure = false;
-        TextInputDialog dialog = new TextInputDialog("save");
-        ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
-        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Alert alertAlreadyExists = new Alert(AlertType.WARNING,"The file already exists.\nDo you want to overwrite it?",yesButton,noButton);
-        alertAlreadyExists.setTitle("File already exists");
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select a file");
+        fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
+        new File(saveDefaultPath).mkdirs();
+        fileChooser.setInitialDirectory(new File(saveDefaultPath));
+        fileChooser.setInitialFileName("save.json");
 
-        dialog.setContentText("Choose a name for your save file");
+        File file = fileChooser.showSaveDialog(this.primaryStage);
         
-        dialog.showAndWait();
-        Optional<String> dialogResult = dialog.showAndWait();
-        String fileName = null;
-
-        if (dialogResult.isPresent()){
-            fileName = dialogResult.get();
-        }
-
-        if(fileName != null) {
+        if(file != null) {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbMaxTotalFences(), this.game.getBoard().getPawnsArray(), this.game.getCurrentPawnIndex());
             Alert alert = null;
             try {
-                saveDataObject.save(fileName, false);
+                saveDataObject.save(file.getAbsolutePath(), true);
                 alert = new Alert(AlertType.INFORMATION);
                 alert.setContentText("Game saved");
                 alert.showAndWait();
-            } catch(FileNameIsDuplicateException e) {
-                Optional<ButtonType> overwriteResult = alertAlreadyExists.showAndWait();
-                ButtonBar.ButtonData overwriteChoice = null;
-                if (overwriteResult.isPresent()) {
-                    overwriteChoice = overwriteResult.get().getButtonData();
-                }
-                if(overwriteChoice == ButtonBar.ButtonData.OK_DONE) {
-                    try {
-                        saveDataObject.save(fileName, true);
-                        alert = new Alert(AlertType.INFORMATION);
-                        alert.setContentText("Game saved");
-                        alert.showAndWait();
-                    } catch (Exception err) {
-                        failure = true;
-                    }
-                }
             } catch (Exception e) {
-                failure = true;
-            }
-            if(failure) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
                 alert.showAndWait();

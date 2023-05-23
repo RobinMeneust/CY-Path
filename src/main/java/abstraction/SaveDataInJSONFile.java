@@ -213,7 +213,7 @@ public class SaveDataInJSONFile {
         gameObjects.put("listPawns", gameElementsListPawns);
 
         try {
-            newFile = createFile(this.folderPath, fileName+".json");
+            newFile = createFile(this.folderPath, fileName);
             FileWriter file = new FileWriter(newFile);
 
             file.write(gameObjects.toString());
@@ -221,7 +221,7 @@ public class SaveDataInJSONFile {
             file.close();
         } catch (FileNameIsDuplicateException e) {
             if(doOverwrite){
-                String overFilePath = this.folderPath+"/"+fileName+".json";
+                String overFilePath = this.folderPath+"/"+fileName;
                 replaceExistingJSONFile(overFilePath, gameObjects);
             } else {
                 throw e;
