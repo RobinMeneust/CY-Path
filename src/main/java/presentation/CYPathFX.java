@@ -177,10 +177,16 @@ public class CYPathFX extends Application {
 
         Button loadButton = new Button("Load");
 
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
         loadButton.setOnAction(e -> loadGame());
 
 
-        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, continueGameButton);
+        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, exitButton, continueGameButton);
     }
 
     /**
