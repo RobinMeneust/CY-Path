@@ -150,10 +150,10 @@ public class Point {
 
         try {
             System.out.print("X : ");
-            int x = Integer.parseInt(CYPath.scanner.next());
+            int x = Integer.parseInt(CYPath.scanner.nextLine());
             System.out.println();
             System.out.print("Y : ");	
-            int y = Integer.parseInt(CYPath.scanner.next());
+            int y = Integer.parseInt(CYPath.scanner.nextLine());
             return new Point(x,y);
         } catch (NumberFormatException e) {
             throw e;

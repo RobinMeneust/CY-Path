@@ -193,7 +193,7 @@ public class Board {
 	 */
 
 	public String chooseOrientation(){
-		String orientation = CYPath.scanner.next();
+		String orientation = CYPath.scanner.nextLine();
 		return orientation;
 	}
 
