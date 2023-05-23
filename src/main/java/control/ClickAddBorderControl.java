@@ -81,7 +81,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 
 						this.game.setIsEndTurn(true);
 
-						//We wait the begining of the next turn
+						//We wait the beginning of the next turn
 						while (this.game.getIsEndTurn()) {
 							try {
 								Thread.sleep(100); //Wait 100 milliseconds before checking again
@@ -115,7 +115,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 					this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());
 					//the information is transmitted to the terminal
 					this.game.setIsEndTurn(true);
-					//We wait the begining of the next turn
+					//We wait the beginning of the next turn
 					while (this.game.getIsEndTurn()) {
 						try {
 							Thread.sleep(100); //Wait 100 milliseconds before checking again

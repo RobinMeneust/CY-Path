@@ -1,7 +1,7 @@
 package abstraction;
 
 /**
- * Exception used to describe the case where the number of players is incorrect, e.g if it's equals to 0
+ * Exception used to describe the case where the number of players is incorrect, e.g. if it's equals to 0
  */
 
 public class InvalidNumberOfPlayersException extends Exception {
