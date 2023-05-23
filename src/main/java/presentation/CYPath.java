@@ -19,7 +19,11 @@ import java.util.Scanner;
  */
 
 public class CYPath {
+    /**
+     * Scanner used to read the user input in console mode
+     */
     public static final Scanner scanner = new Scanner(System.in);
+
     /** 
      * Main method
      * Launch the game in console mode or window mode

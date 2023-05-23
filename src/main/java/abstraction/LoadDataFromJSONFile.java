@@ -31,9 +31,9 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; 
 
 /**
- * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
- * 
  * This class stores the elements of the current part in a .json file
+ * 
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
 public class LoadDataFromJSONFile {
