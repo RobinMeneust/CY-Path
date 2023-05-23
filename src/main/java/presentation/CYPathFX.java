@@ -39,11 +39,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
 @SuppressWarnings("deprecation")
+
+/**
+ * Main JavaFX class of the CYPath project
+ * Manage all the JavaFX elements and the game loop for the window mode
+ * 
+ * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
+ */
+
 public class CYPathFX extends Application {
-    /**
-     * State the CY-PATH class attributes
-     */
-    
     public Button actionButton;
     public GameFX game;
     public GridPane gPane;
@@ -66,9 +70,9 @@ public class CYPathFX extends Application {
     /**
      * Method running at the launch of the graphical interface.
      * @param primaryStage Stage of the window
-     * @throws Exception
+     * @throws Exception Any exception thrown by start
      */
-    //JavaFX
+
     public void start(Stage primaryStage) throws Exception {
         this.cellColorHover = Color.rgb(239,255,172);
         this.prevHighlightedFencesList = new LinkedList<Line>();
