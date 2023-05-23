@@ -33,15 +33,30 @@ import org.json.JSONObject;
  */
 
 public class SaveDataInJSONFile {
-    /**
-     * State the SaveGame's class attributes
-     */
 
+    /**
+     * Number of rows
+     */
     private int rows;
+    /**
+     * Number of columns
+     */
     private int columns;
+    /**
+     * Maximum number of fence available
+     */
     private int maxNbFences;
+    /**
+     * Table of pawns on the board
+     */
     private Pawn[] listPawns;
+    /**
+     * Table of fences placed
+     */
     private Fence[] listFences;
+    /**
+     * Index of current pawn playing
+     */
     private int currentPawnIndex;
 
     private String folderPath = "./src/main/resources/data/saves";

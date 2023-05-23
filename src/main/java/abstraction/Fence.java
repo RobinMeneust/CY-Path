@@ -8,12 +8,20 @@ package abstraction;
 
 public class Fence {
 	/**
-	 * State the Fence's class attributes
+	 * Length of a fence
 	 */
-	
 	private int length;
+	/**
+	 * Orientation of a fence
+	 */
 	private Orientation orientation;
+	/**
+	 * Fence's starting point
+	 */
 	private Point start;
+	/**
+	 * Fence's ending point
+	 */
 	private Point end;
 	
 	/**
@@ -168,7 +176,7 @@ public class Fence {
 	/** 
 	 * Returns a String representing the Fence in the following format:
 	 * {
-	 * lenght: LENGTH
+	 * length: LENGTH
 	 * Orientation: ORIENTATION
 	 * start: START
 	 * end: END
@@ -179,6 +187,6 @@ public class Fence {
 
 	@Override
 	public String toString(){
-		return("{\nlenght:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
+		return("{\nlength:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
 	}
 }

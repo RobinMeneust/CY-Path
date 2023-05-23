@@ -9,12 +9,13 @@ import presentation.CYPath;
  */
 
 public class Point {
-
     /**
-     * State the Point's class attributes
+     * X coordinate
      */
-
     private int x;
+    /**
+     * Y coordinate
+     */
     private int y;
 
     /**
@@ -118,7 +119,7 @@ public class Point {
     /**
      * Function to return an integer that uniquely represents the object on which the method is called
      * 
-     * @return (int) an inteteger
+     * @return (int) an integer
      */
 
     public int hashCode() {

@@ -37,15 +37,30 @@ import org.json.simple.parser.ParseException;
  */
 
 public class LoadDataFromJSONFile {
-    /**
-     * State the SaveData's class attributes
-     */
 
+    /**
+     * Number of rows
+     */
     private int rows;
+    /**
+     * Number of columns
+     */
     private int columns;
+    /**
+     * Maximal number of fence available
+     */
     private int maxNbFences;
+    /**
+     * List of fences to placed on the board
+     */
     private ArrayList<Fence> listFences;
+    /**
+     * Table of pawns to placed on the board
+     */
     private Pawn[] pawns;
+    /**
+     * Index of current pawn playing
+     */
     private int currentPawnIndex;
 
     /**

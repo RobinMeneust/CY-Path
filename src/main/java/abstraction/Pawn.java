@@ -8,15 +8,32 @@ package abstraction;
 
 public class Pawn implements Cloneable{
     /**
-     * State the Pawn's class attributes
+     * Current position of the player
      */
-
 	private Point position;
+    /**
+     * ID of the pawn
+     */
     private int id;
+    /**
+     * Number of available fences of the pawn
+     */
     private int availableFences;
+    /**
+     * Starting side of the pawn. Useful for knowing which it needs to go to win the game.
+     */
     private Side startingSide;
+    /**
+     * Color of the pawn
+     */
     private ColorPawn color;
+    /**
+     * Board associated to the pawn
+     */
     private Board board;
+    /**
+     * Player associated to the pawn
+     */
     private Player player;
 
     /**
