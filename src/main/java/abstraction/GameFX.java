@@ -4,13 +4,13 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import java.util.HashMap;
 
-/**
+/*
  * Importing java classes needed for the GameFX class
  * 
  * Importing classes from the java.util package
  */
 
-/**
+/*
  * Importing javafx classes needed for the CYPathFX class
  */
 
@@ -46,6 +46,17 @@ public class GameFX extends GameAbstract {
         this.isEndGame = new SimpleBooleanProperty(false);
     }
 
+	/**
+	 * Create a GameConsole object by giving all of its attributes
+	 * @param players Array of the players
+	 * @param nbMaxTotalFences Maximum number of fences that can be placed in total
+	 * @param nbRows Number of rows of the board
+	 * @param nbCols Number of columns of the board
+	 * @param playersPawnIndex Player associated to each pawn index associated
+	 * @param pawns Table of pawns to be assigned for every player
+	 * @param currentPlayerIndex Set the player ready to be played
+	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 */
     public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
         this.action = new SimpleStringProperty("Place fence");
@@ -96,9 +107,9 @@ public class GameFX extends GameAbstract {
 
             System.out.println("Turn of player: " + this.getCurrentPlayer());
 
-				this.setChanged();
-				this.notifyObservers(this.getCurrentPawnIndex());
-                currentPawn = this.getCurrentPawn();
+			this.setChanged();
+			this.notifyObservers(this.getCurrentPawnIndex());
+			currentPawn = this.getCurrentPawn();
 
             this.setIsEndTurn(false);
             while (!this.getIsEndTurn()) {

@@ -1,6 +1,6 @@
-package abstraction; /**
+package abstraction;
+/*
  * Importing java classes needed for the GameConsole class
- * 
  * Importing classes from the java.util package
  */
 
@@ -32,6 +32,17 @@ public class GameConsole extends GameAbstract {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex);
     }
 
+    /**
+     * Create a GameConsole object by giving all of its attributes
+     * @param players Array of the players
+     * @param nbMaxTotalFences Maximum number of fences that can be placed in total
+     * @param nbRows Number of rows of the board
+     * @param nbCols Number of columns of the board
+     * @param playersPawnIndex Player associated to each pawn index associated
+     * @param pawns Table of pawns to be assigned for every player
+     * @param currentPlayerIndex Set the player ready to be played
+     * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+     */
     public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
     }
@@ -48,6 +59,7 @@ public class GameConsole extends GameAbstract {
         Pawn currentPawn = null;
 
         try {
+            // Play until there is a winner
             while(this.getBoard().getWinner() == -1){
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
 
@@ -83,7 +95,7 @@ public class GameConsole extends GameAbstract {
                     }while(!response.matches("M(OVE)?") && !response.matches("F(ENCE)?"));
                 }
         
-                if(response.equals("M")){
+                if(response.matches("M(OVE)?")){
                     this.getBoard().displayBoard(DisplayType.COORD_CELL);
 
                     List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
@@ -102,9 +114,9 @@ public class GameConsole extends GameAbstract {
                             if(!isPawnPosValid) {
                                 System.out.println("The pawn can't move here\nTry again.");
                             }
-                        } catch (NumberFormatException e) {}
+                        } catch (NumberFormatException ignored) {}
                     } while(!isPawnPosValid);
-                } else if (response.equals("F")) {
+                } else if (response.matches("F(ENCE)?")) {
                     this.getBoard().displayBoard(DisplayType.COORD_LINE);
                     boolean isFenceValid = false;
 

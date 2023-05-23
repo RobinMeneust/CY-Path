@@ -66,8 +66,7 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Create a point from its id and color. It is necessary to take into
-     * account its starting point, position, and the availableFences of the player.
+     * Create a point from its id and color. It is necessary to take into account its starting point, position, and the availableFences of the player.
      * 
      * @param id (int) : id of the pawn
      * @param startingSide (Side) : side of the game board from which the pawn
@@ -87,33 +86,36 @@ public class Pawn implements Cloneable{
     }
     
     /**
-     * Accessor to recover the position of a pawn
+     * Get the position of a pawn
      * 
-     * @return (Point) position
+     * @return (Point) Position of the pawn
      */
 
     public Point getPosition() {
         return position;
     }
 
+    /**
+     * Set the player associated to the pawn
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
     /**
-     * Accessor to assign the position of a pawn to the current pawn
+     * Set the position of a pawn to the pawn
      * 
-     * @param positition (Point)
+     * @param position Position of the pawn
      */
 
-    public void setPosition(Point positition){
-        this.position = positition;
+    public void setPosition(Point position){
+        this.position = position;
     }
 
     /**
-     * Accessor to recover the id of the current pawn
+     * Accessor to recover the ID of the pawn
      * 
-     * @return (int) id
+     * @return (int) ID of the pawn
      */
 
     public int getId() {
@@ -121,9 +123,9 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Accessor to recover the number of the available fences of the game board
+     * Get the number of the available fences of the pawn
      * 
-     * @return (int) availableFences
+     * @return (int) Available fences remaining
      */
 
     public int getAvailableFences() {
@@ -131,9 +133,9 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Accessor to assign the number of the available fences of the game board
+     * Set the number of the available fences of the pawn
      * 
-     * @param availableFences (int)
+     * @param availableFences Number of fences to set
      */
 
     public void setAvailableFences(int availableFences) {
@@ -141,9 +143,9 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Accessor to recover the initial starting side of the pawn
+     * Get the initial starting side of the pawn
      * 
-     * @return (Side) startingSide
+     * @return (Side) Starting side of the pawn
      */
 
     public Side getStartingSide() {
@@ -151,9 +153,9 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Accessor to recover the color of a pawn
+     * Get the color of a pawn
      * 
-     * @return (Color) color
+     * @return Color of the pawn
      */
 
     public ColorPawn getColor() {
@@ -161,15 +163,19 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Accessor to recover the board game of a CY-PATH game
+     * Get the board game of the pawn
      * 
-     * @return (Board) board
+     * @return (Board) Board of the pawn
      */
 
     public Board getBoard() {
         return this.board;
     }
 
+    /**
+     * Change the board of the pawn
+     * @param board Board to assign to the pawn
+     */
     public void setBoard(Board board) {
         this.board = board;
         if(this.position == null) {
@@ -178,9 +184,9 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Accessor to retrieve the player associated with the current pawn
+     * Get the player associated with the current pawn
      * 
-     * @return (Player) player
+     * @return Player associated to the pawn
      */
 
     public Player getPlayer(){
@@ -198,7 +204,7 @@ public class Pawn implements Cloneable{
     /**
      * A procedure to update the current point position
      * 
-     * @param position (Point)
+     * @param position New position of the pawn
      */
 
     public void move(Point position){
@@ -206,10 +212,9 @@ public class Pawn implements Cloneable{
     }
 
     /**
-     * Redefine 'toString' method of the Object class to display informations about
-     * a pawn
+     * Redefine 'toString' method of the Object class to display information about a pawn
      * 
-     * @return (String) : a text
+     * @return String displaying information of the pawn
      */
     
     @Override
