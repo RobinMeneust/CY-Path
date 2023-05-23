@@ -24,6 +24,11 @@ public enum ColorPawn {
      */
     GREEN;
 
+    /**
+     * Convert the colors of this enumeration to the ones from JavaFX.
+     * The colors then can be used by graphical interface for the players.
+     * @return Color from JavaFX associated to the color of this enumeration.
+     */
     public Color toColorFX(){
         switch (this){
             case GREEN:
@@ -39,6 +44,11 @@ public enum ColorPawn {
         }
     }
 
+    /**
+     * Convert the colors of this enumeration to the ones from JavaFX to show which move is possible from the color of the current pawn.
+     * It helps the players to know which pawn is color from its color.
+     * @return Light color from JavaFX associated to the color of this enumeration.
+     */
     public Color toColorPossibleMove(){
         switch (this){
             case GREEN:

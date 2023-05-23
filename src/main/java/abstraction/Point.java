@@ -40,7 +40,7 @@ public class Point {
     /**
      * Create a point by taking another point as an argument
      * 
-     * @param p (Point)
+     * @param p Point from where the new point os created
      */
 
     public Point(Point p) {
@@ -50,9 +50,9 @@ public class Point {
     }
 
     /**
-     * Accessor to recover the abscissa of a point
+     * Get the abscissa of a point
      * 
-     * @return x (int)
+     * @return X coordinate
      */
 
     public int getX() {
@@ -60,9 +60,9 @@ public class Point {
     }
 
     /**
-     * Accessor to recover the ordinate of a point
+     * Get the ordinate of a point
      * 
-     * @return y (int)
+     * @return Y coordinate
      */
 
     public int getY() {
@@ -70,9 +70,9 @@ public class Point {
     }
 
     /**
-     * Accessor to assign the abscissa of a point
+     * Set the abscissa of a point
      * 
-     * @param x (int)
+     * @param x X coordinate to change
      */
 
     public void setX(int x) {
@@ -80,9 +80,9 @@ public class Point {
     }
 
     /**
-     * Accessor to assign the ordinate of a point
+     * Set the ordinate of a point
      * 
-     * @param y (int)
+     * @param y Y coordinate to change
      */
 
     public void setY(int y) {
@@ -90,7 +90,7 @@ public class Point {
     }
 
     /**
-     * Accessor to recover the distance between two points
+     * Get the distance between two points
      * 
      * @param p1 (Point) : First point coordinates
      * @param p2 (Point) : Second point coordinates

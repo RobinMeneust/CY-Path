@@ -743,7 +743,7 @@ public class Board {
 	 * @return True if the 2 fences are coincidences
 	 */
 
-	public boolean areCoincidences(Fence f1, Fence f2) {
+	public boolean areCoincident(Fence f1, Fence f2) {
 		if(f1.getOrientation() == f2.getOrientation()) {
 			// Same orientation
 			if(f1.getStart().equals(f2.getStart()) || f1.getEnd().equals(f2.getEnd())){
@@ -774,7 +774,7 @@ public class Board {
     public boolean isFenceOverlapping(Fence fenceChecked) {
         if (this.fences != null) {
             for (Fence fence : this.fences) {
-				if(areIntersecting(fence,fenceChecked) || areCoincidences(fence,fenceChecked)) {
+				if(areIntersecting(fence,fenceChecked) || areCoincident(fence,fenceChecked)) {
 					return true;
 				}
             }
