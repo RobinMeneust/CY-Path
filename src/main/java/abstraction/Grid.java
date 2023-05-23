@@ -21,12 +21,20 @@ import java.util.Set;
 public class Grid {
 
 	/**
-	 * State the Grid's class attributes
+	 * Hashmap of a position associated with its adjacent position
 	 */
-	
 	private HashMap<Point,HashSet<Point>> adjacencyList;
+	/**
+	 * Number of rows
+	 */
 	private int nbRows;
+	/**
+	 * Number of columns
+	 */
 	private int nbCols;
+	/**
+	 * Number node in the graph
+	 */
 	private int nbNodes;
 
 	/**

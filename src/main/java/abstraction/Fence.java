@@ -8,12 +8,20 @@ package abstraction;
 
 public class Fence {
 	/**
-	 * State the Fence's class attributes
+	 * Length of a fence
 	 */
-	
 	private int length;
+	/**
+	 * Orientation of a fence
+	 */
 	private Orientation orientation;
+	/**
+	 * Fence's starting point
+	 */
 	private Point start;
+	/**
+	 * Fence's ending point
+	 */
 	private Point end;
 	
 	/**
@@ -61,9 +69,23 @@ public class Fence {
 		this(length,Orientation.HORIZONTAL,new Point(0,0),new Point(length,0));
 	}
 
+	/**
+	 * Create a Fence by giving only its orientation
+	 * 
+	 * @param orientation orientation of the fence
+	 */
+
 	public Fence(Orientation orientation){
 		this(2, orientation, new Point(0,0),new Point(2,0));
 	}
+
+	/**
+	 * Create a Fence by giving its orientation but also the starting and ending point
+	 * 
+	 * @param orientation orientation of the fence
+	 * @param start start coordinates of the fence
+	 * @param end end coordinates of the fence
+	 */
 
 	public Fence(Orientation orientation, Point start, Point end) {
 		this(Point.getDistance(start, end), orientation, new Point(start), new Point(end));
@@ -168,7 +190,7 @@ public class Fence {
 	/** 
 	 * Returns a String representing the Fence in the following format:
 	 * {
-	 * lenght: LENGTH
+	 * length: LENGTH
 	 * Orientation: ORIENTATION
 	 * start: START
 	 * end: END
@@ -179,6 +201,6 @@ public class Fence {
 
 	@Override
 	public String toString(){
-		return("{\nlenght:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
+		return("{\nlength:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
 	}
 }

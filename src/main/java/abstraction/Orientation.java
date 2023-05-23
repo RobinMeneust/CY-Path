@@ -5,12 +5,12 @@ package abstraction;
  */
 
 public enum Orientation {
-	/*
+	/**
 	 * The orientation of a fence "Vertical".
 	 */
 	VERTICAL,
 
-	/*
+	/**
 	 * The orientation of a fence "Horizontal".
 	 */
 	HORIZONTAL

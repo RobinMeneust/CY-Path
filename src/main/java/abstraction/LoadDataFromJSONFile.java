@@ -37,15 +37,30 @@ import org.json.simple.parser.ParseException;
  */
 
 public class LoadDataFromJSONFile {
-    /**
-     * State the SaveData's class attributes
-     */
 
+    /**
+     * Number of rows
+     */
     private int rows;
+    /**
+     * Number of columns
+     */
     private int columns;
+    /**
+     * Maximal number of fence available
+     */
     private int maxNbFences;
+    /**
+     * List of fences to placed on the board
+     */
     private ArrayList<Fence> listFences;
+    /**
+     * Table of pawns to placed on the board
+     */
     private Pawn[] pawns;
+    /**
+     * Index of current pawn playing
+     */
     private int currentPawnIndex;
 
     /**
@@ -137,8 +152,8 @@ public class LoadDataFromJSONFile {
      *
      * @param filePath Filepath of the file to load
      * @throws FileNameNotExistException If the file name entered doesn't exist
-     * @throws IOException
-     * @throws ParseException
+     * @throws IOException If an I/O error occurs while reading the file
+     * @throws ParseException If an error occurs while parsing the JSON data
      */
 
     public void load(String filePath) throws FileNameNotExistException, IOException, ParseException {

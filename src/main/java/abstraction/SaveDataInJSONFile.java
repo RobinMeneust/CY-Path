@@ -33,15 +33,30 @@ import org.json.JSONObject;
  */
 
 public class SaveDataInJSONFile {
-    /**
-     * State the SaveGame's class attributes
-     */
 
+    /**
+     * Number of rows
+     */
     private int rows;
+    /**
+     * Number of columns
+     */
     private int columns;
+    /**
+     * Maximum number of fence available
+     */
     private int maxNbFences;
+    /**
+     * Table of pawns on the board
+     */
     private Pawn[] listPawns;
+    /**
+     * Table of fences placed
+     */
     private Fence[] listFences;
+    /**
+     * Index of current pawn playing
+     */
     private int currentPawnIndex;
 
     private String folderPath = "./src/main/resources/data/saves";
@@ -143,10 +158,12 @@ public class SaveDataInJSONFile {
     /**
      * Fill the save file with the information of the current game to be saved and used later
      * @param fileName Path of the save file
+     * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
      * @throws FileNameIsDuplicateException If the file name already exists
      * @throws IOException If the entry of the user is wrong
      */
-    public void save(String fileName) throws FileNameIsDuplicateException, IOException {
+    
+    public void save(String fileName, boolean doOverwrite) throws FileNameIsDuplicateException, IOException {
         File newFile = null;
 
         JSONObject gameObjects = new JSONObject();
@@ -203,8 +220,12 @@ public class SaveDataInJSONFile {
             file.flush();
             file.close();
         } catch (FileNameIsDuplicateException e) {
-            String overFilePath = this.folderPath+"/"+fileName+".json";
-            replaceExistingJSONFile(overFilePath, gameObjects);
+            if(doOverwrite){
+                String overFilePath = this.folderPath+"/"+fileName+".json";
+                replaceExistingJSONFile(overFilePath, gameObjects);
+            } else {
+                throw e;
+            }
         } catch (IOException e) {
             throw e;
         }

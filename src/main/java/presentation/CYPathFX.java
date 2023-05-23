@@ -53,6 +53,11 @@ import javafx.scene.control.Alert.AlertType;
 
 public class CYPathFX extends Application {
     /**
+    * Default constructor.
+    * The default constructor is intentionally left empty as it is not used in the CYPath class.
+    */
+
+    /**
      * The action button used in the game interface.
      */
     public Button actionButton;
@@ -184,10 +189,16 @@ public class CYPathFX extends Application {
 
         Button loadButton = new Button("Load");
 
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
         loadButton.setOnAction(e -> loadGame());
 
 
-        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, continueGameButton);
+        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, exitButton, continueGameButton);
     }
 
     /**
@@ -775,7 +786,13 @@ public class CYPathFX extends Application {
      * Save a game to a file
      */
     private void saveGame() {
+        boolean failure = false;
         TextInputDialog dialog = new TextInputDialog("save");
+        ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert alertAlreadyExists = new Alert(AlertType.WARNING,"The file already exists.\nDo you want to overwrite it?",yesButton,noButton);
+        alertAlreadyExists.setTitle("File already exists");
+
         dialog.setContentText("Choose a name for your save file");
         
         dialog.showAndWait();
@@ -790,11 +807,30 @@ public class CYPathFX extends Application {
             SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbMaxTotalFences(), this.game.getBoard().getPawnsArray(), this.game.getCurrentPawnIndex());
             Alert alert = null;
             try {
-                saveDataObject.save(fileName);
+                saveDataObject.save(fileName, false);
                 alert = new Alert(AlertType.INFORMATION);
                 alert.setContentText("Game saved");
                 alert.showAndWait();
-            } catch(Exception e) {
+            } catch(FileNameIsDuplicateException e) {
+                Optional<ButtonType> overwriteResult = alertAlreadyExists.showAndWait();
+                ButtonBar.ButtonData overwriteChoice = null;
+                if (overwriteResult.isPresent()) {
+                    overwriteChoice = overwriteResult.get().getButtonData();
+                }
+                if(overwriteChoice == ButtonBar.ButtonData.OK_DONE) {
+                    try {
+                        saveDataObject.save(fileName, true);
+                        alert = new Alert(AlertType.INFORMATION);
+                        alert.setContentText("Game saved");
+                        alert.showAndWait();
+                    } catch (Exception err) {
+                        failure = true;
+                    }
+                }
+            } catch (Exception e) {
+                failure = true;
+            }
+            if(failure) {
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
                 alert.showAndWait();

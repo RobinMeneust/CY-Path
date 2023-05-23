@@ -12,12 +12,20 @@ import java.util.Observable;
 @SuppressWarnings("deprecation")
 public abstract class GameAbstract extends Observable {
 	/**
-	 * State the Game's class attributes
+	 * Current game state
 	 */
-	
 	private GameState state;
+	/**
+	 * Maximal total number of fence available
+	 */
 	private int nbMaxTotalFences;
+	/**
+	 * Table of the players
+	 */
 	private Player[] players;
+	/**
+	 * The board playing on
+	 */
 	private Board board;
 	private int currentPawnIndex;
 
@@ -185,6 +193,7 @@ public abstract class GameAbstract extends Observable {
 	 * 
 	 * @param index Index of the player
 	 * @return Player corresponding to the given index
+	 * @throws IncorrectPlayerIndexException if the index is invalid
 	 */
 
 	public Player getPlayer(int index) throws IncorrectPlayerIndexException {

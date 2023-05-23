@@ -48,6 +48,38 @@ public class GameConsole extends GameAbstract {
     }
 
     /**
+     * Save the current game in a file
+     */
+
+    private void saveGame() {
+        SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbMaxTotalFences(), this.getBoard().getPawnsArray(), this.getCurrentPawnIndex());
+        System.out.println("What is the name of your save file ? (without extension) :");
+        String fileName = CYPath.scanner.nextLine();
+
+        try {
+            saveDataObject.save(fileName, false);
+            System.out.println("Game successfully saved");
+        } catch (FileNameIsDuplicateException e) {
+            System.err.println("Warning: the name of the file is already used, do you want to overwrite it? ('y' (yes) or 'n' (no))");
+            String response = CYPath.scanner.nextLine();
+
+            if(response.toUpperCase().matches("Y(ES)?")) {
+                try {
+                    saveDataObject.save(fileName, true);
+                    System.out.println("Game successfully saved");
+                } catch (Exception err) {
+                    System.err.println("Error: there was an error while saving the game");
+                }
+            } else {
+                System.out.println("Saving process cancelled");
+            }
+        } catch (IOException e) {
+            System.err.println("Error: there was an error while saving the game");
+        }
+    }
+
+
+    /**
      * Ask the user if he wants to move, place a fence or save a game
      * 
      * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can it's equals to true and if he can't it's false
@@ -67,22 +99,7 @@ public class GameConsole extends GameAbstract {
             response = response.toUpperCase();
             
             if(response.matches("S(AVE)?")) {
-                boolean isValidSave = false;
-                do {
-                    try {
-                        System.out.println("What is the name of your save file ? (without extension) :");
-                        String fileName = CYPath.scanner.nextLine();
-
-                        SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getBoard().getNbRows(), this.getBoard().getNbCols(), this.getBoard().getFencesArray(), this.getNbMaxTotalFences(), this.getBoard().getPawnsArray(), this.getCurrentPawnIndex());
-                        saveDataObject.save(fileName);
-                        isValidSave = true;
-                        System.out.println("Game successfully saved");
-                    } catch (FileNameIsDuplicateException e) {
-                        System.err.println("Error: the name of the file is already used, write a new name save file :");
-                    } catch (IOException e) {
-                        System.err.println("Error: there is an error during saving game, write a new name save file :");
-                    }
-                } while (!isValidSave);
+                saveGame();
             }
         }while(!response.matches("M(OVE)?") && !(response.matches("F(ENCE)?") || !canPlaceFence));
 

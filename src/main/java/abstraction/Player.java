@@ -8,10 +8,12 @@ package abstraction;
 
 public class Player {
     /**
-     * State the Player's class attributes
+     * Player's username
      */
-
 	private String username;
+    /**
+     * Number of victory of the player
+     */
     private int nbWins;
 
     /**
