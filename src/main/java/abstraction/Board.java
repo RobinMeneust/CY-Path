@@ -261,27 +261,31 @@ public class Board {
 		The given points are defined by considering the position and looking at one of the 4 directions (top,left,right,bottom).
 		It's shaped like a "T"
 		*/
-
+		System.out.println(position+" "+posTested+" "+posBehindTested+" "+posLeftTested+" "+posRightTested);
 		// We check if the tested position is on the board and if the current position and the tested position are not separated by a fence
 		if(this.isCellOnTheBoard(posTested) && this.grid.areConnected(position,posTested)){
 			if(this.isPawnAtPos(posTested)) {
 				// There is a pawn, so we can't go there, but we can maybe jump above it
 				if(this.isCellOnTheBoard(posBehindTested) && this.grid.areConnected(posTested,posBehindTested) && !this.isPawnAtPos(posBehindTested)){
 					// The cell just behind is free
+					System.out.println("behind free");
 					listMove.add(posBehindTested);
 				}
 				else{
 					// If there is a fence behind the pawn we check if we can go left side or right side
 					if(this.isCellOnTheBoard(posLeftTested) && this.grid.areConnected(posTested,posLeftTested) && !this.isPawnAtPos(posLeftTested)){
+						System.out.println("left behind free");
 						listMove.add(posLeftTested);
 					}
 					if(this.isCellOnTheBoard(posRightTested) && this.grid.areConnected(posTested,posRightTested) && !this.isPawnAtPos(posRightTested)){
+						System.out.println("right behind free");
 						listMove.add(posRightTested);
 					}
 				}
 			}
 			else {
 				// There is no pawn, so we can go there, and we can't go behind it
+				System.out.println("free");
 				listMove.add(posTested);
 			}
 		}
@@ -325,8 +329,8 @@ public class Board {
 		for(int i=0; i<3; i++) {
 			posTested = Point.rightRotation(posTested, position);
 			posBehindTested = Point.rightRotation(posBehindTested, position);
-			posLeftTested = Point.rightRotation(posBehindTested, position);
-			posRightTested = Point.rightRotation(posBehindTested, position);
+			posLeftTested = Point.rightRotation(posLeftTested, position);
+			posRightTested = Point.rightRotation(posRightTested, position);
 
 			allPossibleMoves = this.possibleMove(position,posTested,posBehindTested,posLeftTested,posRightTested);
 			if(!allPossibleMoves.contains(position)){

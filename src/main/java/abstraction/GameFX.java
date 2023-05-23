@@ -123,7 +123,6 @@ public class GameFX extends GameAbstract {
 
         while(true){
             this.getBoard().displayBoard(DisplayType.NO_COORD);
-            //Platform.runLater(() -> this.setAction("Move"));
 
             System.out.println("Turn of player: " + this.getCurrentPlayer());
 

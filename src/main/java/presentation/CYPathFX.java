@@ -35,7 +35,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -133,7 +132,7 @@ public class CYPathFX extends Application {
     /**
      * Default constructor
      */
-    
+
     public CYPathFX() {}
 
     /**
