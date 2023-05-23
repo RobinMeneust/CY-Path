@@ -19,6 +19,8 @@ import control.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -27,10 +29,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -149,6 +153,9 @@ public class CYPathFX extends Application {
         this.terminalThread = null;
         this.fenceCounter = new Text("0");
         this.continueGameButton = new Button("Continue current game");
+        // this.continueGameButton.setPadding(new Insets(10, 20, 10, 20));
+        this.continueGameButton.getStyleClass().add("menu-button");
+        this.continueGameButton.setId("continue-game-button");
         this.continueGameButton.setOnAction(e -> {
             goToGameScene();
         });
@@ -156,7 +163,10 @@ public class CYPathFX extends Application {
 
         // Set up stage
         primaryStage.setTitle("CY Path : the Game");
-        primaryStage.setResizable(false);
+        primaryStage.setMinWidth(545);
+        primaryStage.setMinHeight(595);
+        primaryStage.setWidth(545);
+        primaryStage.setHeight(595);
         primaryStage.setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
@@ -173,16 +183,31 @@ public class CYPathFX extends Application {
     public void createMainMenuScene() {
         BorderPane rootMainMenu = new BorderPane();
         this.mainMenuScene = new Scene(rootMainMenu);
+
         
-        HBox buttonsMenuHBox = new HBox();
-        rootMainMenu.setCenter(buttonsMenuHBox);
+        
+        Label titleMainMenu = new Label("CY Path");
+        titleMainMenu.setAlignment(Pos.CENTER);
+        // titleMainMenu.setPadding(new Insets(10, 50, 10, 50));
+        titleMainMenu.setId("title-main-menu");
+        rootMainMenu.setTop(titleMainMenu);
+        rootMainMenu.setAlignment(titleMainMenu, Pos.CENTER);
 
         Button newGameMenuButton = new Button("New Game");
+        // newGameMenuButton.setPadding(new Insets(10, 20, 10, 20));
+        newGameMenuButton.setId("new-game-button");
+        newGameMenuButton.getStyleClass().add("menu-button");
         newGameMenuButton.setOnAction(e -> goToNewGameMenu());
 
         Button loadButton = new Button("Load");
+        // loadButton.setPadding(new Insets(10, 44, 10, 44));
+        loadButton.setId("load-game-button");
+        loadButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
+        // exitButton.setPadding(new Insets(10, 50, 10, 50));
+        exitButton.setId("exit-game-button");
+        exitButton.getStyleClass().add("menu-button");
         exitButton.setOnAction(e -> {
             Platform.exit();
             System.exit(0);
@@ -190,8 +215,12 @@ public class CYPathFX extends Application {
 
         loadButton.setOnAction(e -> loadGame());
 
+        VBox buttonsMenuHBox = new VBox(15);
+        buttonsMenuHBox.setAlignment(Pos.CENTER);
+        rootMainMenu.setCenter(buttonsMenuHBox);
 
         buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, exitButton, continueGameButton);
+        mainMenuScene.getStylesheets().add("styleMainMenu.css");
     }
 
     /**
@@ -241,26 +270,49 @@ public class CYPathFX extends Application {
      */
     public void createNewGameScene() {
         BorderPane root = new BorderPane();
-        
+    
+        // Création des boutons
         Button twoPlayersModeButton = new Button("2 Players");
+        twoPlayersModeButton.setPadding(new Insets(10, 28, 10, 28));
+        twoPlayersModeButton.getStyleClass().add("menu-button");
+        twoPlayersModeButton.setId("two-players-mode-button");
         twoPlayersModeButton.setOnAction(e -> {
             prepareGameScene(2);
         });
         Button fourPlayersModeButton = new Button("4 Players");
+        fourPlayersModeButton.setPadding(new Insets(10, 28, 10, 28));
+        fourPlayersModeButton.getStyleClass().add("menu-button");
+        fourPlayersModeButton.setId("four-players-mode-button");
         fourPlayersModeButton.setOnAction(e -> {
             prepareGameScene(4);
         });
-
+    
         Button goBack = new Button("Main Menu");
+        goBack.setPadding(new Insets(10, 20, 10, 20));
+        goBack.getStyleClass().add("menu-button");
+        goBack.setId("go-back");
         goBack.setOnAction(e -> {
             goToMainMenuScene();
         });
+    
+        // Création du titre
+        Label titleGameMode = new Label("Game mode");
+        titleGameMode.setId("title-game-mode");
+        titleGameMode.setAlignment(Pos.CENTER);
+        titleGameMode.setPadding(new Insets(10));
+    
+        // Création des VBox
+        VBox vbox = new VBox(15);
+        vbox.getChildren().addAll(twoPlayersModeButton, fourPlayersModeButton, goBack);
+        vbox.setAlignment(Pos.CENTER);
 
-        root.setTop(goBack);
-        root.setLeft(twoPlayersModeButton);
-        root.setRight(fourPlayersModeButton);
-        
+        // Ajout des VBox dans le centre du BorderPane
+        root.setTop(titleGameMode);
+        root.setCenter(vbox);
+        root.setAlignment(titleGameMode, Pos.CENTER);
+    
         this.newGameMenuScene = new Scene(root);
+        this.newGameMenuScene.getStylesheets().add("styleGameMode.css");
     }
 
     /**
