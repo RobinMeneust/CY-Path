@@ -48,24 +48,81 @@ import javafx.scene.control.Alert.AlertType;
  */
 
 public class CYPathFX extends Application {
+    /**
+     * The action button used in the game interface.
+     */
     public Button actionButton;
+
+    /**
+     * The GameFX object representing the game.
+     */
     public GameFX game;
+
+    /**
+     * The GridPane used to display the game grid.
+     */
     public GridPane gPane;
+
+    /**
+     * The fence object.
+     */
     private Fence fence;
+
+    /**
+     * A linked list of Line objects representing previously highlighted fences.
+     */
     public LinkedList<Line> prevHighlightedFencesList;
+
+    /**
+     * A linked list of Rectangle objects representing previously possible cells.
+     */
     public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
+
+    /**
+     * The color used for cell hover effects.
+     */
     public Color cellColorHover;
+
+    /**
+     * A boolean indicating the move mode.
+     */
     private boolean moveMode;
+
+    /**
+     * The Text object representing the fence counter.
+     */
     public Text fenceCounter;
 
+    /**
+     * The terminal thread use during the game.
+     */
     private Thread terminalThread;
-    
+
+    /**
+     * The primary stage of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The main menu scene.
+     */
     private Scene mainMenuScene;
+
+    /**
+     * The new game menu scene.
+     */
     private Scene newGameMenuScene;
+
+    /**
+     * The game scene.
+     */
     private Scene gameScene;
 
+    /**
+     * The continue game button.
+     */
     private Button continueGameButton;
+
 
     /**
      * Method running at the launch of the graphical interface.

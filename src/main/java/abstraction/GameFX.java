@@ -25,8 +25,19 @@ import javafx.beans.property.StringProperty;
 
 @SuppressWarnings("deprecation")
 public class GameFX extends GameAbstract {
+    /**
+     * The StringProperty representing the current action.
+     */
     private StringProperty action;
+
+    /**
+     * A boolean indicating if it is the end of the turn.
+     */
     private boolean isEndTurn;
+
+    /**
+     * The BooleanProperty indicating if it is the end of the game.
+     */
     public BooleanProperty isEndGame;
 
    /**
@@ -84,12 +95,21 @@ public class GameFX extends GameAbstract {
 		this.action.set(a);
 	}
 
-    public boolean getIsEndTurn(){
-		return this.isEndTurn;
-	}
-	public void setIsEndTurn(boolean b){
-		this.isEndTurn = b;
-	}
+    /**
+     * Gets the current state indicating if it is the end of the turn.
+     * @return True if it is the end of the turn, false otherwise.
+     */
+    public boolean getIsEndTurn() {
+        return this.isEndTurn;
+    }
+
+    /**
+     * Sets the state indicating if it is the end of the turn.
+     * @param isEndTurn True if it is the end of the turn, false otherwise.
+     */
+    public void setIsEndTurn(boolean isEndTurn) {
+        this.isEndTurn = isEndTurn;
+    }
 
     /**
      * Launch the current game for window mode
