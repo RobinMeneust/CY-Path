@@ -49,6 +49,11 @@ import javafx.scene.control.Alert.AlertType;
 
 public class CYPathFX extends Application {
     /**
+    * Default constructor.
+    * The default constructor is intentionally left empty as it is not used in the CYPath class.
+    */
+
+    /**
      * The action button used in the game interface.
      */
     public Button actionButton;

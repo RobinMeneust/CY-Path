@@ -193,6 +193,7 @@ public abstract class GameAbstract extends Observable {
 	 * 
 	 * @param index Index of the player
 	 * @return Player corresponding to the given index
+	 * @throws IncorrectPlayerIndexException if the index is invalid
 	 */
 
 	public Player getPlayer(int index) throws IncorrectPlayerIndexException {

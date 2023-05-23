@@ -37,8 +37,8 @@ public class CurrentPlayerTextControl implements Observer {
 	/**
 	 * We use the state of the game to know which player's turn it is.
 	 * Default method of the Observer interface
-	 * @param observable
-	 * @param o
+	 * @param observable The Observable object that triggered the update.
+ 	 * @param o The optional argument passed to the notifyObservers method.
 	 */
 	@Override
 	public void update(Observable observable, Object o) {

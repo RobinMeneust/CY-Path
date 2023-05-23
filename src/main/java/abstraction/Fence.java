@@ -69,9 +69,25 @@ public class Fence {
 		this(length,Orientation.HORIZONTAL,new Point(0,0),new Point(length,0));
 	}
 
+	/**
+	 * Create a Fence by giving only its orientation
+	 * It's the default constructor here
+	 * 
+	 * @param orientation orientation of the fence
+	 */
+
 	public Fence(Orientation orientation){
 		this(2, orientation, new Point(0,0),new Point(2,0));
 	}
+
+	/**
+	 * Create a Fence by giving its orientation but also the starting and ending point
+	 * It's the default constructor here
+	 * 
+	 * @param orientation orientation of the fence
+	 * @param start start coordinates of the fence
+	 * @param end end coordinates of the fence
+	 */
 
 	public Fence(Orientation orientation, Point start, Point end) {
 		this(Point.getDistance(start, end), orientation, new Point(start), new Point(end));

@@ -20,6 +20,11 @@ import java.util.Scanner;
 
 public class CYPath {
     /**
+    * Default constructor.
+    * The default constructor is intentionally left empty as it is not used in the CYPath class.
+    */
+
+    /**
      * Scanner used to read the user input in console mode
      */
     public static final Scanner scanner = new Scanner(System.in);

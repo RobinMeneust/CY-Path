@@ -152,8 +152,8 @@ public class LoadDataFromJSONFile {
      *
      * @param filePath Filepath of the file to load
      * @throws FileNameNotExistException If the file name entered doesn't exist
-     * @throws IOException
-     * @throws ParseException
+     * @throws IOException If an I/O error occurs while reading the file
+     * @throws ParseException If an error occurs while parsing the JSON data
      */
 
     public void load(String filePath) throws FileNameNotExistException, IOException, ParseException {

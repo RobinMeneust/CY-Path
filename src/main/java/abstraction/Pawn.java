@@ -114,6 +114,7 @@ public class Pawn implements Cloneable{
 
     /**
      * Set the player associated to the pawn
+     * @param player player to be associated with the pawn
      */
     public void setPlayer(Player player) {
         this.player = player;
