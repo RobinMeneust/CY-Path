@@ -89,26 +89,49 @@ public class GameConsole extends GameAbstract {
     /**
      * Ask the user if he wants to move, place a fence or save a game
      * 
-     * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can it's equals to true and if he can't it's false
+     * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can, it's equal to true, and if he can't, it's false
      * @return User's choice
      */
 
-    private String getUserActionChoice(boolean canPlaceFence) {
+    private String getUserActionChoice(boolean canPlaceFence, boolean canMove) {
         String response = "";
 
-        do {
-            if(canPlaceFence) {
+        if(canPlaceFence && canMove) {
+            do{
                 System.out.println("What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))");
-            } else {
+                response = CYPath.scanner.nextLine();
+                response = response.toUpperCase();
+
+            } while(!response.matches("M(OVE)?") && !(response.matches("F(ENCE)?")) && !(response.matches("S(AVE)?")));
+        } 
+        else if(!canPlaceFence && canMove){
+            do{
                 System.out.println("What is your next action ? ('m' (move) or 's' (save))");
-            }
-            response = CYPath.scanner.nextLine();
-            response = response.toUpperCase();
+                response = CYPath.scanner.nextLine();
+                response = response.toUpperCase();
+            }while(!response.matches("M(OVE)?") && !(response.matches("S(AVE)?")));
+        }
+        else if(canPlaceFence && !canMove){
+           
+            do{
+                System.out.println("What is your next action ? ('f' (fence) or  'b' (bound == skip) or 's' (save))");
+                response = CYPath.scanner.nextLine();
+                response = response.toUpperCase();
+
+            } while(!(response.matches("F(ENCE)?")) && !(response.matches("B(OUND)?")) && !(response.matches("S(AVE)?")));
+        }
+        else{
+            do{
+                System.out.println("What is your next action ? ('b' (bound == skip) or 's' (save) or  )");
+                response = CYPath.scanner.nextLine();
+                response = response.toUpperCase();
+
+            } while(!(response.matches("B(OUND)?")) && !(response.matches("S(AVE)?")));
+        }
             
-            if(response.matches("S(AVE)?")) {
-                saveGame();
-            }
-        }while(!response.matches("M(OVE)?") && !(response.matches("F(ENCE)?") || !canPlaceFence));
+        if(response.matches("S(AVE)?")) {
+            saveGame();
+        }
 
         return response;
     }
@@ -202,28 +225,47 @@ public class GameConsole extends GameAbstract {
 
                 System.out.println("Turn of player: " +  this.getCurrentPlayer());
                 currentPawn = this.getCurrentPawn();
+                List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
 
                 if(currentPawn.getAvailableFences() == 0){
                     System.out.println("You don't have any fence remaining. You can only move.");
-                    response = getUserActionChoice(false);
-                } else{
+                    response = getUserActionChoice(false,true);
+                } else if(listPossibleMoves.isEmpty()){
+                    //If it can't move
+                    if(currentPawn.getAvailableFences() != 0){
+                        
+                        System.out.println("You can't move. You can only place a fence");
+                        response = getUserActionChoice(true,false);
+                    }
+                    else{
+                        System.out.println("You can't move or place a fence. Skip your turn");
+                        response = getUserActionChoice(false,false);
+                    }
+
+                } 
+                else{
                     System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
-                    response = getUserActionChoice(true);
+                    response = getUserActionChoice(true,true);
                 }
-        
+                
                 if(response.matches("M(OVE)?")){
                     this.getBoard().displayBoard(DisplayType.COORD_CELL);
-                    List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
+
+                
                     System.out.println("Those are the cells where your pawn can move to:");
                     System.out.println(listPossibleMoves);
                     
                     playerMovePawn();
+                    
                 } else if (response.matches("F(ENCE)?")) {
                     this.getBoard().displayBoard(DisplayType.COORD_LINE);
                     Fence fence = new Fence(this.getBoard().getFenceLength());
 
                     playerChangeFenceOrientation(fence);
                     playerPlaceFence(fence);
+                }
+                else{
+                    System.out.println("You can't move or place a fence. Skip your turn");
                 }
                 this.endPlayerTurn();
             }

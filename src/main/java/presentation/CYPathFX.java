@@ -55,17 +55,17 @@ public class CYPathFX extends Application {
     /**
      * The action button used in the game interface.
      */
-    public Button actionButton;
+    private Button actionButton;
 
     /**
      * The GameFX object representing the game.
      */
-    public GameFX game;
+    private GameFX game;
 
     /**
      * The GridPane used to display the game grid.
      */
-    public GridPane gPane;
+    private GridPane gPane;
 
     /**
      * The fence object.
@@ -75,17 +75,17 @@ public class CYPathFX extends Application {
     /**
      * A linked list of Line objects representing previously highlighted fences.
      */
-    public LinkedList<Line> prevHighlightedFencesList;
+    private LinkedList<Line> prevHighlightedFencesList;
 
     /**
      * A linked list of Rectangle objects representing previously possible cells.
      */
-    public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
+    private LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
 
     /**
      * The color used for cell hover effects.
      */
-    public Color cellColorHover;
+    private Color cellColorHover;
 
     /**
      * A boolean indicating the move mode.
@@ -95,7 +95,7 @@ public class CYPathFX extends Application {
     /**
      * The Text object representing the fence counter.
      */
-    public Text fenceCounter;
+    private Text fenceCounter;
 
     /**
      * The terminal thread use during the game.
@@ -143,6 +143,62 @@ public class CYPathFX extends Application {
      */
 
     public CYPathFX() {}
+
+    /**
+     * Get the action button
+     * @return Action Button
+     */
+    public Button getActionButton(){
+        return this.actionButton;
+    }
+
+    /**
+     * Get the game associated to the graphical interface
+     * @return Current game
+     */
+    public GameFX getGame() {
+        return game;
+    }
+
+    /**
+     * Get color of cells when you can hover them
+     * @return Color of when hovering cells
+     */
+    public Color getCellColorHover() {
+        return cellColorHover;
+    }
+
+    /**
+     * Get the list of highlighted fences, representing by a line on the graphical interface
+     * @return List of Line
+     */
+    public LinkedList<Line> getPrevHighlightedFencesList() {
+        return prevHighlightedFencesList;
+    }
+
+    /**
+     * Get the list of cells where it's possible for the player to move on
+     * @return List of Rectangle where the player can go to
+     */
+    public LinkedList<Rectangle> getPreviousPossibleCells() {
+        return previousPossibleCells;
+    }
+
+    /**
+     * Get the grid show to the player
+     * @return GridPane show to the player
+     */
+    public GridPane getGPane(){
+        return this.gPane;
+    }
+
+    /**
+     * Get the text of number of fences
+     * @return Text of fence's number
+     */
+    public Text getFenceCounter() {
+        return fenceCounter;
+    }
 
     /**
      * Method running at the launch of the graphical interface.
@@ -283,7 +339,7 @@ public class CYPathFX extends Application {
     public void createNewGameScene() {
         BorderPane root = new BorderPane();
     
-        // Création des boutons
+        // Creation of the buttons
         Button twoPlayersModeButton = new Button("2 Players");
         twoPlayersModeButton.setPadding(new Insets(10, 28, 10, 28));
         twoPlayersModeButton.getStyleClass().add("menu-button");
@@ -307,18 +363,18 @@ public class CYPathFX extends Application {
             goToMainMenuScene();
         });
     
-        // Création du titre
+        // Creation of the label
         Label titleGameMode = new Label("Game mode");
         titleGameMode.setId("title-game-mode");
         titleGameMode.setAlignment(Pos.CENTER);
         titleGameMode.setPadding(new Insets(10));
     
-        // Création des VBox
+        // Creation of the VBox
         VBox vbox = new VBox(15);
         vbox.getChildren().addAll(twoPlayersModeButton, fourPlayersModeButton, goBack);
         vbox.setAlignment(Pos.CENTER);
 
-        // Ajout des VBox dans le centre du BorderPane
+        // Adding the VBox in the center of the BorderPane
         root.setTop(titleGameMode);
         root.setCenter(vbox);
         BorderPane.setAlignment(titleGameMode, Pos.CENTER);
@@ -360,7 +416,7 @@ public class CYPathFX extends Application {
         goBack.setOnAction(e -> {
             goToMainMenuScene();
         });
-        this.actionButton.setOnAction(new ActionButtonControl(this, this.actionButton, this.game));
+        this.getActionButton().setOnAction(new ActionButtonControl(this, this.getActionButton(), this.game));
         
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
@@ -380,25 +436,25 @@ public class CYPathFX extends Application {
             }
 
             if(this.game.getBoard().getWinner() != -1){
-                this.game.isEndGame.setValue(true);
+                this.game.getIsEndGame().setValue(true);
             }
 
             //update button
-            actionButton.fire();
-            if (!(actionButton.getText().equals("Place fence"))) {
-                actionButton.fire();
+            this.getActionButton().fire();
+            if (!(this.getActionButton().getText().equals("Place fence"))) {
+                this.getActionButton().fire();
             }
         });
         
         HBox buttonsHBox = new HBox();
-        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter,gameSkipTurnButton);
+        buttonsHBox.getChildren().addAll(this.getActionButton(), saveButton, goBack, fenceCounter,gameSkipTurnButton);
         this.gPane = createBoard(50,8,Color.LIGHTGRAY, Color.rgb(230, 230, 230));
 
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
 
-        this.game.isEndGame.addListener((observable, oldValue, newValue) -> {
+        this.game.getIsEndGame().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Button newGameButton = new Button("New game");
                 newGameButton.setOnAction(e -> {
@@ -426,8 +482,8 @@ public class CYPathFX extends Application {
         this.game.addObserver(currentPlayerTextControl);
         buttonsHBox.getChildren().add(currentPlayerText);
         //We click on the button two times for update the first player action
-        actionButton.fire();
-        actionButton.fire();
+        this.getActionButton().fire();
+        this.getActionButton().fire();
         //Create a thread to run in the terminal
         if(this.terminalThread != null && this.terminalThread.isAlive()) {
             this.terminalThread.interrupt();
@@ -509,7 +565,7 @@ public class CYPathFX extends Application {
         cell.setFill(color);
         cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
         cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
-        cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.actionButton));
+        cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.getActionButton()));
         cellStackPane.getChildren().add(cell);       
 
         // Check if there is a pawn on this cell and add it if there is one
