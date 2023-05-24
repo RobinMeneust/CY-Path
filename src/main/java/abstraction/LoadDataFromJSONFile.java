@@ -20,7 +20,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-
 /*
  * Importing classes from the org.json.simple package
 */
@@ -37,7 +36,6 @@ import org.json.simple.parser.ParseException;
  */
 
 public class LoadDataFromJSONFile {
-
     /**
      * Number of rows
      */
@@ -130,7 +128,6 @@ public class LoadDataFromJSONFile {
     public int getCurrentPawnIndex() {
         return currentPawnIndex;
     }
-
 
     /**
      * Get the file of the game from a filepath
