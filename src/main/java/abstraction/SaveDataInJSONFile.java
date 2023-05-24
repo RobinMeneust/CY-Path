@@ -1,6 +1,6 @@
 package abstraction;
 
-/**
+/*
  * Importing classes from the java.util package
  * 
  * It provides features to work with regular expressions.
@@ -8,7 +8,7 @@ package abstraction;
 
  import java.util.regex.Pattern;
 
-/**
+/*
  * Importing classes from the java.io package
  * 
  * It provides input/output functionality for read and write data operations.
@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
+/*
  * Importing classes from the java.nio package
  * 
  * It provides features for handling non-blocking I/O operations, as well as efficient handling of binary data, such as data transfer between channels and data buffers.
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/**
+/*
  * Importing classes from the org.json package
  */
 
@@ -106,14 +106,14 @@ public class SaveDataInJSONFile {
 
     public static boolean isFileNameValid(String fileName) {
        // Using a regular expression to check the characters of the file name.
-       String pattern = "^[a-zA-Z0-9_-.]+$";
+       String pattern = "^[a-zA-Z0-9_.-]+$";
        return Pattern.matches(pattern, fileName);
     }
 
     /**
-     * It provides the name of the save file
+     * It provides the name of the load file
      * 
-     * @param filePath The path of the save file you want saved
+     * @param filePath The path of the save file you want loaded
      * @return The save's name file without extension or the empty string if the save's name file is incorrect
      */
 
@@ -184,7 +184,7 @@ public class SaveDataInJSONFile {
      * 
      * @param filePath Path of the save file
      * @param jsonObject New JSON to be placed into the file
-     * @throws FileNameNotExistException
+     * @throws FileNameNotExistException If the file doesn't exist
      * @throws IOException If the entry of the user is wrong
      */
 
@@ -210,10 +210,13 @@ public class SaveDataInJSONFile {
      * 
      * @param fileName Name of the save file without its extension
      * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
-     * @throws Exception
+     * @throws FileNameException - If the file name is incorrect
+     * @throws FileNameIsDuplicateException - If the file name already exists
+     * @throws IOException - If the entry of the user is wrong
+     * @throws FileNameNotExistException - If the file that will be overwrite doesn't exist
      */
     
-    public void save(String fileName, boolean doOverwrite) throws Exception {
+    public void save(String fileName, boolean doOverwrite) throws FileNameException, FileNameIsDuplicateException, IOException, FileNameNotExistException {
         Path folder = Paths.get(this.defaultFolderPath);
         Path filePath = folder.resolve(fileName+".json");
         try {
