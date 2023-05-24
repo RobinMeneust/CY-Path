@@ -106,7 +106,7 @@ public class SaveDataInJSONFile {
 
     public static boolean isFileNameValid(String fileName) {
        // Using a regular expression to check the characters of the file name.
-       String pattern = "^[a-zA-Z0-9_-.]+$";
+       String pattern = "^[a-zA-Z0-9_.-]+$";
        return Pattern.matches(pattern, fileName);
     }
 
@@ -213,7 +213,7 @@ public class SaveDataInJSONFile {
      * @throws Exception
      */
     
-    public void save(String fileName, boolean doOverwrite) throws Exception {
+    public void save(String fileName, boolean doOverwrite) throws UnsupportedOperationException,  {
         Path folder = Paths.get(this.defaultFolderPath);
         Path filePath = folder.resolve(fileName+".json");
         try {

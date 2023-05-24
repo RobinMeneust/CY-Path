@@ -145,7 +145,7 @@ public class LoadDataFromJSONFile {
 
      public static boolean isFileNameValid(String fileName) {
         // Using a regular expression to check the characters of the file name.
-        String pattern = "^[a-zA-Z0-9_-.]+$";
+        String pattern = "^[a-zA-Z0-9_.-]+$";
         return Pattern.matches(pattern, fileName);
      }
  
@@ -202,26 +202,26 @@ public class LoadDataFromJSONFile {
 
             JSONObject gameObjects = (JSONObject) parser.parse(new FileReader(filePath));
 
-            if((gameObjects.get("rows") instanceof Integer) && ((Integer)(gameObjects.get("rows")) >= 2)) {
-                rows = ((Integer) gameObjects.get("rows")).intValue();
+            if((gameObjects.get("rows") instanceof Number) && (((Number)(gameObjects.get("rows"))).intValue() >= 2)) {
+                rows = ((Number) gameObjects.get("rows")).intValue();
             } else {
                 throw new FileContentModifiedException();
             }
 
-            if((gameObjects.get("columns") instanceof Integer) && ((Integer)(gameObjects.get("columns")) >= 2)) {
-                columns = ((Integer) gameObjects.get("columns")).intValue();
+            if((gameObjects.get("columns") instanceof Number) && (((Number)(gameObjects.get("columns"))).intValue() >= 2)) {
+                columns = ((Number) gameObjects.get("columns")).intValue();
             } else {
                 throw new FileContentModifiedException();
             }
 
-            if((gameObjects.get("maxNbFences") instanceof Integer) && ((Integer)(gameObjects.get("maxNbFences")) >= 0)) {
-                maxNbFences = ((Integer) gameObjects.get("maxNbFences")).intValue();
+            if((gameObjects.get("maxNbFences") instanceof Number) && (((Number)(gameObjects.get("maxNbFences"))).intValue() >= 0)) {
+                maxNbFences = ((Number) gameObjects.get("maxNbFences")).intValue();
             } else {
                 throw new FileContentModifiedException();
             }
 
-            if((gameObjects.get("currentPawnIndex") instanceof Integer) && ((Integer)(gameObjects.get("currentPawnIndex")) >= 0)) {
-                currentPawnIndex = ((Integer) gameObjects.get("currentPawnIndex")).intValue();
+            if((gameObjects.get("currentPawnIndex") instanceof Number) && (((Number)(gameObjects.get("currentPawnIndex"))).intValue() >= 0)) {
+                currentPawnIndex = ((Number) gameObjects.get("currentPawnIndex")).intValue();
             } else {
                 throw new FileContentModifiedException();
             }
@@ -245,8 +245,9 @@ public class LoadDataFromJSONFile {
                         Point start = new Point(0,0);
 
                         if((fenceJSON.get("start") instanceof JSONObject)) {
-                            if(fenceJSON.get("x") instanceof Integer) {
-                                start.setX(((Integer) fenceJSON.get("x")).intValue());
+                            JSONObject startJSON = (JSONObject) fenceJSON.get("start");
+                            if(startJSON.get("x") instanceof Number) {
+                                start.setX(((Number) startJSON.get("x")).intValue());
                                 if(start.getX() < 0) {
                                     throw new FileContentModifiedException();
                                 }
@@ -254,8 +255,8 @@ public class LoadDataFromJSONFile {
                                 throw new FileContentModifiedException();
                             }
 
-                            if(fenceJSON.get("y") instanceof Integer) {
-                                start.setY(((Integer) fenceJSON.get("y")).intValue());
+                            if(startJSON.get("y") instanceof Number) {
+                                start.setY(((Number) startJSON.get("y")).intValue());
                                 if(start.getY() < 0) {
                                     throw new FileContentModifiedException();
                                 }
@@ -270,8 +271,9 @@ public class LoadDataFromJSONFile {
                         Point end = new Point(0,0);
 
                         if((fenceJSON.get("end") instanceof JSONObject)) {
-                            if(fenceJSON.get("x") instanceof Integer) {
-                                end.setX(((Integer) fenceJSON.get("x")).intValue());
+                            JSONObject endJSON = (JSONObject) fenceJSON.get("end");
+                            if(endJSON.get("x") instanceof Number) {
+                                end.setX(((Number) endJSON.get("x")).intValue());
                                 if(end.getX() < 0) {
                                     throw new FileContentModifiedException();
                                 }
@@ -279,8 +281,8 @@ public class LoadDataFromJSONFile {
                                 throw new FileContentModifiedException();
                             }
 
-                            if(fenceJSON.get("y") instanceof Integer) {
-                                end.setY(((Integer) fenceJSON.get("y")).intValue());
+                            if(endJSON.get("y") instanceof Number) {
+                                end.setY(((Number) endJSON.get("y")).intValue());
                                 if(end.getY() < 0) {
                                     throw new FileContentModifiedException();
                                 }
@@ -319,8 +321,8 @@ public class LoadDataFromJSONFile {
                     if (iterPawn instanceof JSONObject) {
                         JSONObject pawnJSON = (JSONObject) iterPawn;
 
-                        if (pawnJSON.get("id") instanceof Integer) {
-                            id = ((Integer) pawnJSON.get("id")).intValue();
+                        if (pawnJSON.get("id") instanceof Number) {
+                            id = ((Number) pawnJSON.get("id")).intValue();
                             if(id < 0) {
                                 throw new FileContentModifiedException();
                             }
@@ -342,8 +344,8 @@ public class LoadDataFromJSONFile {
 
                         if (pawnJSON.get("pos") instanceof JSONObject) {
                             JSONObject position = (JSONObject) pawnJSON.get("pos");
-                            if (position.get("x") instanceof Integer) {
-                                positionX = ((Integer) position.get("x")).intValue();
+                            if (position.get("x") instanceof Number) {
+                                positionX = ((Number) position.get("x")).intValue();
                                 if (positionX < 0) {
                                     throw new FileContentModifiedException();
                                 }
@@ -351,8 +353,8 @@ public class LoadDataFromJSONFile {
                                 throw new FileContentModifiedException();
                             }
 
-                            if (position.get("y") instanceof Integer) {
-                                positionY = ((Integer) position.get("y")).intValue();
+                            if (position.get("y") instanceof Number) {
+                                positionY = ((Number) position.get("y")).intValue();
                                 if (positionY < 0) {
                                     throw new FileContentModifiedException();
                                 }
@@ -363,8 +365,8 @@ public class LoadDataFromJSONFile {
                             throw new FileContentModifiedException();
                         }
 
-                        if (pawnJSON.get("nbRemainingFences") instanceof Integer) {
-                            nbRemainingFences = ((Integer) pawnJSON.get("nbRemainingFences")).intValue();
+                        if (pawnJSON.get("nbRemainingFences") instanceof Number) {
+                            nbRemainingFences = ((Number) pawnJSON.get("nbRemainingFences")).intValue();
                         } else {
                            throw new FileContentModifiedException();
                         }

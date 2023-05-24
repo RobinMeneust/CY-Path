@@ -909,6 +909,7 @@ public class CYPathFX extends Application {
                 this.createGameScene();
                 this.goToGameScene();
             } catch (Exception e) {
+                e.printStackTrace();
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while loading the game.\n"+e);
                 alert.showAndWait();

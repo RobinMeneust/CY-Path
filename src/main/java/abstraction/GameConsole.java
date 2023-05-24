@@ -96,25 +96,24 @@ public class GameConsole extends GameAbstract {
     private String getUserActionChoice(boolean canPlaceFence, boolean canMove) {
         String response = "";
 
-        System.out.println("What is your next action ? ('s' (save) ");
-        if(canMove) {
-            System.out.print("'m' (move) ");
-        } else {
-            System.out.print("'n' (next : skip the current player's turn) ");
-        }
-        if(canPlaceFence) {
-            System.out.print(" 'f' (fence))");
-        }
-        System.out.println();
-
         do{
+            System.out.println("What is your next action ? ('s' (save) ");
+            if(canMove) {
+                System.out.print("'m' (move) ");
+            } else {
+                System.out.print("'n' (next : skip the current player's turn) ");
+            }
+            if(canPlaceFence) {
+                System.out.print(" 'f' (fence))");
+            }
+            System.out.println();
+
             response = CYPath.scanner.nextLine();
             response = response.toUpperCase();
             if(response.matches("S(AVE)?")) {
                 saveGame();
             }
         } while(!(response.matches("M(OVE)?") && canMove) && !(response.matches("F(ENCE)?") && canPlaceFence) && !(response.matches("N(EXT)?") && !canMove));
-        
         return response;
     }
 
