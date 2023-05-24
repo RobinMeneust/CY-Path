@@ -96,43 +96,25 @@ public class GameConsole extends GameAbstract {
     private String getUserActionChoice(boolean canPlaceFence, boolean canMove) {
         String response = "";
 
-        if(canPlaceFence && canMove) {
-            do{
-                System.out.println("What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))");
-                response = CYPath.scanner.nextLine();
-                response = response.toUpperCase();
-
-            } while(!response.matches("M(OVE)?") && !(response.matches("F(ENCE)?")) && !(response.matches("S(AVE)?")));
-        } 
-        else if(!canPlaceFence && canMove){
-            do{
-                System.out.println("What is your next action ? ('m' (move) or 's' (save))");
-                response = CYPath.scanner.nextLine();
-                response = response.toUpperCase();
-            }while(!response.matches("M(OVE)?") && !(response.matches("S(AVE)?")));
+        System.out.println("What is your next action ? ('s' (save) ");
+        if(canMove) {
+            System.out.print("'m' (move) ");
+        } else {
+            System.out.print("'n' (next : skip the current player's turn) ");
         }
-        else if(canPlaceFence && !canMove){
-           
-            do{
-                System.out.println("What is your next action ? ('f' (fence) or  'b' (bound == skip) or 's' (save))");
-                response = CYPath.scanner.nextLine();
-                response = response.toUpperCase();
-
-            } while(!(response.matches("F(ENCE)?")) && !(response.matches("B(OUND)?")) && !(response.matches("S(AVE)?")));
+        if(canPlaceFence) {
+            System.out.print(" 'f' (fence))");
         }
-        else{
-            do{
-                System.out.println("What is your next action ? ('b' (bound == skip) or 's' (save) or  )");
-                response = CYPath.scanner.nextLine();
-                response = response.toUpperCase();
+        System.out.println();
 
-            } while(!(response.matches("B(OUND)?")) && !(response.matches("S(AVE)?")));
-        }
-            
-        if(response.matches("S(AVE)?")) {
-            saveGame();
-        }
-
+        do{
+            response = CYPath.scanner.nextLine();
+            response = response.toUpperCase();
+            if(response.matches("S(AVE)?")) {
+                saveGame();
+            }
+        } while(!(response.matches("M(OVE)?") && canMove) && !(response.matches("F(ENCE)?") && canPlaceFence) && !(response.matches("N(EXT)?") && !canMove));
+        
         return response;
     }
 

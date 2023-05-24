@@ -906,8 +906,7 @@ public class CYPathFX extends Application {
                 this.goToGameScene();
             } catch (Exception e) {
                 alert = new Alert(AlertType.ERROR);
-                alert.setContentText("Error while loading the game.\n\n"+e);
-                e.printStackTrace();
+                alert.setContentText("Error while loading the game.\n"+e);
                 alert.showAndWait();
             }
         }
@@ -937,7 +936,7 @@ public class CYPathFX extends Application {
                 alert.showAndWait();
             } catch (Exception e) {
                 alert = new Alert(AlertType.ERROR);
-                alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
+                alert.setContentText("Error while saving the game.\n"+e);
                 alert.showAndWait();
             }
         }
