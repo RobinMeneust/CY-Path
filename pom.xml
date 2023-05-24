@@ -62,8 +62,6 @@
         <finalName>${project.artifactId}</finalName>
 
         <plugins>
-              
-
             <!-- Build src -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

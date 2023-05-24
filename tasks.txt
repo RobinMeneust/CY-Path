@@ -212,6 +212,7 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/19 10:15
 		* Estimated end : 2023/05/19 11:30
 		* Real end : 2023/05/22 03:26
+		* NOTE: Re-opened between 2023/05/23 and 2023/05/24 to check if the file is in the valid format
 
 9. Create a user interface using JavaFX:
 	9.0 Set up

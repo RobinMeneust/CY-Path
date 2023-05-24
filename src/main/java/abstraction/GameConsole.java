@@ -223,7 +223,7 @@ public class GameConsole extends GameAbstract {
             while(this.getBoard().getWinner() == -1){
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
 
-                System.out.println("Turn of player: " +  this.getCurrentPlayer());
+                System.out.println("Turn of player: " +  this.getCurrentPlayer() + " (pawn id: " + this.getCurrentPawn().getId() + ")");
                 currentPawn = this.getCurrentPawn();
                 List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
 
@@ -241,7 +241,6 @@ public class GameConsole extends GameAbstract {
                         System.out.println("You can't move or place a fence. Skip your turn");
                         response = getUserActionChoice(false,false);
                     }
-
                 } 
                 else{
                     System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");

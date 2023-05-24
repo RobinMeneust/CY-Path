@@ -219,7 +219,7 @@ public class CYPathFX extends Application {
         this.primaryStage = primaryStage;
         this.terminalThread = null;
         this.fenceCounter = new Text("0");
-        this.continueGameButton = new Button("Continue current game");
+        this.continueGameButton = new Button("Continue");
         // this.continueGameButton.setPadding(new Insets(10, 20, 10, 20));
         this.continueGameButton.getStyleClass().add("menu-button");
         this.continueGameButton.setId("continue-game-button");
@@ -252,17 +252,13 @@ public class CYPathFX extends Application {
         BorderPane rootMainMenu = new BorderPane();
         this.mainMenuScene = new Scene(rootMainMenu);
 
-        
-        
         Label titleMainMenu = new Label("CY Path");
         titleMainMenu.setAlignment(Pos.CENTER);
-        // titleMainMenu.setPadding(new Insets(10, 50, 10, 50));
         titleMainMenu.setId("title-main-menu");
         rootMainMenu.setTop(titleMainMenu);
         BorderPane.setAlignment(titleMainMenu, Pos.CENTER);
 
         Button newGameMenuButton = new Button("New Game");
-        // newGameMenuButton.setPadding(new Insets(10, 20, 10, 20));
         newGameMenuButton.setId("new-game-button");
         newGameMenuButton.getStyleClass().add("menu-button");
         newGameMenuButton.setOnAction(e -> goToNewGameMenu());
@@ -283,11 +279,11 @@ public class CYPathFX extends Application {
 
         loadButton.setOnAction(e -> loadGame());
 
-        VBox buttonsMenuHBox = new VBox(15);
-        buttonsMenuHBox.setAlignment(Pos.CENTER);
-        rootMainMenu.setCenter(buttonsMenuHBox);
+        VBox buttonsMenuVBox = new VBox(15);
+        buttonsMenuVBox.setAlignment(Pos.CENTER);
+        rootMainMenu.setCenter(buttonsMenuVBox);
 
-        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, exitButton, continueGameButton);
+        buttonsMenuVBox.getChildren().addAll(newGameMenuButton, continueGameButton, loadButton, exitButton);
         mainMenuScene.getStylesheets().add("styleMainMenu.css");
     }
 
@@ -370,13 +366,13 @@ public class CYPathFX extends Application {
         titleGameMode.setPadding(new Insets(10));
     
         // Creation of the VBox
-        VBox vbox = new VBox(15);
-        vbox.getChildren().addAll(twoPlayersModeButton, fourPlayersModeButton, goBack);
-        vbox.setAlignment(Pos.CENTER);
+        VBox buttonsMenuVBox = new VBox(15);
+        buttonsMenuVBox.getChildren().addAll(twoPlayersModeButton, fourPlayersModeButton, goBack);
+        buttonsMenuVBox.setAlignment(Pos.CENTER);
 
         // Adding the VBox in the center of the BorderPane
         root.setTop(titleGameMode);
-        root.setCenter(vbox);
+        root.setCenter(buttonsMenuVBox);
         BorderPane.setAlignment(titleGameMode, Pos.CENTER);
     
         this.newGameMenuScene = new Scene(root);
@@ -447,7 +443,8 @@ public class CYPathFX extends Application {
         });
         
         HBox buttonsHBox = new HBox();
-        buttonsHBox.getChildren().addAll(this.getActionButton(), saveButton, goBack, fenceCounter,gameSkipTurnButton);
+        buttonsHBox.setAlignment(Pos.CENTER_LEFT);
+        buttonsHBox.getChildren().addAll(this.getActionButton(), saveButton, goBack, fenceCounter, gameSkipTurnButton);
         this.gPane = createBoard(50,8,Color.LIGHTGRAY, Color.rgb(230, 230, 230));
 
         rootGameScene.setCenter(this.gPane);
