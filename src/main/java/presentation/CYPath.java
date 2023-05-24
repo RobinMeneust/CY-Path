@@ -90,7 +90,7 @@ public class CYPath {
                     playersPawnIndex.put(i,players[i]);
                 }
                 try {
-                    GameConsole game = new GameConsole(players,20, 9, 9,playersPawnIndex);
+                    GameConsole game = new GameConsole(players,20, 9, 9,playersPawnIndex, 2);
                     game.launch();
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -34,11 +34,6 @@ public class Grid {
 	 */
 	private int nbCols;
 	/**
-	 * Number node in the graph
-	 */
-	private int nbNodes;
-
-	/**
 	 * Constructor of the Grid
 	 * 
 	 * @param nbRows Number of rows in the grid
@@ -48,7 +43,6 @@ public class Grid {
 	public Grid(int nbRows, int nbCols) {
 		this.nbRows = nbRows;
 		this.nbCols = nbCols;
-		this.nbNodes = nbRows * nbCols;
 		this.adjacencyList = new HashMap<Point,HashSet<Point>>();
 
 		Point p = null;
@@ -56,26 +50,26 @@ public class Grid {
 		HashSet<Point> neighborsList = null;
 		for(int i=0; i<nbRows; i++){
 			for(int j=0; j<nbCols; j++){
-				p = new Point(i,j);
+				p = new Point(j,i);
 				neighborsList = new HashSet<Point>(4);
 				if(i>0) {
 					// Top neighbor
-					neighbor = new Point(i-1,j);
+					neighbor = new Point(j,i-1);
 					neighborsList.add(neighbor);
 				}
 				if(i<nbRows-1) {
 					// Bottom neighbor
-					neighbor = new Point(i+1,j);
+					neighbor = new Point(j,i+1);
 					neighborsList.add(neighbor);
 				}
 				if(j>0) {
 					// Left neighbor
-					neighbor = new Point(i,j-1);
+					neighbor = new Point(j-1,i);
 					neighborsList.add(neighbor);
 				}
 				if(j<nbCols-1) {
 					// Right neighbor
-					neighbor = new Point(i,j+1);
+					neighbor = new Point(j+1,i);
 					neighborsList.add(neighbor);
 				}
 				this.adjacencyList.put(p, neighborsList);
@@ -101,16 +95,6 @@ public class Grid {
 
 	public int getNbCols() {
 		return nbCols;
-	}
-
-	/**
-	 * Get the number of nodes (or cells) of the grid
-	 * 
-	 * @return Number of nodes
-	 */
-
-	public int getNbNodes() {
-		return nbNodes;
 	}
 
 	/**
@@ -154,8 +138,8 @@ public class Grid {
 	public void displayGrid() {
 		for(int i=0; i<this.getNbRows(); i++) {
 			for(int j=0; j<this.getNbCols(); j++) {
-				System.out.println("Node ("+i+","+j+") : ");
-				for(Point p : this.getListNeighbors(new Point(i,j))) {
+				System.out.println("Node ("+j+","+i+") : ");
+				for(Point p : this.getListNeighbors(new Point(j,i))) {
 					System.out.print(p+" ");
 				}
 			}

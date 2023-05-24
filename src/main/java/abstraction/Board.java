@@ -65,22 +65,36 @@ public class Board {
 	 * @param nbRows Number of rows of the game board
 	 * @param game Object extending GameAbstract, that contains the components of the current game (list of players, rules...)
 	 * @param pawns Array of the pawns that are placed on the board
+	 * @param fenceLength Length of the fences
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
 	 */
 
-	public Board(int nbCols, int nbRows, GameAbstract game, Pawn[] pawns) {
+	public Board(int nbCols, int nbRows, GameAbstract game, Pawn[] pawns, int fenceLength) throws InvalidBoardSizeException, InvalidFenceLengthException {
+		if((pawns.length < 3 && (nbCols < 2 || nbRows < 2))
+				|| (pawns.length >= 3 && (nbCols < 3 || nbRows < 3))
+				|| nbCols>15 || nbRows>15) {
+			throw new InvalidBoardSizeException();
+		}
+
+		if(fenceLength < 1 || fenceLength >= nbCols || fenceLength >= nbRows) {
+			throw new InvalidFenceLengthException();
+		}
 		this.nbCols = nbCols;
 		this.nbRows = nbRows;
 		this.grid = new Grid(nbRows, nbCols);
 		this.game = game;
 		this.fences = null;
-		this.fenceLength = 2;
+		this.fenceLength = fenceLength;
 		this.winner = -1;
-		
-		if(game != null && game.getNbMaxTotalFences() > 0){
-			this.fences = new ArrayList<Fence>(game.getNbMaxTotalFences());
-		}
+
+		this.fences = new ArrayList<Fence>(Math.max(0,game.getNbMaxTotalFences()));
 		
 		this.pawns = pawns;
+
+		for(int i=0; i<pawns.length;i++) {
+			pawns[i].setBoard(this);
+		}
 	}
 
 	/**

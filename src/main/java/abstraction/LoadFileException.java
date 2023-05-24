@@ -1,5 +1,9 @@
 package abstraction;
 
+/**
+ * Exception thrown when the file loaded has an incorrect name
+ */
+
 public class LoadFileException extends Exception {
     /**
      * Constructs a new exception with the specified detail message.

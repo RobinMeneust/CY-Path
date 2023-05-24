@@ -47,11 +47,15 @@ public class GameFX extends GameAbstract {
 	 * @param nbRows Number of rows of the board
 	 * @param nbCols Number of columns of the board
      * @param playersPawnIndex Player associated to each pawn index associated
+     * @param fenceLength Length of the fences
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 * @throws PlayersPawnMapInvalidException If all players aren't associated to a pawn
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
 	 */
 
-    public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex) throws InvalidNumberOfPlayersException {
-        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex);
+    public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, int fenceLength) throws InvalidNumberOfPlayersException, PlayersPawnMapInvalidException, InvalidBoardSizeException, InvalidFenceLengthException  {
+        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, fenceLength);
         this.action = new SimpleStringProperty("Place fence");
         this.isEndTurn = false;
         this.isEndGame = new SimpleBooleanProperty(false);
@@ -66,10 +70,14 @@ public class GameFX extends GameAbstract {
 	 * @param playersPawnIndex Player associated to each pawn index associated
 	 * @param pawns Table of pawns to be assigned for every player
 	 * @param currentPlayerIndex Set the player ready to be played
+     * @param fenceLength Length of the fences
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 * @throws PlayersPawnMapInvalidException If all players aren't associated to a pawn
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
 	 */
-    public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
-        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
+    public GameFX(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex, int fenceLength) throws InvalidNumberOfPlayersException, PlayersPawnMapInvalidException, InvalidBoardSizeException, InvalidFenceLengthException  {
+        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex, fenceLength);
         this.action = new SimpleStringProperty("Place fence");
         this.isEndTurn = false;
         this.isEndGame = new SimpleBooleanProperty(false);
@@ -116,9 +124,6 @@ public class GameFX extends GameAbstract {
      */
 
      public void launch() {
-		// The game is now in progress
-		this.setState(GameState.IN_PROGRESS);
-
         Pawn currentPawn = null;
 
         while(true){

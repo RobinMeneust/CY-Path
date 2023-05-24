@@ -184,7 +184,7 @@ public class SaveDataInJSONFile {
      * 
      * @param filePath Path of the save file
      * @param jsonObject New JSON to be placed into the file
-     * @throws FileNameNotExistException
+     * @throws FileNameNotExistException If the file doesn't exist
      * @throws IOException If the entry of the user is wrong
      */
 
@@ -210,10 +210,13 @@ public class SaveDataInJSONFile {
      * 
      * @param fileName Name of the save file without its extension
      * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
-     * @throws Exception
+     * @throws FileNameException - If the file name is incorrect
+     * @throws FileNameIsDuplicateException - If the file name already exists
+     * @throws IOException - If the entry of the user is wrong
+     * @throws FileNameNotExistException - If the file that will be overwrite doesn't exist
      */
     
-    public void save(String fileName, boolean doOverwrite) throws Exception {
+    public void save(String fileName, boolean doOverwrite) throws FileNameException, FileNameIsDuplicateException, IOException, FileNameNotExistException {
         Path folder = Paths.get(this.defaultFolderPath);
         Path filePath = folder.resolve(fileName+".json");
         try {

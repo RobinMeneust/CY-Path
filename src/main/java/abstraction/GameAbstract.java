@@ -1,6 +1,8 @@
 package abstraction;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 
 /**
@@ -11,10 +13,6 @@ import java.util.Observable;
 
 @SuppressWarnings("deprecation")
 public abstract class GameAbstract extends Observable {
-	/**
-	 * Current game state
-	 */
-	private GameState state;
 	/**
 	 * Maximal total number of fence available
 	 */
@@ -37,15 +35,31 @@ public abstract class GameAbstract extends Observable {
 	 * @param nbRows Number of rows of the board
 	 * @param nbCols Number of columns of the board
 	 * @param playersPawnIndex Player associated to each pawn index associated
+	 * @param fenceLength Length of the fences
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 * @throws PlayersPawnMapInvalidException If all players aren't associated to a pawn
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
 	 */
 
-	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex) throws InvalidNumberOfPlayersException {
-		this.state = GameState.READY;
+	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, int fenceLength) throws PlayersPawnMapInvalidException, InvalidNumberOfPlayersException, InvalidBoardSizeException, InvalidFenceLengthException {
 		if(players == null || (players.length != 2 && players.length != 4)){
 			throw new InvalidNumberOfPlayersException();
 		}
-		this.nbMaxTotalFences = nbMaxTotalFences;
+
+		if(playersPawnIndex == null){
+			throw new PlayersPawnMapInvalidException();
+		}
+		
+		// Check if all the players have a pawn
+		List<Player> listPlayers = Arrays.asList(players);
+		for(int i=0; i<players.length; i++) {
+			if(!listPlayers.contains(playersPawnIndex.get(i))) {
+				throw new PlayersPawnMapInvalidException();
+			}
+		}
+
+		this.nbMaxTotalFences = Math.max(0,nbMaxTotalFences);
 		this.players = players;
 
 		Pawn[] pawns = new Pawn[players.length];
@@ -53,9 +67,10 @@ public abstract class GameAbstract extends Observable {
 			pawns[i] = new Pawn(i, Side.values()[i], ColorPawn.values()[i], playersPawnIndex.get(i), nbMaxTotalFences, players.length);
 		}
 
-		this.board = new Board(nbCols, nbRows, this, pawns);
-		for(int i=0; i<pawns.length;i++) {
-			pawns[i].setBoard(this.board);
+		try {
+			this.board = new Board(nbCols, nbRows, this, pawns, fenceLength);
+		} catch(Exception e) {
+			throw e;
 		}
 		this.currentPawnIndex = 0;
 	}
@@ -70,20 +85,26 @@ public abstract class GameAbstract extends Observable {
 	 * @param playersPawnIndex Player associated to each pawn index associated
 	 * @param pawns Table of pawns to be assigned for every player
 	 * @param currentPawnIndex Set the pawn ready to be played
+	 * @param fenceLength Length of the fences
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
 	 */
-	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPawnIndex) throws InvalidNumberOfPlayersException {
-		this.state = GameState.READY;
+	public GameAbstract(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPawnIndex, int fenceLength) throws InvalidNumberOfPlayersException, InvalidBoardSizeException, InvalidFenceLengthException {
 		if(players == null || (players.length != 2 && players.length != 4)){
 			throw new InvalidNumberOfPlayersException();
 		}
 		this.nbMaxTotalFences = nbMaxTotalFences;
 		this.players = players;
 		
-		this.board = new Board(nbCols, nbRows, this, pawns);
+		try {
+			this.board = new Board(nbCols, nbRows, this, pawns, fenceLength);
+		} catch(Exception e) {
+			throw e;
+		}
+		
 		for(int i=0; i<pawns.length;i++) {
 			pawns[i].setPlayer(playersPawnIndex.get(i));
-			pawns[i].setBoard(this.board);
 		}
 		this.currentPawnIndex = currentPawnIndex;
 	}
@@ -156,26 +177,6 @@ public abstract class GameAbstract extends Observable {
 	 */
 
 	public abstract void launch();
-
-	/**
-	 * Get the current state of the game
-	 * 
-	 * @return State of the game
-	 */
-
-	public GameState getState() {
-		return state;
-	}
-
-	/**
-	 * Set the current state of the game to a new state
-	 * 
-	 * @param state New game state
-	 */
-
-	public void setState(GameState state){
-		this.state = state;
-	}
 
 	/**
 	 * Get the number of players

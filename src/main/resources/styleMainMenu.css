@@ -1,8 +1,3 @@
-@font-face {
-    font-family: "technoRace";
-    src: url("./font/techno-race-italic-font/TechnoRaceItalic-eZRWe.otf");
-}
-
 .root {
     -fx-background-image: url('background_image_main_menu.png');
     -fx-background-position: top center;
