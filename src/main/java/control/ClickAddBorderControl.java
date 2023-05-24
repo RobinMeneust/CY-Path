@@ -127,17 +127,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 				//the information is transmitted to the terminal
 				this.game.setIsEndTurn(true);
 				//We wait the beginning of the next turn
-				while (this.game.getIsEndTurn()) {
-					try {
-						Thread.sleep(100); //Wait 100 milliseconds before checking again
-					} catch (InterruptedException ev) {
-						Thread.currentThread().interrupt();
-					}
-				}
-
-				if(this.game.getBoard().getWinner() != -1){
-					this.game.getIsEndGame().setValue(true);
-				}
+				CYPathFX.checkEndTurn(this.game);
 
 				//update button
 				actionButton.fire();

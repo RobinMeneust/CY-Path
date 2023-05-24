@@ -115,8 +115,10 @@ public class Grid {
 	 */
 
 	public void addEdge(Point p1, Point p2) {
-		this.adjacencyList.get(p1).add(p2);
-		this.adjacencyList.get(p2).add(p1);
+		if(p1 != null && p2 != null && this.adjacencyList != null) {
+			this.adjacencyList.get(p1).add(p2);
+			this.adjacencyList.get(p2).add(p1);
+		}
 	}
 
 	/**
@@ -127,8 +129,10 @@ public class Grid {
 	 */
 
 	public void removeEdge(Point p1, Point p2) {
-		this.adjacencyList.get(p1).remove(p2);
-		this.adjacencyList.get(p2).remove(p1);
+		if(p1 != null && p2 != null && this.adjacencyList != null) {
+			this.adjacencyList.get(p1).remove(p2);
+			this.adjacencyList.get(p2).remove(p1);
+		}
 	}
 
 	/**

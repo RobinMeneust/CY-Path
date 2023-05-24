@@ -42,15 +42,14 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
-@SuppressWarnings("deprecation")
-
 /**
  * Main JavaFX class of the CYPath project
  * Manage all the JavaFX elements and the game loop for the window mode
- * 
+ *
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
+@SuppressWarnings("deprecation")
 public class CYPathFX extends Application {
     /**
      * The action button used in the game interface.
@@ -220,7 +219,6 @@ public class CYPathFX extends Application {
         this.terminalThread = null;
         this.fenceCounter = new Text("0");
         this.continueGameButton = new Button("Continue");
-        // this.continueGameButton.setPadding(new Insets(10, 20, 10, 20));
         this.continueGameButton.getStyleClass().add("menu-button");
         this.continueGameButton.setId("continue-game-button");
         this.continueGameButton.setOnAction(e -> {
@@ -264,12 +262,10 @@ public class CYPathFX extends Application {
         newGameMenuButton.setOnAction(e -> goToNewGameMenu());
 
         Button loadButton = new Button("Load");
-        // loadButton.setPadding(new Insets(10, 44, 10, 44));
         loadButton.setId("load-game-button");
         loadButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
-        // exitButton.setPadding(new Insets(10, 50, 10, 50));
         exitButton.setId("exit-game-button");
         exitButton.getStyleClass().add("menu-button");
         exitButton.setOnAction(e -> {
@@ -422,18 +418,8 @@ public class CYPathFX extends Application {
         this.gameSkipTurnButton.setOnAction(e -> {
             this.game.setIsEndTurn(true);
             this.gameSkipTurnButton.setVisible(false);
-            
-            while (this.game.getIsEndTurn()) {
-                try {
-                    Thread.sleep(100); //Wait 100 milliseconds before checking again
-                } catch (InterruptedException ev) {
-                    Thread.currentThread().interrupt();
-                }
-            }
 
-            if(this.game.getBoard().getWinner() != -1){
-                this.game.getIsEndGame().setValue(true);
-            }
+            checkEndTurn(this.game);
 
             //update button
             this.getActionButton().fire();
@@ -451,6 +437,7 @@ public class CYPathFX extends Application {
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
 
+        // When it's the end of a game, change the user interface
         this.game.getIsEndGame().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Button newGameButton = new Button("New game");
@@ -490,6 +477,24 @@ public class CYPathFX extends Application {
         });
         this.terminalThread.setDaemon(true);
         this.terminalThread.start();
+    }
+
+    /**
+     * Check if the turn ends and check if it's the end of the game
+     * @param game Current game
+     */
+    public static void checkEndTurn(GameFX game) {
+        while (game.getIsEndTurn()) {
+            try {
+                Thread.sleep(100); //Wait 100 milliseconds before checking again
+            } catch (InterruptedException ev) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if(game.getBoard().getWinner() != -1){
+            game.getIsEndGame().setValue(true);
+        }
     }
 
     /**
@@ -590,7 +595,6 @@ public class CYPathFX extends Application {
         int sizeBoardColumns = this.game.getBoard().getNbCols();
         Line border = null;
         int lineLength = cellSize;
-        //gPane.setMinSize(sizeBoardColumns * cellSize + (sizeBoardColumns+1) * lineWidth, sizeBoardRows * cellSize + (sizeBoardRows+1) * lineWidth);
 
         // To fix the top left corner
         gPane.add(createLineBorder(0, 0, 0, lineWidth, borderColor, lineWidth), 0, 0);
