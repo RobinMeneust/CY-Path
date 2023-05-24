@@ -27,6 +27,9 @@ public abstract class GameAbstract extends Observable {
 	 * The board playing on
 	 */
 	private Board board;
+	/**
+	 * Index of the current pawn
+	 */
 	private int currentPawnIndex;
 
 	/**

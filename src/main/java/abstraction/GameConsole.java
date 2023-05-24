@@ -81,7 +81,7 @@ public class GameConsole extends GameAbstract {
     /**
      * Ask the user if he wants to move, place a fence or save a game
      * 
-     * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can it's equals to true and if he can't it's false
+     * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can, it's equal to true, and if he can't, it's false
      * @return User's choice
      */
 
@@ -226,7 +226,7 @@ public class GameConsole extends GameAbstract {
                     System.out.println("You don't have any fence remaining. You can only move.");
                     response = getUserActionChoice(false,true);
                 } else if(listPossibleMoves.isEmpty()){
-                    //If can't move
+                    //If it can't move
                     if(currentPawn.getAvailableFences() != 0){
                         
                         System.out.println("You can't move. You can only place a fence");

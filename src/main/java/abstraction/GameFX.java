@@ -38,7 +38,7 @@ public class GameFX extends GameAbstract {
     /**
      * The BooleanProperty indicating if it is the end of the game.
      */
-    public BooleanProperty isEndGame;
+    private BooleanProperty isEndGame;
 
    /**
 	 * Create a GameFX object by giving all of its attributes
@@ -111,6 +111,23 @@ public class GameFX extends GameAbstract {
         this.isEndTurn = isEndTurn;
     }
 
+
+	/**
+	 * Get the value if it's the end of a game
+	 * @return True if the game ended, false otherwise
+	 */
+	public BooleanProperty getIsEndGame(){
+		return this.isEndGame;
+	}
+
+
+	/**
+	 * Set the end of the game
+	 * @param endGame True if the game ended, false otherwise
+	 */
+	public void setIsEndGame(BooleanProperty endGame){
+		this.isEndGame = endGame;
+	}
     /**
      * Launch the current game for window mode
      */

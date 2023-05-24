@@ -67,15 +67,15 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 
 		try {
 			// If a fence is selected (highlighted)
-			if(this.cyPathFX.prevHighlightedFencesList != null){
+			if(this.cyPathFX.getPrevHighlightedFencesList() != null){
 				if (this.game.getBoard().placeFence(this.game.getCurrentPawnIndex(), fence)) {
 					// Add fence to the gridPane
-					for (Line l : this.cyPathFX.prevHighlightedFencesList) {
+					for (Line l : this.cyPathFX.getPrevHighlightedFencesList()) {
 						l.setStroke(Color.BLACK);
 						l.toFront();
 					}
 					// Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved in the next round
-					this.cyPathFX.prevHighlightedFencesList.clear();
+					this.cyPathFX.getPrevHighlightedFencesList().clear();
 
 					this.game.setIsEndTurn(true);
 					//We wait the beginning of the next turn
@@ -111,11 +111,11 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 		}
 		try {
 			// If there are possible moves
-			if(this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell)) {
+			if(this.cyPathFX.getPreviousPossibleCells() != null && this.cyPathFX.getPreviousPossibleCells().contains(sourceCell)) {
 				Pawn pawn = this.game.getCurrentPawn();
 
 				// We move circle (pawn of the player) to its new location
-				this.cyPathFX.removeCircleFromCell(this.cyPathFX.gPane, pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
+				this.cyPathFX.removeCircleFromCell(this.cyPathFX.getGPane(), pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
 
 				StackPane parentStackPane = (StackPane) sourceCell.getParent();
 				int columnIndex = GridPane.getColumnIndex(parentStackPane);
@@ -123,7 +123,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 				
 				this.game.getBoard().movePawn(this.game.getCurrentPawn().getId(), new Point(columnIndex / 2, rowIndex / 2));
 				
-				this.cyPathFX.addCircleToCell(this.cyPathFX.gPane, rowIndex, columnIndex, pawn.getColor());
+				this.cyPathFX.addCircleToCell(this.cyPathFX.getGPane(), rowIndex, columnIndex, pawn.getColor());
 				//the information is transmitted to the terminal
 				this.game.setIsEndTurn(true);
 				//We wait the beginning of the next turn
@@ -136,7 +136,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 				}
 
 				if(this.game.getBoard().getWinner() != -1){
-					this.game.isEndGame.setValue(true);
+					this.game.getIsEndGame().setValue(true);
 				}
 
 				//update button

@@ -61,6 +61,6 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
 		}
 
 		//Update fenceCounter
-		this.cyPathFX.fenceCounter.setText(this.cyPathFX.game.getCurrentPawn().getAvailableFences()+" fence(s) remaining.");
+		this.cyPathFX.getFenceCounter().setText(this.cyPathFX.getGame().getCurrentPawn().getAvailableFences()+" fence(s) remaining.");
 	}
 }
