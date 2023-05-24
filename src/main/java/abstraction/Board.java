@@ -110,9 +110,12 @@ public class Board {
 	 */
 
 	public Fence[] getFencesArray() {
-		Fence[] fencesArray = new Fence[this.fences.size()];
-		this.fences.toArray(fencesArray);
-		return fencesArray;
+		if(this.fences != null){
+			Fence[] fencesArray = new Fence[this.fences.size()];
+			this.fences.toArray(fencesArray);
+			return fencesArray;
+		}
+		return null;
 	}
 
 	/**

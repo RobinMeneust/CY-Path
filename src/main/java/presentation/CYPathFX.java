@@ -33,7 +33,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -204,7 +203,7 @@ public class CYPathFX extends Application {
         // titleMainMenu.setPadding(new Insets(10, 50, 10, 50));
         titleMainMenu.setId("title-main-menu");
         rootMainMenu.setTop(titleMainMenu);
-        rootMainMenu.setAlignment(titleMainMenu, Pos.CENTER);
+        BorderPane.setAlignment(titleMainMenu, Pos.CENTER);
 
         Button newGameMenuButton = new Button("New Game");
         // newGameMenuButton.setPadding(new Insets(10, 20, 10, 20));
@@ -322,7 +321,7 @@ public class CYPathFX extends Application {
         // Ajout des VBox dans le centre du BorderPane
         root.setTop(titleGameMode);
         root.setCenter(vbox);
-        root.setAlignment(titleGameMode, Pos.CENTER);
+        BorderPane.setAlignment(titleGameMode, Pos.CENTER);
     
         this.newGameMenuScene = new Scene(root);
         this.newGameMenuScene.getStylesheets().add("styleGameMode.css");
