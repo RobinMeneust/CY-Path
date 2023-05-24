@@ -4,8 +4,6 @@ package abstraction;
  * Importing classes from the java.util package
  */
 
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,6 +41,7 @@ public class GameConsole extends GameAbstract {
      * @param currentPlayerIndex Set the player ready to be played
      * @throws InvalidNumberOfPlayersException If the number of players is incorrect
      */
+    
     public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
         super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
     }
@@ -73,8 +72,8 @@ public class GameConsole extends GameAbstract {
             } else {
                 System.out.println("Saving process cancelled");
             }
-        } catch (IOException e) {
-            System.err.println("Error: there was an error while saving the game");
+        } catch (Exception e) {
+            System.err.println("Error: there was an error while saving the game :" + e);
         }
     }
 
@@ -183,7 +182,6 @@ public class GameConsole extends GameAbstract {
     /**
      * Launch the current game in console mode
      */
-
 
     public void launch() {
 		// The game is now in progress

@@ -130,17 +130,6 @@ public class Point {
     }
 
     /**
-     * Redefine 'toString' method of the Object class to display coordinates of a pawn
-     * 
-     * @return (String) : a text
-     */
-
-    @Override
-    public String toString() {
-        return ("(" + this.getX() + "," + this.getY() + ")");
-    }
-
-    /**
 	 * Ask for a Point from the user, and return it.
 	 * 
 	 * @return Point chosen by the user
@@ -189,4 +178,15 @@ public class Point {
     public static Point sum(Point p1, Point p2) {
         return new Point(p1.getX()+p2.getX(), p1.getY()+p2.getY());
     }
+
+    /**
+     * Redefine 'toString' method of the Object class to display coordinates of a pawn
+     * 
+     * @return (String) : a text
+     */
+
+     @Override
+     public String toString() {
+         return ("(" + this.getX() + "," + this.getY() + ")");
+     }
 }

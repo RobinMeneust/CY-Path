@@ -370,8 +370,24 @@ public class CYPathFX extends Application {
         this.gameSkipTurnButton.setOnAction(e -> {
             this.game.setIsEndTurn(true);
             this.gameSkipTurnButton.setVisible(false);
-            this.actionButton.fire();
-            this.actionButton.fire();
+            
+            while (this.game.getIsEndTurn()) {
+                try {
+                    Thread.sleep(100); //Wait 100 milliseconds before checking again
+                } catch (InterruptedException ev) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+            if(this.game.getBoard().getWinner() != -1){
+                this.game.isEndGame.setValue(true);
+            }
+
+            //update button
+            actionButton.fire();
+            if (!(actionButton.getText().equals("Place fence"))) {
+                actionButton.fire();
+            }
         });
         
         HBox buttonsHBox = new HBox();
@@ -710,7 +726,8 @@ public class CYPathFX extends Application {
         try {
             possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
 
-            if(possibleMoves.isEmpty()){
+            if(possibleMoves.isEmpty() && !this.game.getIsEndTurn()){
+
                 System.out.println(this.game.getCurrentPawn().getColor().toString() + " pawn can't move");
                 showPopupWindow(primaryStage);
                 this.gameSkipTurnButton.setVisible(true);

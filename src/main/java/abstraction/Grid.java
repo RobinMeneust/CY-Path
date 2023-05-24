@@ -1,14 +1,16 @@
 package abstraction;
+
 /*
  * Importing java classes needed for the Grid class
  * 
  * Importing classes from the java.util package
  */
 
+import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
+
 
 /**
  * Grid using as a data structure an undirected graph using an adjacency list
@@ -19,7 +21,6 @@ import java.util.Set;
  */
 
 public class Grid {
-
 	/**
 	 * Hashmap of a position associated with its adjacent position
 	 */
@@ -92,7 +93,6 @@ public class Grid {
 		return nbRows;
 	}
 
-	
 	/**
 	 * Get the number of columns of the grid
 	 * 

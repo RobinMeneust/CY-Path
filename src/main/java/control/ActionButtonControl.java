@@ -52,7 +52,8 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
 			this.game.setAction("Place fence");
 			this.cyPathFX.setMoveMode(false);
 			this.actionButton.setText("Move");
-		} else if(this.actionButton.getText().equals("Move")) {
+		//} else if(this.actionButton.getText().equals("Move")){
+		}else{
 			this.cyPathFX.showPossibleCells(this.game.getCurrentPawnIndex());
 			this.game.setAction("Move");
 			this.cyPathFX.setMoveMode(true);
