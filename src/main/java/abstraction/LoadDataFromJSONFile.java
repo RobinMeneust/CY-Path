@@ -8,6 +8,8 @@ package abstraction;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.regex.Pattern;
+import java.io.File;
 
 /*
  * Importing classes from the java.io package
@@ -15,10 +17,10 @@ import java.util.Iterator;
  * It provides input/output functionality for read and write data operations.
  */
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /*
  * Importing classes from the org.json.simple package
@@ -60,7 +62,7 @@ public class LoadDataFromJSONFile {
      * Index of current pawn playing
      */
     private int currentPawnIndex;
-
+    
     /**
      * Create a constructor that retrieves the elements that make up a backup file of a part of CY-PATH
      */
@@ -79,6 +81,7 @@ public class LoadDataFromJSONFile {
      *
      * @return Number of rows
      */
+
     public int getRows() {
         return rows;
     }
@@ -88,6 +91,7 @@ public class LoadDataFromJSONFile {
      *
      * @return Number of columns
      */
+
     public int getColumns() {
         return columns;
     }
@@ -97,16 +101,17 @@ public class LoadDataFromJSONFile {
      *
      * @return Number of maximum fence
      */
+
     public int getMaxNbFences() {
         return maxNbFences;
     }
-
 
     /**
      * Get the list of every fence placed
      *
      * @return list of every fence placed
      */
+
     public ArrayList<Fence> getListFences() {
         return listFences;
     }
@@ -116,6 +121,7 @@ public class LoadDataFromJSONFile {
      *
      * @return Table of pawns
      */
+
     public Pawn[] getPawns() {
         return pawns;
     }
@@ -125,83 +131,261 @@ public class LoadDataFromJSONFile {
      *
      * @return Current index of the pawn playing
      */
+
     public int getCurrentPawnIndex() {
         return currentPawnIndex;
     }
 
     /**
-     * Get the file of the game from a filepath
-     * @param filePath Filepath of the file to load
-     * @return File wanted to be loaded
-     * @throws FileNameNotExistException If the file name entered doesn't exist
+     * Checks if the backup file name entered by the user is correct
+     * 
+     * @param fileName Name of the file
+     * @return True if the save's name file contains only letters, numbers, the _, the - and the . else false
      */
-    public static File loadFile(String filePath) throws FileNameNotExistException {
-        File file = new File(filePath);
-        if(file != null && file.isFile()) {
-            return file;
+
+     public static boolean isFileNameValid(String fileName) {
+        // Using a regular expression to check the characters of the file name.
+        String pattern = "^[a-zA-Z0-9_-.]+$";
+        return Pattern.matches(pattern, fileName);
+     }
+ 
+     /**
+      * It provides the name of the load file
+      * 
+      * @param filePath The path of the save file you want loaded
+      * @return The save's name file without extension or the empty string if the save's name file is incorrect
+      */
+ 
+      public static String extractFileNameWithoutExtension(String filePath) {
+        Path path = Paths.get(filePath);
+        String fileName = path.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf(".json");
+        if (dotIndex > 0) {
+            return fileName.substring(0, dotIndex);
         } else {
+            return "";
+        }
+     }
+
+     /**
+      * Procedure to load a game from a file save in the backup folder
+      *
+      * @param filePath Filepath of the file to load
+      * @throws FileNameNotExistException If the file name entered doesn't exist
+      * @throws IOException If an I/O error occurs while reading the file
+      * @throws ParseException If an error occurs while parsing the JSON data
+      * @throws FileNameException If the file name entered by the player is incorrect
+      * @throws FileContentModifiedException If the file loaded by the palyer are incorrect
+      */
+    public void load(String filePath) throws FileNameNotExistException, IOException, ParseException, FileNameException, FileContentModifiedException  {
+        String orientation;
+
+        int id;
+        String startingSide;
+        String color;
+        int nbRemainingFences;
+        int positionX;
+        int positionY;
+                
+        File file = new File(filePath);
+
+        if (!file.exists()) {
             throw new FileNameNotExistException();
         }
-    }
 
-    /**
-     * Procedure to load a game from a file save in the backup folder
-     *
-     * @param filePath Filepath of the file to load
-     * @throws FileNameNotExistException If the file name entered doesn't exist
-     * @throws IOException If an I/O error occurs while reading the file
-     * @throws ParseException If an error occurs while parsing the JSON data
-     */
-
-    public void load(String filePath) throws FileNameNotExistException, IOException, ParseException {
-        File savedFile = null;
-        
-        try {
-            savedFile = loadFile(filePath);
-        } catch (FileNameNotExistException e) {
-            throw e;
+        if(!isFileNameValid(extractFileNameWithoutExtension(filePath))) {    
+            throw new FileNameException();
         }
 
         try {
             JSONParser parser = new JSONParser();
 
-            JSONObject gameObjects = (JSONObject) parser.parse(new FileReader(savedFile.getAbsolutePath()));
-            this.rows = ((Number) gameObjects.get("rows")).intValue();
-            this.columns = ((Number) gameObjects.get("columns")).intValue();
-            this.maxNbFences = ((Number) gameObjects.get("maxNbFences")).intValue();
-            this.currentPawnIndex = ((Number) gameObjects.get("currentPawnIndex")).intValue();
-            JSONArray listFences = (JSONArray)gameObjects.get("listFences");
-            Iterator<?> iteratorFence = listFences.iterator();
-            this.listFences = new ArrayList<Fence>(listFences.size());
-            while(iteratorFence.hasNext()) {
-                JSONObject fenceJSON = (JSONObject) iteratorFence.next();
-                String orientation = (String) fenceJSON.get("orientation").toString();
-                JSONObject start = (JSONObject) fenceJSON.get("start");
-                int startX = ((Number) start.get("x")).intValue();
-                int startY = ((Number) start.get("y")).intValue();
-                JSONObject end = (JSONObject) fenceJSON.get("end");
-                int endX = ((Number) end.get("x")).intValue();
-                int endY = ((Number) end.get("y")).intValue();
-                this.listFences.add(new Fence(Orientation.valueOf(orientation), new Point(startX, startY), new Point(endX, endY)));
+            JSONObject gameObjects = (JSONObject) parser.parse(new FileReader(filePath));
+
+            if((gameObjects.get("rows") instanceof Integer) && ((Integer)(gameObjects.get("rows")) >= 2)) {
+                rows = ((Integer) gameObjects.get("rows")).intValue();
+            } else {
+                throw new FileContentModifiedException();
             }
 
-            JSONArray listPawns = (JSONArray)gameObjects.get("listPawns");
-            Iterator<?> iteratorPawns = listPawns.iterator();
-            this.pawns = new Pawn[listPawns.size()];
-            int i = 0;
-            while(iteratorPawns.hasNext()) {
-                JSONObject pawnJSON = (JSONObject) iteratorPawns.next();
-                int id = ((Number) pawnJSON.get("id")).intValue();
-                String startingSide = (String) pawnJSON.get("startingSide").toString();
-                String color = (String) pawnJSON.get("color").toString();
-                JSONObject position = (JSONObject) pawnJSON.get("pos");
-                int positionX = ((Number) position.get("x")).intValue();
-                int positionY = ((Number) position.get("y")).intValue();
-                int nbRemainingFences = ((Number) pawnJSON.get("nbRemainingFences")).intValue();
-                this.pawns[i] = new Pawn(id, Side.valueOf(startingSide), ColorPawn.valueOf(color), new Point(positionX, positionY), nbRemainingFences);
-                i++;
+            if((gameObjects.get("columns") instanceof Integer) && ((Integer)(gameObjects.get("columns")) >= 2)) {
+                columns = ((Integer) gameObjects.get("columns")).intValue();
+            } else {
+                throw new FileContentModifiedException();
             }
-        } catch (FileNotFoundException e) {
+
+            if((gameObjects.get("maxNbFences") instanceof Integer) && ((Integer)(gameObjects.get("maxNbFences")) >= 0)) {
+                maxNbFences = ((Integer) gameObjects.get("maxNbFences")).intValue();
+            } else {
+                throw new FileContentModifiedException();
+            }
+
+            if((gameObjects.get("currentPawnIndex") instanceof Integer) && ((Integer)(gameObjects.get("currentPawnIndex")) >= 0)) {
+                currentPawnIndex = ((Integer) gameObjects.get("currentPawnIndex")).intValue();
+            } else {
+                throw new FileContentModifiedException();
+            }
+            
+            Object FencesObj = gameObjects.get("listFences");
+            if((FencesObj != null) && (FencesObj instanceof JSONArray)) { 
+                JSONArray listFencesJSON = (JSONArray) FencesObj;
+                Iterator<?> iteratorFence = listFencesJSON.iterator(); // It is an array that contains objects that can be a string associated with the key "orientation" and then two int that form an object associated with the key "start" and "end" 
+                this.listFences = new ArrayList<Fence>(); //check if it's really what we want to have
+                while(iteratorFence.hasNext()) {
+                    Object iterFence = iteratorFence.next();
+                    if (iterFence instanceof JSONObject) {
+                        JSONObject fenceJSON = (JSONObject) iterFence;
+
+                        if (fenceJSON.get("orientation") instanceof String) {
+                            orientation = ((String) fenceJSON.get("orientation")).toString();
+                        } else {
+                            throw new FileContentModifiedException();
+                        }
+
+                        Point start = new Point(0,0);
+
+                        if((fenceJSON.get("start") instanceof JSONObject)) {
+                            if(fenceJSON.get("x") instanceof Integer) {
+                                start.setX(((Integer) fenceJSON.get("x")).intValue());
+                                if(start.getX() < 0) {
+                                    throw new FileContentModifiedException();
+                                }
+                            } else {
+                                throw new FileContentModifiedException();
+                            }
+
+                            if(fenceJSON.get("y") instanceof Integer) {
+                                start.setY(((Integer) fenceJSON.get("y")).intValue());
+                                if(start.getY() < 0) {
+                                    throw new FileContentModifiedException();
+                                }
+                            } else {
+                                throw new FileContentModifiedException();
+                            }
+
+                        } else {
+                            throw new FileContentModifiedException();
+                        }                        
+
+                        Point end = new Point(0,0);
+
+                        if((fenceJSON.get("end") instanceof JSONObject)) {
+                            if(fenceJSON.get("x") instanceof Integer) {
+                                end.setX(((Integer) fenceJSON.get("x")).intValue());
+                                if(end.getX() < 0) {
+                                    throw new FileContentModifiedException();
+                                }
+                            } else {
+                                throw new FileContentModifiedException();
+                            }
+
+                            if(fenceJSON.get("y") instanceof Integer) {
+                                end.setY(((Integer) fenceJSON.get("y")).intValue());
+                                if(end.getY() < 0) {
+                                    throw new FileContentModifiedException();
+                                }
+                            } else {
+                                throw new FileContentModifiedException();
+                            }
+
+                        } else {
+                            throw new FileContentModifiedException();
+                        } 
+                        
+                        try {
+                            this.listFences.add(new Fence(Orientation.valueOf(orientation), start, end));
+                        } catch (Exception e) {
+                            throw new FileContentModifiedException();
+                        }
+
+                    } else {
+                        throw new FileContentModifiedException();
+                    }
+                }
+
+            } else {
+                throw new FileContentModifiedException();
+            }
+
+            Object PawnsObj = gameObjects.get("listPawns");
+            if((PawnsObj != null) && (PawnsObj instanceof JSONArray)) { 
+                JSONArray listPawnsJSON = (JSONArray) PawnsObj;
+                Iterator<?> iteratorPawn = listPawnsJSON.iterator(); //C'est un tableau qui contient des objets qui peuvent être un int associé à la clé "id", un Side associé à la clé "startingSide", une String associée à la clé "color", puis deux int associé à la clé "x" et "y" qui forme un objet associé à la clé "pos" et un int associé à la clé "nbRemainingFences" 
+                int size = listPawnsJSON.size(); //check if it's really what we want to have
+                this.pawns = new Pawn[size];
+                int i = 0;
+                while(iteratorPawn.hasNext()) {
+                    Object iterPawn = iteratorPawn.next();
+                    if (iterPawn instanceof JSONObject) {
+                        JSONObject pawnJSON = (JSONObject) iterPawn;
+
+                        if (pawnJSON.get("id") instanceof Integer) {
+                            id = ((Integer) pawnJSON.get("id")).intValue();
+                            if(id < 0) {
+                                throw new FileContentModifiedException();
+                            }
+                        } else {
+                            throw new FileContentModifiedException();
+                        }
+
+                        if (pawnJSON.get("startingSide") instanceof String) {
+                            startingSide = ((String) pawnJSON.get("startingSide")).toString();
+                        } else {
+                           throw new FileContentModifiedException();
+                        }
+
+                        if (pawnJSON.get("color") instanceof String) {
+                            color = ((String) pawnJSON.get("color")).toString();
+                        } else {
+                            throw new FileContentModifiedException();
+                        }
+
+                        if (pawnJSON.get("pos") instanceof JSONObject) {
+                            JSONObject position = (JSONObject) pawnJSON.get("pos");
+                            if (position.get("x") instanceof Integer) {
+                                positionX = ((Integer) position.get("x")).intValue();
+                                if (positionX < 0) {
+                                    throw new FileContentModifiedException();
+                                }
+                            } else {
+                                throw new FileContentModifiedException();
+                            }
+
+                            if (position.get("y") instanceof Integer) {
+                                positionY = ((Integer) position.get("y")).intValue();
+                                if (positionY < 0) {
+                                    throw new FileContentModifiedException();
+                                }
+                            } else {
+                                throw new FileContentModifiedException();
+                            }
+                        } else {
+                            throw new FileContentModifiedException();
+                        }
+
+                        if (pawnJSON.get("nbRemainingFences") instanceof Integer) {
+                            nbRemainingFences = ((Integer) pawnJSON.get("nbRemainingFences")).intValue();
+                        } else {
+                           throw new FileContentModifiedException();
+                        }
+
+                        try {
+                            this.pawns[i] = new Pawn(id, Side.valueOf(startingSide), ColorPawn.valueOf(color), new Point(positionX, positionY), nbRemainingFences);
+                            i++;
+                        } catch (Exception e) {
+                            throw new FileContentModifiedException();
+                        }
+
+                    } else {
+                        throw new FileContentModifiedException();
+                    }
+                }
+
+            } else {
+                throw new FileContentModifiedException();
+            }
+
+        } catch (FileContentModifiedException e) {
             throw e;
         } catch (IOException e) {
             throw e;
