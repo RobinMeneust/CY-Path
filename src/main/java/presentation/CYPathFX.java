@@ -418,18 +418,8 @@ public class CYPathFX extends Application {
         this.gameSkipTurnButton.setOnAction(e -> {
             this.game.setIsEndTurn(true);
             this.gameSkipTurnButton.setVisible(false);
-            
-            while (this.game.getIsEndTurn()) {
-                try {
-                    Thread.sleep(100); //Wait 100 milliseconds before checking again
-                } catch (InterruptedException ev) {
-                    Thread.currentThread().interrupt();
-                }
-            }
 
-            if(this.game.getBoard().getWinner() != -1){
-                this.game.getIsEndGame().setValue(true);
-            }
+            checkEndTurn(this.game);
 
             //update button
             this.getActionButton().fire();
@@ -486,6 +476,24 @@ public class CYPathFX extends Application {
         });
         this.terminalThread.setDaemon(true);
         this.terminalThread.start();
+    }
+
+    /**
+     * Check if the turn ends and check if it's the end of the game
+     * @param game Current game
+     */
+    public static void checkEndTurn(GameFX game) {
+        while (game.getIsEndTurn()) {
+            try {
+                Thread.sleep(100); //Wait 100 milliseconds before checking again
+            } catch (InterruptedException ev) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if(game.getBoard().getWinner() != -1){
+            game.getIsEndGame().setValue(true);
+        }
     }
 
     /**
