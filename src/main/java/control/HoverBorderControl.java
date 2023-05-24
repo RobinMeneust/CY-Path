@@ -88,6 +88,14 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 		}
 	}
 
+
+	/**
+	 * Set the color the fence for the player to show where it is possible to place a fence.
+	 * @param orientation Orientation of the fence
+	 * @param start Starting point of the fence
+	 * @param length Length of the fence
+	 * @param color Color of the fence
+	 */
 	private void highlightFence(Orientation orientation, Point start, int length, Color color) {
 		if(orientation == Orientation.HORIZONTAL) {
 			int y = start.getY() - 1; // get the upper border
@@ -104,10 +112,10 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 
 
 	/**
-	 * Set the color the dummy fence for the player to show where it is possible to place a fence.
-	 * 
-	 * @param x	The X coordinate of the origin of the fence on the grid
-	 * @param y The Y coordinate of the origin of the fence on the grid
+	 * Set the color the line for the player to show where it is possible to place a fence.
+	 *
+	 * @param x	The X coordinate of the origin of the line on the grid
+	 * @param y The Y coordinate of the origin of the line on the grid
 	 * @param newColor New color of the line
 	 */
 

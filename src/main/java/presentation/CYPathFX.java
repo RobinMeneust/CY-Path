@@ -42,15 +42,14 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
-@SuppressWarnings("deprecation")
-
 /**
  * Main JavaFX class of the CYPath project
  * Manage all the JavaFX elements and the game loop for the window mode
- * 
+ *
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
+@SuppressWarnings("deprecation")
 public class CYPathFX extends Application {
     /**
      * The action button used in the game interface.
