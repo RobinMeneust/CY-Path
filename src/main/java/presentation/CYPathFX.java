@@ -18,6 +18,8 @@ import control.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -100,7 +102,7 @@ public class CYPathFX extends Application {
     /**
      * The terminal thread use during the game.
      */
-    private Thread terminalThread;
+    private Service<Void> service;
 
     /**
      * The primary stage of the application.
@@ -217,7 +219,7 @@ public class CYPathFX extends Application {
         this.newGameMenuScene = null;
         this.gameScene = null;
         this.primaryStage = primaryStage;
-        this.terminalThread = null;
+        this.service = null;
         this.fenceCounter = new Text("0");
         this.continueGameButton = new Button("Continue");
         this.continueGameButton.getStyleClass().add("menu-button");
@@ -395,6 +397,40 @@ public class CYPathFX extends Application {
             System.err.println(e.getMessage());
             System.exit(-1);
         }
+
+        //Create a thread to run in the terminal
+        if(this.service == null) {
+            this.service = new Service<Void>(){
+                @Override
+                protected Task<Void> createTask() {
+                    Task<Void> task = new Task<Void>(){
+                        @Override
+                        protected Void call() throws Exception {
+                            try {
+                                CYPathFX.this.game.setTask(this);
+                                CYPathFX.this.game.launch();
+                            } catch(Exception e) {
+                                throw e;
+                            }
+                            return null;
+                        }
+                    };
+                    
+                    task.exceptionProperty().addListener((observable, oldValue, newValue) ->  {
+                        if(newValue != null) {
+                            Exception e = (Exception) newValue;
+                            System.err.println(e);
+                            System.exit(-1);
+                        }
+                    });
+                    
+                    return task;
+                }
+            };
+            this.service.start();
+        } else {
+            this.service.restart();
+        }
     }
 
     /**
@@ -471,15 +507,6 @@ public class CYPathFX extends Application {
         //We click on the button two times for update the first player action
         this.getActionButton().fire();
         this.getActionButton().fire();
-        //Create a thread to run in the terminal
-        if(this.terminalThread != null && this.terminalThread.isAlive()) {
-            this.terminalThread.interrupt();
-        }
-        this.terminalThread = new Thread(() -> {
-            this.game.launch();
-        });
-        this.terminalThread.setDaemon(true);
-        this.terminalThread.start();
     }
 
     /**

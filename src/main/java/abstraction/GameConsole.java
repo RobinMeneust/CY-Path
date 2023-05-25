@@ -193,9 +193,11 @@ public class GameConsole extends GameAbstract {
     
     /**
      * Launch the current game in console mode
+     * 
+     * @throws Exception If the game could not be launched or if a round was invalid
      */
 
-    public void launch() {
+    public void launch() throws Exception {
         String response = "";
         Pawn currentPawn = null;
 
@@ -214,7 +216,6 @@ public class GameConsole extends GameAbstract {
                 } else if(listPossibleMoves.isEmpty()){
                     //If it can't move
                     if(currentPawn.getAvailableFences() != 0){
-                        
                         System.out.println("You can't move. You can only place a fence");
                         response = getUserActionChoice(true,false);
                     }
@@ -254,8 +255,7 @@ public class GameConsole extends GameAbstract {
             System.out.println("The winner is "+playerWinner);            
         } catch (IncorrectPawnIndexException e) {
             // If this exception is thrown the pawn ids are incorrect
-            System.err.println(e.getMessage());
-            System.exit(-1);
+            throw e;
         }
 	}
 }

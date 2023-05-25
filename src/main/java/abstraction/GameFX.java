@@ -16,6 +16,7 @@ import java.util.HashMap;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
 
 /**
  * Current game launched in window mode with JavaFX
@@ -40,6 +41,11 @@ public class GameFX extends GameAbstract {
      */
     private BooleanProperty isEndGame;
 
+    /**
+     * Task associated to this game
+     */
+    private Task<Void> task;
+
    /**
 	 * Create a GameFX object by giving all of its attributes
 	 * @param players Array of the players
@@ -59,6 +65,7 @@ public class GameFX extends GameAbstract {
         this.action = new SimpleStringProperty("Place fence");
         this.isEndTurn = false;
         this.isEndGame = new SimpleBooleanProperty(false);
+        this.task = null;
     }
 
 	/**
@@ -81,6 +88,7 @@ public class GameFX extends GameAbstract {
         this.action = new SimpleStringProperty("Place fence");
         this.isEndTurn = false;
         this.isEndGame = new SimpleBooleanProperty(false);
+        this.task = null;
     }
 
     /**
@@ -136,14 +144,41 @@ public class GameFX extends GameAbstract {
 	public void setIsEndGame(BooleanProperty endGame){
 		this.isEndGame = endGame;
 	}
+
     /**
-     * Launch the current game for window mode
+     * Get the task associated to this game
+     * 
+     * @return The task
+     */
+    
+    public Task<Void> getTask() {
+        return task;
+    }
+
+    /**
+     * Change the task associated to this game
+     * @param task New task
+     * @throws InvalidTaskException If the task given is null
      */
 
-     public void launch() {
+    public void setTask(Task<Void> task) throws InvalidTaskException {
+        if(task == null) {
+            throw new InvalidTaskException();
+        }
+        this.task = task;
+    }
+
+    /**
+     * Launch the current game for window mode
+     * 
+     * @throws Exception If the game could not be launched or if a round was invalid
+     */
+
+     public void launch() throws Exception {
+        System.out.println("TEST");
         Pawn currentPawn = null;
 
-        while(true){
+        while(!this.getIsEndGame().getValue()) {
             this.getBoard().displayBoard(DisplayType.NO_COORD);
 
             System.out.println("Turn of player: " + this.getCurrentPlayer());
@@ -158,6 +193,9 @@ public class GameFX extends GameAbstract {
                     Thread.sleep(100); //Wait 100 milliseconds before checking again
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                }
+                if(this.getTask().isCancelled()){
+                    return;
                 }
             }
 

@@ -25,7 +25,8 @@ public class PointWithCost extends Point implements Comparable<PointWithCost> {
 
 	/**
 	 * Get the cost value of this point
-	 * @return
+	 * 
+	 * @return The cost value
 	 */
 
 	public int getCost() {
@@ -34,6 +35,7 @@ public class PointWithCost extends Point implements Comparable<PointWithCost> {
 
 	/**
 	 * Set the cost value of this point
+	 * 
 	 * @param cost New cost
 	 */
 

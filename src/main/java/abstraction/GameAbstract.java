@@ -177,9 +177,10 @@ public abstract class GameAbstract extends Observable {
 
 	/**
 	 * Abstract method used to launch a Game on a board in either console or window mode
-	 */
-
-	public abstract void launch();
+	 * 
+     * @throws Exception If the game could not be launched or if a round was invalid
+     */
+	public abstract void launch() throws Exception;
 
 	/**
 	 * Get the number of players
