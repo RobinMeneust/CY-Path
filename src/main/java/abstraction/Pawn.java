@@ -197,7 +197,7 @@ public class Pawn implements Cloneable{
     public void setBoard(Board board) {
         this.board = board;
         if(this.position == null) {
-            this.position = board.getGrid().getCenterOfSide(startingSide);
+            this.position = this.getCenterOfSide(startingSide);
         }
     }
 
@@ -210,6 +210,23 @@ public class Pawn implements Cloneable{
     public Player getPlayer(){
         return player;
     }
+
+    /**
+	 * Get the point at the center of a side
+	 * 
+	 * @param side Side whose center is searched
+	 * @return Center of the side
+	 */
+
+	public Point getCenterOfSide(Side side) {
+		switch(side){
+			case TOP : return new Point(this.getBoard().getNbCols()/2,0);
+			case BOTTOM : return new Point(this.getBoard().getNbCols()/2,this.getBoard().getNbRows()-1);
+			case LEFT : return new Point(0,this.getBoard().getNbRows()/2);
+			case RIGHT : return new Point(this.getBoard().getNbCols()-1,this.getBoard().getNbRows()/2);
+			default: return null;
+		}
+	}
 
     /**
      * A procedure that updates the number of remaining fences to be placed

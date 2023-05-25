@@ -9,7 +9,7 @@ package abstraction;
 import java.util.Set;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 
 /**
@@ -182,33 +182,33 @@ public class Grid {
 	}
 
 	/**
-	 * Get the approximate cost of a path between a start and a destination
+	 * Get the distance between a point and a Side
 	 * 
-	 * @param start Node where the path starts
-	 * @param destination Node where the path ends
-	 * @return Cost of the path
+	 * @param start Point whose distance is calculated
+	 * @param destination Targeted side
+	 * @return Distance
 	 */
 
-	public static int costFunctionPath(Point start, Point destination) {
-		return Point.getDistance(start,destination);
+	public int getDistanceToSide(Point start, Side destination) {
+		switch(destination) {
+			case TOP: return start.getY();
+			case BOTTOM: return this.getNbRows() - 1 - start.getY();
+			case LEFT: return start.getX();
+			case RIGHT: return this.getNbRows() - 1 - start.getX();
+			default: return Integer.MAX_VALUE;
+		}
 	}
 
 	/**
-	 * Get the Point that has the minimum cost value
+	 * Get the approximate cost of a path between a start and a destination
 	 * 
-	 * @param list List of points where the minimum is searched
-	 * @param cost Map of the cost of each point
-	 * @return Point that has the minimum cost
+	 * @param start Node where the path starts
+	 * @param destination Side where the path ends
+	 * @return Cost of the path
 	 */
 
-	public static Point getMinPoint(LinkedList<Point> list, HashMap<Point,Integer> cost) {
-		Point minPoint = list.peek();
-		for(Point p : list) {
-			if(cost.get(minPoint) > cost.get(p)) {
-				minPoint = p;
-			}
-		}
-		return minPoint;
+	public int costFunctionPath(Point start, Side destination) {
+		return getDistanceToSide(start,destination);
 	}
 
 	/**
@@ -223,55 +223,76 @@ public class Grid {
 	}
 
 	/**
-	 * Get the point at the center of a side
+	 * Display the path in contained in the parameter 'parents' starting from the point 'end'
 	 * 
-	 * @param side Side whose center is searched
-	 * @return Center of the side
+	 * @param end The last point of the path
+	 * @param parents The map containing the path. Each point is associated to its predecessor in the path
 	 */
 
-	public Point getCenterOfSide(Side side) {
-		switch(side){
-			case TOP : return new Point(this.getNbCols()/2,0);
-			case BOTTOM : return new Point(this.getNbCols()/2,this.getNbRows()-1);
-			case LEFT : return new Point(0,this.getNbRows()/2);
-			case RIGHT : return new Point(this.getNbCols()-1,this.getNbRows()/2);
-			default: return null;
+	public void displayPath(Point end, HashMap<Point,Point> parents) {
+		if(parents == null) {
+			return;
 		}
-	}
-
-	/**
-	 * Get the set of points on the given side
-	 * 
-	 * @param sideDest Side where points are searched
-	 * @return Set of points found on the given side
-	 */
-
-	public HashSet<Point> getPointsSetFromSide(Side sideDest) {
-		HashSet<Point> pointsSet = new HashSet<Point>(9);
-		switch(sideDest) {
-			case LEFT:
-				for(int i=0; i<this.getNbRows(); i++) {
-					pointsSet.add(new Point(0,i));
-				}
-				break;
-			case RIGHT:
-				for(int i=0; i<this.getNbRows(); i++) {
-					pointsSet.add(new Point(this.getNbCols()-1,i));
-				}
-				break;
-			case TOP:
-				for(int i=0; i<this.getNbRows(); i++) {
-					pointsSet.add(new Point(i,0));
-				}
-				break;
-			case BOTTOM:
-				for(int i=0; i<this.getNbRows(); i++) {
-					pointsSet.add(new Point(i,this.getNbRows()-1));
-				}
-				break;
-			default:;
+		System.out.println();
+		
+		System.out.print("    ");
+		for(int i=0; i<nbCols; i++) {
+			System.out.printf("%3d ",i);
 		}
-		return pointsSet;
+
+		System.out.println();
+		System.out.print("    ");
+		for(int x=0; x<nbCols; x++){
+			System.out.print("|---");
+		}
+		System.out.print("|");
+		System.out.println();
+
+		HashMap<Point,Integer> cellContent = new HashMap<Point,Integer>();
+
+		Point p = end;
+		int id = 0;
+		while(p != null) {
+			cellContent.put(p, Integer.valueOf(id));
+			p = parents.get(p);
+			id++;
+		}
+
+
+		for(int y=0; y<nbRows; y++) {
+			System.out.printf("%3d |",y);
+
+			for(int x=0; x<nbCols; x++) {
+				Integer content = cellContent.get(new Point(x,y));
+				if(content != null) {
+					System.out.printf("%3d", content);
+				} else {
+					System.out.print("   ");
+				}
+				
+				if(x==nbCols-1 || this.areConnected(x, y, x+1, y)) {
+					// It's the right border or there is no vertical fence between (x,y) and (x+1,y)
+					System.out.print("|");
+				} else {
+					// There is a vertical fence between (x,y) and (x+1,y)
+					System.out.print("@");
+				}
+			}
+
+			// bottom border
+			System.out.println();
+			System.out.print("    ");
+
+			for(int x=0; x<nbCols; x++){
+				if(y == nbRows-1 || this.areConnected(x, y, x, y+1)) {
+					System.out.print("|---");
+				} else {
+					System.out.print("|@@@");
+				}
+			}
+			System.out.print("|");
+			System.out.println();
+		}
 	}
 
 	/**
@@ -283,45 +304,37 @@ public class Grid {
 	 */
 
 	public boolean existPath(Point start, Side sideDest) {
-		LinkedList<Point> nodesToBeExpanded = new LinkedList<Point>();
+		PriorityQueue<PointWithCost> nodesToBeExpanded = new PriorityQueue<PointWithCost>();
 		HashMap<Point,Point> parents = new HashMap<Point,Point>();
 		HashMap<Point,Integer> distTo = new HashMap<Point,Integer>();
-		HashMap<Point,Integer> cost = new HashMap<Point,Integer>();
 		Point currentNode = start;
-		Point destinationApprox = null;
 		int distToNeighbor = 0;
-		HashSet<Point> pointsOnSideDest = null;
-		
-		pointsOnSideDest = getPointsSetFromSide(sideDest);
-		destinationApprox = this.getCenterOfSide(sideDest);
 
 		for(Point p : this.getNodesList()) {
 			parents.put(p,null);
 			distTo.put(p, Integer.MAX_VALUE);
-			cost.put(p, Integer.MAX_VALUE);
 		}
 
-		nodesToBeExpanded.add(start);
+		nodesToBeExpanded.add(new PointWithCost(start, costFunctionPath(start, sideDest)));
 		distTo.replace(start,0);
-		cost.replace(start,costFunctionPath(start, destinationApprox));
 		
 		while(!nodesToBeExpanded.isEmpty()) {
-			currentNode = getMinPoint(nodesToBeExpanded, cost);
-			if(pointsOnSideDest.contains(currentNode)) {
+			currentNode = nodesToBeExpanded.poll();
+			if(getDistanceToSide(currentNode, sideDest) == 0) {
 				return true;
 			}
 
 			nodesToBeExpanded.remove(currentNode);
 			for(Point neighbor : getListNeighbors(currentNode)) {
-				distToNeighbor = distTo.get(currentNode) + 1; // weight is 1 for all edges
+				distToNeighbor = distTo.get(currentNode) + 1; // weight is 1 for all edges so we just add 1
 				if(distToNeighbor < distTo.get(neighbor)) {
 					// Update distTo and path if the new distance is smaller
 					parents.replace(neighbor, currentNode);
 					distTo.replace(neighbor, distToNeighbor);
-					cost.replace(neighbor, distToNeighbor + costFunctionPath(neighbor, destinationApprox));
 					
-					if(!nodesToBeExpanded.contains(neighbor)) {
-						nodesToBeExpanded.add(neighbor);
+					PointWithCost newPointWithCost = new PointWithCost(neighbor, distToNeighbor + costFunctionPath(neighbor, sideDest));
+					if(!nodesToBeExpanded.contains(newPointWithCost)) {
+						nodesToBeExpanded.add(newPointWithCost);
 					}
 				}
 			}

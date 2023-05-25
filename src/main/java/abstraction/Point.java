@@ -3,7 +3,7 @@ package abstraction;
 import presentation.CYPath;
 
 /**
- * This class corresponds to all elements that are related to a point in a CY-PATH game.
+ * This class represents a 2D point with integer coordinates
  * 
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
