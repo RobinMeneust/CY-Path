@@ -56,12 +56,16 @@ When you launch the application you can either press 'w' to open a JavaFX window
 
 ### In the JavaFX window
 
+- Navigate in the main menu to start a game (if a game is in progress there is a "Continue" button to go back to it)
 - Click on the button to change the mode (placing fence or moving)
-- Right click to change the fence orientation
-- Left click on a cell to make a move or place a fence
-- If a fence is red it's not a valid position and if it's green it can be placed
-- The cells where you can move to are in a different color
-
+- Move mode :
+    - The cells where you can move to are in a different color (in the color of your pawn)
+    - Left click on a cell to move there
+- Fence placing mode
+    - Right click on a cell to change the fence orientation
+    - Move your mouse on a cell to display the current selected fence
+    - If a fence is red it's not a valid position and if it's green it can be placed
+    - Left click on a cell to place the selected fence
 
 ### In the console mode display
 
@@ -81,10 +85,10 @@ To play you must write in the console your answer when a question is asked. We h
 
 - "How many players do you want ? (2 or 4)"
     - Type either 2 or 4
-- "What is your next action ? ('m' (move) or 'f' (place fence))"
+- "What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))"
     - "m" : Move your pawn to the position that you will provide just after
     - "f" : Place a fence to the position that you will provide just after along with its orientation
-    - "s" : Save your current game to a file in resources/data/saves
+    - "s" : Save your current game to a file in data/saves
 - "Where do you want to go ?"
     - Here, you can only move to the positions given in the list after "Those are the possible moves you can do"
     - "X" : Give a number between 0 and 8. It's the x (horizontal) coordinate of the position where tou want to move your pawn

@@ -18,6 +18,7 @@ import control.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -27,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -40,30 +42,29 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
-@SuppressWarnings("deprecation")
-
 /**
  * Main JavaFX class of the CYPath project
  * Manage all the JavaFX elements and the game loop for the window mode
- * 
+ *
  * @author BARRE Romain, ETRILLARD Yann, GARCIA-MEGEVAND Thibault, KUSMIDER David, MENEUST Robin
  */
 
+@SuppressWarnings("deprecation")
 public class CYPathFX extends Application {
     /**
      * The action button used in the game interface.
      */
-    public Button actionButton;
+    private Button actionButton;
 
     /**
      * The GameFX object representing the game.
      */
-    public GameFX game;
+    private GameFX game;
 
     /**
      * The GridPane used to display the game grid.
      */
-    public GridPane gPane;
+    private GridPane gPane;
 
     /**
      * The fence object.
@@ -73,17 +74,17 @@ public class CYPathFX extends Application {
     /**
      * A linked list of Line objects representing previously highlighted fences.
      */
-    public LinkedList<Line> prevHighlightedFencesList;
+    private LinkedList<Line> prevHighlightedFencesList;
 
     /**
      * A linked list of Rectangle objects representing previously possible cells.
      */
-    public LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
+    private LinkedList<Rectangle> previousPossibleCells = new LinkedList<Rectangle>();
 
     /**
      * The color used for cell hover effects.
      */
-    public Color cellColorHover;
+    private Color cellColorHover;
 
     /**
      * A boolean indicating the move mode.
@@ -93,7 +94,7 @@ public class CYPathFX extends Application {
     /**
      * The Text object representing the fence counter.
      */
-    public Text fenceCounter;
+    private Text fenceCounter;
 
     /**
      * The terminal thread use during the game.
@@ -143,6 +144,62 @@ public class CYPathFX extends Application {
     public CYPathFX() {}
 
     /**
+     * Get the action button
+     * @return Action Button
+     */
+    public Button getActionButton(){
+        return this.actionButton;
+    }
+
+    /**
+     * Get the game associated to the graphical interface
+     * @return Current game
+     */
+    public GameFX getGame() {
+        return game;
+    }
+
+    /**
+     * Get color of cells when you can hover them
+     * @return Color of when hovering cells
+     */
+    public Color getCellColorHover() {
+        return cellColorHover;
+    }
+
+    /**
+     * Get the list of highlighted fences, representing by a line on the graphical interface
+     * @return List of Line
+     */
+    public LinkedList<Line> getPrevHighlightedFencesList() {
+        return prevHighlightedFencesList;
+    }
+
+    /**
+     * Get the list of cells where it's possible for the player to move on
+     * @return List of Rectangle where the player can go to
+     */
+    public LinkedList<Rectangle> getPreviousPossibleCells() {
+        return previousPossibleCells;
+    }
+
+    /**
+     * Get the grid show to the player
+     * @return GridPane show to the player
+     */
+    public GridPane getGPane(){
+        return this.gPane;
+    }
+
+    /**
+     * Get the text of number of fences
+     * @return Text of fence's number
+     */
+    public Text getFenceCounter() {
+        return fenceCounter;
+    }
+
+    /**
      * Method running at the launch of the graphical interface.
      * @param primaryStage Stage of the window
      * @throws Exception Any exception thrown by start
@@ -161,7 +218,9 @@ public class CYPathFX extends Application {
         this.primaryStage = primaryStage;
         this.terminalThread = null;
         this.fenceCounter = new Text("0");
-        this.continueGameButton = new Button("Continue current game");
+        this.continueGameButton = new Button("Continue");
+        this.continueGameButton.getStyleClass().add("menu-button");
+        this.continueGameButton.setId("continue-game-button");
         this.continueGameButton.setOnAction(e -> {
             goToGameScene();
         });
@@ -169,9 +228,12 @@ public class CYPathFX extends Application {
         this.gameSkipTurnButton = null;
 
         // Set up stage
-        primaryStage.setTitle("CY Path : the Game");
-        primaryStage.setResizable(false);
-        primaryStage.setOnCloseRequest(e -> {
+        this.primaryStage.setTitle("CY Path : the Game");
+        this.primaryStage.setMinWidth(545);
+        this.primaryStage.setMinHeight(595);
+        this.primaryStage.setWidth(545);
+        this.primaryStage.setHeight(595);
+        this.primaryStage.setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
         });
@@ -187,16 +249,25 @@ public class CYPathFX extends Application {
     public void createMainMenuScene() {
         BorderPane rootMainMenu = new BorderPane();
         this.mainMenuScene = new Scene(rootMainMenu);
-        
-        HBox buttonsMenuHBox = new HBox();
-        rootMainMenu.setCenter(buttonsMenuHBox);
+
+        Label titleMainMenu = new Label("CY Path");
+        titleMainMenu.setAlignment(Pos.CENTER);
+        titleMainMenu.setId("title-main-menu");
+        rootMainMenu.setTop(titleMainMenu);
+        BorderPane.setAlignment(titleMainMenu, Pos.CENTER);
 
         Button newGameMenuButton = new Button("New Game");
+        newGameMenuButton.setId("new-game-button");
+        newGameMenuButton.getStyleClass().add("menu-button");
         newGameMenuButton.setOnAction(e -> goToNewGameMenu());
 
         Button loadButton = new Button("Load");
+        loadButton.setId("load-game-button");
+        loadButton.getStyleClass().add("menu-button");
 
         Button exitButton = new Button("Exit");
+        exitButton.setId("exit-game-button");
+        exitButton.getStyleClass().add("menu-button");
         exitButton.setOnAction(e -> {
             Platform.exit();
             System.exit(0);
@@ -204,8 +275,12 @@ public class CYPathFX extends Application {
 
         loadButton.setOnAction(e -> loadGame());
 
+        VBox buttonsMenuVBox = new VBox(15);
+        buttonsMenuVBox.setAlignment(Pos.CENTER);
+        rootMainMenu.setCenter(buttonsMenuVBox);
 
-        buttonsMenuHBox.getChildren().addAll(newGameMenuButton, loadButton, exitButton, continueGameButton);
+        buttonsMenuVBox.getChildren().addAll(newGameMenuButton, continueGameButton, loadButton, exitButton);
+        mainMenuScene.getStylesheets().add("styleMainMenu.css");
     }
 
     /**
@@ -245,7 +320,7 @@ public class CYPathFX extends Application {
             createGameScene();
             goToGameScene();
         } catch (GameNotInitializedException err) {
-            err.printStackTrace();
+            System.err.println(err.getMessage());
             System.exit(-1);
         }
     }
@@ -255,26 +330,49 @@ public class CYPathFX extends Application {
      */
     public void createNewGameScene() {
         BorderPane root = new BorderPane();
-        
+    
+        // Creation of the buttons
         Button twoPlayersModeButton = new Button("2 Players");
+        twoPlayersModeButton.setPadding(new Insets(10, 28, 10, 28));
+        twoPlayersModeButton.getStyleClass().add("menu-button");
+        twoPlayersModeButton.setId("two-players-mode-button");
         twoPlayersModeButton.setOnAction(e -> {
             prepareGameScene(2);
         });
         Button fourPlayersModeButton = new Button("4 Players");
+        fourPlayersModeButton.setPadding(new Insets(10, 28, 10, 28));
+        fourPlayersModeButton.getStyleClass().add("menu-button");
+        fourPlayersModeButton.setId("four-players-mode-button");
         fourPlayersModeButton.setOnAction(e -> {
             prepareGameScene(4);
         });
-
+    
         Button goBack = new Button("Main Menu");
+        goBack.setPadding(new Insets(10, 20, 10, 20));
+        goBack.getStyleClass().add("menu-button");
+        goBack.setId("go-back");
         goBack.setOnAction(e -> {
             goToMainMenuScene();
         });
+    
+        // Creation of the label
+        Label titleGameMode = new Label("Game mode");
+        titleGameMode.setId("title-game-mode");
+        titleGameMode.setAlignment(Pos.CENTER);
+        titleGameMode.setPadding(new Insets(10));
+    
+        // Creation of the VBox
+        VBox buttonsMenuVBox = new VBox(15);
+        buttonsMenuVBox.getChildren().addAll(twoPlayersModeButton, fourPlayersModeButton, goBack);
+        buttonsMenuVBox.setAlignment(Pos.CENTER);
 
-        root.setTop(goBack);
-        root.setLeft(twoPlayersModeButton);
-        root.setRight(fourPlayersModeButton);
-        
+        // Adding the VBox in the center of the BorderPane
+        root.setTop(titleGameMode);
+        root.setCenter(buttonsMenuVBox);
+        BorderPane.setAlignment(titleGameMode, Pos.CENTER);
+    
         this.newGameMenuScene = new Scene(root);
+        this.newGameMenuScene.getStylesheets().add("styleGameMode.css");
     }
 
     /**
@@ -289,9 +387,9 @@ public class CYPathFX extends Application {
             playersPawnIndex.put(i, players[i]);
         }
         try {
-            this.game = new GameFX(players,20, 9, 9, playersPawnIndex);
-        } catch (InvalidNumberOfPlayersException e) {
-            e.printStackTrace();
+            this.game = new GameFX(players,20, 9, 9, playersPawnIndex, 2);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
             System.exit(-1);
         }
     }
@@ -310,7 +408,7 @@ public class CYPathFX extends Application {
         goBack.setOnAction(e -> {
             goToMainMenuScene();
         });
-        this.actionButton.setOnAction(new ActionButtonControl(this, this.actionButton, this.game));
+        this.getActionButton().setOnAction(new ActionButtonControl(this, this.getActionButton(), this.game));
         
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
@@ -320,18 +418,27 @@ public class CYPathFX extends Application {
         this.gameSkipTurnButton.setOnAction(e -> {
             this.game.setIsEndTurn(true);
             this.gameSkipTurnButton.setVisible(false);
-            this.actionButton.fire();
-            this.actionButton.fire();
+
+            checkEndTurn(this.game);
+
+            //update button
+            this.getActionButton().fire();
+            if (!(this.getActionButton().getText().equals("Place fence"))) {
+                this.getActionButton().fire();
+            }
         });
         
         HBox buttonsHBox = new HBox();
-        buttonsHBox.getChildren().addAll(actionButton, saveButton, goBack, fenceCounter,gameSkipTurnButton);
-        this.gPane = createBoard();
+        buttonsHBox.setAlignment(Pos.CENTER_LEFT);
+        buttonsHBox.getChildren().addAll(this.getActionButton(), saveButton, goBack, fenceCounter, gameSkipTurnButton);
+        this.gPane = createBoard(50,8,Color.LIGHTGRAY, Color.rgb(230, 230, 230));
+
         rootGameScene.setCenter(this.gPane);
         rootGameScene.setTop(buttonsHBox);
         gameScene = new Scene(rootGameScene);
 
-        this.game.isEndGame.addListener((observable, oldValue, newValue) -> {
+        // When it's the end of a game, change the user interface
+        this.game.getIsEndGame().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Button newGameButton = new Button("New game");
                 newGameButton.setOnAction(e -> {
@@ -342,7 +449,7 @@ public class CYPathFX extends Application {
                 try {
                     winner = new Text("Winner is " + this.game.getBoard().getPawn(this.game.getBoard().getWinner()).getColor().toString());
                 } catch (IncorrectPawnIndexException e1) {
-                    e1.printStackTrace();
+                    System.err.println(e1.getMessage());
                 }
                 
                 this.gPane.setDisable(true);
@@ -359,8 +466,8 @@ public class CYPathFX extends Application {
         this.game.addObserver(currentPlayerTextControl);
         buttonsHBox.getChildren().add(currentPlayerText);
         //We click on the button two times for update the first player action
-        actionButton.fire();
-        actionButton.fire();
+        this.getActionButton().fire();
+        this.getActionButton().fire();
         //Create a thread to run in the terminal
         if(this.terminalThread != null && this.terminalThread.isAlive()) {
             this.terminalThread.interrupt();
@@ -370,6 +477,24 @@ public class CYPathFX extends Application {
         });
         this.terminalThread.setDaemon(true);
         this.terminalThread.start();
+    }
+
+    /**
+     * Check if the turn ends and check if it's the end of the game
+     * @param game Current game
+     */
+    public static void checkEndTurn(GameFX game) {
+        while (game.getIsEndTurn()) {
+            try {
+                Thread.sleep(100); //Wait 100 milliseconds before checking again
+            } catch (InterruptedException ev) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if(game.getBoard().getWinner() != -1){
+            game.getIsEndGame().setValue(true);
+        }
     }
 
     /**
@@ -426,70 +551,70 @@ public class CYPathFX extends Application {
 
 
     /**
-     * Create a cell of the board and add it
+     * Create a cell of the board
      * 
-     * @param parent Board where the cell is added
      * @param row Row of the cell added
      * @param col Column of the cell added
      * @param size Size of the cell added (size = width = height)
      * @param color Color of the cell background
+     * @return Cell created
      */
 
-    private void createBoardCell(GridPane parent, int row, int col, int size, Color color) {
-        if(parent != null) {
-            StackPane cellStackPane = new StackPane(); // Create a new StackPane for every cell
-            Rectangle cell = new Rectangle(size, size);
+    private StackPane createBoardCell(int row, int col, int size, Color color) {
+        StackPane cellStackPane = new StackPane(); // Create a new StackPane for every cell
+        Rectangle cell = new Rectangle(size, size);
 
-            cell.setFill(color);
-            cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
-            cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
-            cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.actionButton));
-            cellStackPane.getChildren().add(cell);       
+        cell.setFill(color);
+        cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
+        cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
+        cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.getActionButton()));
+        cellStackPane.getChildren().add(cell);       
 
-            // Check if there is a pawn on this cell and add it if there is one
-            Pawn pawn = this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row));
-            if(this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row)) != null) {
-                cellStackPane.getChildren().add(this.createPlayerCircle(pawn.getColor()));
-            }
-
-            parent.add(cellStackPane, col, row);
+        // Check if there is a pawn on this cell and add it if there is one
+        Pawn pawn = this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row));
+        if(this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row)) != null) {
+            cellStackPane.getChildren().add(this.createPlayerCircle(pawn.getColor()));
         }
+        return cellStackPane;
     }
 
     /**
      * Create the grid for the player to play on.
      * The grid is main element in the graphical interface of the game.
      * 
+     * @param cellSize Size of the cells (size = width = height)
+     * @param lineWidth Width of the line of the borders
+     * @param borderColor Color of the borders without fences
+     * @param cellColor Color of the cells
      * @return GridPane with a grid drawn on it.
      */
 
-    public GridPane createBoard() {
+    public GridPane createBoard(int cellSize, int lineWidth, Color borderColor, Color cellColor) {
         GridPane gPane = new GridPane();
         int sizeBoardRows = this.game.getBoard().getNbRows();
         int sizeBoardColumns = this.game.getBoard().getNbCols();
         Line border = null;
-        int lineLength = 50;
-        int cellSize = 50;
-        int lineWidth = 8;
-        int lineLengthBorders = lineLength + lineWidth;
-        Color borderColor = Color.LIGHTGRAY;
-        Color cellColor = Color.rgb(230, 230, 230);
+        int lineLength = cellSize;
 
+        // To fix the top left corner
+        gPane.add(createLineBorder(0, 0, 0, lineWidth, borderColor, lineWidth), 0, 0);
+
+    
         // First horizontal border (top)
         for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
-            border = createLineBorder(0, 0, lineLengthBorders, 0, borderColor, lineWidth);
+            border = createLineBorder(0, 0, lineLength, 0, borderColor, lineWidth);
             gPane.add(border, j, 0);
         }
         gPane.getRowConstraints().add(new RowConstraints(lineWidth));
     
         for (int i = 1; i <= 2 * sizeBoardRows; i += 2) {
             // First vertical border (left)
-            border = createLineBorder(0, 0, 0, lineLengthBorders, borderColor, lineWidth);
+            border = createLineBorder(0, 0, 0, lineLength, borderColor, lineWidth);
             gPane.add(border, 0, i);
     
             for (int j = 1; j <= 2 * sizeBoardColumns; j += 2) {
                 // Cell
-                createBoardCell(gPane, i, j, cellSize, cellColor);
+                gPane.add(createBoardCell(i, j, cellSize, cellColor), j ,i);
     
                 // Vertical border
                 border = createLineBorder(0, 0, 0, lineLength, borderColor, lineWidth);
@@ -653,31 +778,36 @@ public class CYPathFX extends Application {
      * Change the cell's color if the player hover.
 	 * 
 	 * @param pawnId Int representing the ID of the Player.
+     * @throws IncorrectJavaFXBoardException If the board created in the JavaFX window mode is incorrect
 	 */
 
-    public void showPossibleCells(int pawnId){
+    public void showPossibleCells(int pawnId) throws IncorrectJavaFXBoardException {
         LinkedList<Point> possibleMoves = null;
         try {
             possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
 
-            if(possibleMoves.isEmpty()){
+            if(possibleMoves.isEmpty() && !this.game.getIsEndTurn()){
+
                 System.out.println(this.game.getCurrentPawn().getColor().toString() + " pawn can't move");
                 showPopupWindow(primaryStage);
                 this.gameSkipTurnButton.setVisible(true);
             }
 
         } catch(IncorrectPawnIndexException err) {
-            err.printStackTrace();
+            System.err.println(err.getMessage());
             System.exit(-1);
         }
         
-        for( Point p : possibleMoves){
+        for(Point p : possibleMoves){
             StackPane stack = getCellStackPane(gPane, p.getY()*2+1, p.getX()*2+1);
+            if(stack == null) {
+                throw new IncorrectJavaFXBoardException();
+            }
             ObservableList<Node> children = stack.getChildren();
             int lastIndex = children.size() - 1;
             Node node = children.get(lastIndex);
 
-            if( node instanceof Rectangle){
+            if(node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
                 rec.setFill(this.game.getCurrentPawn().getColor().toColorPossibleMove());
                 this.previousPossibleCells.add(rec);
@@ -768,7 +898,7 @@ public class CYPathFX extends Application {
                     playersPawnIndex.put(i, players[i]);
                 }
 
-                this.game = new GameFX(players, loadDataObject.getMaxNbFences(), loadDataObject.getRows(), loadDataObject.getColumns(), playersPawnIndex, loadDataObject.getPawns(), loadDataObject.getCurrentPawnIndex());
+                this.game = new GameFX(players, loadDataObject.getMaxNbFences(), loadDataObject.getRows(), loadDataObject.getColumns(), playersPawnIndex, loadDataObject.getPawns(), loadDataObject.getCurrentPawnIndex(), 2);
                 for(Fence f : loadDataObject.getListFences()){
                     this.game.getBoard().addFenceToData(f);
                 }
@@ -780,8 +910,7 @@ public class CYPathFX extends Application {
                 this.goToGameScene();
             } catch (Exception e) {
                 alert = new Alert(AlertType.ERROR);
-                alert.setContentText("Error while loading the game.\n\n"+e);
-                e.printStackTrace();
+                alert.setContentText("Error while loading the game.\n"+e);
                 alert.showAndWait();
             }
         }
@@ -811,7 +940,7 @@ public class CYPathFX extends Application {
                 alert.showAndWait();
             } catch (Exception e) {
                 alert = new Alert(AlertType.ERROR);
-                alert.setContentText("Error while saving the game. Please check if the file already exists in resources/data/saves");
+                alert.setContentText("Error while saving the game.\n"+e);
                 alert.showAndWait();
             }
         }

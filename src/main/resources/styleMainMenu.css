@@ -1,0 +1,60 @@
+.root {
+    -fx-background-image: url('background_image_main_menu.png');
+    -fx-background-position: top center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+
+.menu-button {
+    -fx-font-size: 18px;
+    -fx-min-width: 100px;
+    -fx-min-height: 50px;
+    -fx-margin: 100px;
+    -fx-border-color: black;
+}
+
+#new-game-button{
+    -fx-background-color: #99FFFF;
+    -fx-padding: 10px 20px 10px 20px;
+}
+
+#new-game-button:hover{
+    -fx-background-color: #CCFFFF;
+}
+
+#load-game-button{
+    -fx-background-color: #99FFCC;
+    -fx-padding: 10px 44px 10px 44px;
+}
+
+#load-game-button:hover{
+    -fx-background-color: #CCFFE5;
+}
+
+#exit-game-button{
+    -fx-background-color: #99FF99;
+    -fx-padding:10px 50px 10px 50px;
+}
+
+#exit-game-button:hover {
+    -fx-background-color: #CCFFE5;
+}
+
+#continue-game-button {
+    -fx-background-color: #CCFF99;
+}
+
+#continue-game-button:hover {
+    -fx-background-color: #E5FFCC;
+}
+
+#title-main-menu {
+    -fx-font-size: 40px;
+    -fx-font-family: "technoRace";
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+    -fx-margin: 20px 0 0 0;
+    -fx-padding: 10px 50px 10px 50px;
+}

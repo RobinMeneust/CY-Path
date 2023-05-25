@@ -89,7 +89,6 @@ public class Fence {
 
 	public Fence(Orientation orientation, Point start, Point end) {
 		this(Point.getDistance(start, end), orientation, new Point(start), new Point(end));
-
 	}
 
 	

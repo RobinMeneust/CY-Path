@@ -4,8 +4,6 @@ package abstraction;
  * Importing classes from the java.util package
  */
 
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,11 +23,15 @@ public class GameConsole extends GameAbstract {
 	 * @param nbRows Number of rows of the board
 	 * @param nbCols Number of columns of the board
      * @param playersPawnIndex Player associated to each pawn index associated
+     * @param fenceLength Length of the fences
 	 * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 * @throws PlayersPawnMapInvalidException If all players aren't associated to a pawn
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
 	 */
 
-    public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex) throws InvalidNumberOfPlayersException {
-        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex);
+    public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, int fenceLength) throws InvalidNumberOfPlayersException, PlayersPawnMapInvalidException, InvalidBoardSizeException, InvalidFenceLengthException {
+        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, fenceLength);
     }
 
     /**
@@ -41,10 +43,15 @@ public class GameConsole extends GameAbstract {
      * @param playersPawnIndex Player associated to each pawn index associated
      * @param pawns Table of pawns to be assigned for every player
      * @param currentPlayerIndex Set the player ready to be played
+     * @param fenceLength Length of the fences
      * @throws InvalidNumberOfPlayersException If the number of players is incorrect
+	 * @throws PlayersPawnMapInvalidException If all players aren't associated to a pawn
+	 * @throws InvalidBoardSizeException If the board size is incorrect (too small)
+	 * @throws InvalidFenceLengthException If the fence length is incorrect (negative, equals to 0 or too large for the board)
      */
-    public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex) throws InvalidNumberOfPlayersException {
-        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex);
+    
+    public GameConsole(Player[] players, int nbMaxTotalFences, int nbRows, int nbCols, HashMap<Integer,Player> playersPawnIndex, Pawn[] pawns, int currentPlayerIndex, int fenceLength) throws InvalidNumberOfPlayersException, PlayersPawnMapInvalidException, InvalidBoardSizeException, InvalidFenceLengthException {
+        super(players, nbMaxTotalFences, nbRows, nbCols, playersPawnIndex, pawns, currentPlayerIndex, fenceLength);
     }
 
     /**
@@ -68,13 +75,13 @@ public class GameConsole extends GameAbstract {
                     saveDataObject.save(fileName, true);
                     System.out.println("Game successfully saved");
                 } catch (Exception err) {
-                    System.err.println("Error: there was an error while saving the game and overwriting the file");
+                    System.err.println("Error: there was an error while saving the game and overwriting the file\n"+e.getMessage());
                 }
             } else {
                 System.out.println("Saving process cancelled");
             }
-        } catch (IOException e) {
-            System.err.println("Error: there was an error while saving the game");
+        } catch (Exception e) {
+            System.err.println("Error: there was an error while saving the game :" + e.getMessage());
         }
     }
 
@@ -82,27 +89,31 @@ public class GameConsole extends GameAbstract {
     /**
      * Ask the user if he wants to move, place a fence or save a game
      * 
-     * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can it's equals to true and if he can't it's false
+     * @param canPlaceFence Indicates if the user is allowed to place a fence. If he can, it's equal to true, and if he can't, it's false
      * @return User's choice
      */
 
-    private String getUserActionChoice(boolean canPlaceFence) {
+    private String getUserActionChoice(boolean canPlaceFence, boolean canMove) {
         String response = "";
 
-        do {
-            if(canPlaceFence) {
-                System.out.println("What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))");
+        do{
+            System.out.println("What is your next action ? ('s' (save) ");
+            if(canMove) {
+                System.out.print("'m' (move) ");
             } else {
-                System.out.println("What is your next action ? ('m' (move) or 's' (save))");
+                System.out.print("'n' (next : skip the current player's turn) ");
             }
+            if(canPlaceFence) {
+                System.out.print(" 'f' (fence))");
+            }
+            System.out.println();
+
             response = CYPath.scanner.nextLine();
             response = response.toUpperCase();
-            
             if(response.matches("S(AVE)?")) {
                 saveGame();
             }
-        }while(!response.matches("M(OVE)?") && !(response.matches("F(ENCE)?") || !canPlaceFence));
-
+        } while(!(response.matches("M(OVE)?") && canMove) && !(response.matches("F(ENCE)?") && canPlaceFence) && !(response.matches("N(EXT)?") && !canMove));
         return response;
     }
 
@@ -175,7 +186,7 @@ public class GameConsole extends GameAbstract {
             } while(!isFenceValid);
         } catch (IncorrectPawnIndexException e) {
             // If this exception is thrown the pawn ids are incorrect
-            System.err.println(e);
+            System.err.println(e.getMessage());
             System.exit(-1);
         }
     }
@@ -184,11 +195,7 @@ public class GameConsole extends GameAbstract {
      * Launch the current game in console mode
      */
 
-
     public void launch() {
-		// The game is now in progress
-		this.setState(GameState.IN_PROGRESS);
-
         String response = "";
         Pawn currentPawn = null;
 
@@ -197,24 +204,39 @@ public class GameConsole extends GameAbstract {
             while(this.getBoard().getWinner() == -1){
                 this.getBoard().displayBoard(DisplayType.NO_COORD);
 
-                System.out.println("Turn of player: " +  this.getCurrentPlayer());
+                System.out.println("Turn of player: " +  this.getCurrentPlayer() + " (pawn id: " + this.getCurrentPawn().getId() + ")");
                 currentPawn = this.getCurrentPawn();
+                List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
 
                 if(currentPawn.getAvailableFences() == 0){
                     System.out.println("You don't have any fence remaining. You can only move.");
-                    response = getUserActionChoice(false);
-                } else{
+                    response = getUserActionChoice(false,true);
+                } else if(listPossibleMoves.isEmpty()){
+                    //If it can't move
+                    if(currentPawn.getAvailableFences() != 0){
+                        
+                        System.out.println("You can't move. You can only place a fence");
+                        response = getUserActionChoice(true,false);
+                    }
+                    else{
+                        System.out.println("You can't move or place a fence. Skip your turn");
+                        response = getUserActionChoice(false,false);
+                    }
+                } 
+                else{
                     System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
-                    response = getUserActionChoice(true);
+                    response = getUserActionChoice(true,true);
                 }
-        
+                
                 if(response.matches("M(OVE)?")){
                     this.getBoard().displayBoard(DisplayType.COORD_CELL);
-                    List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
+
+                
                     System.out.println("Those are the cells where your pawn can move to:");
                     System.out.println(listPossibleMoves);
                     
                     playerMovePawn();
+                    
                 } else if (response.matches("F(ENCE)?")) {
                     this.getBoard().displayBoard(DisplayType.COORD_LINE);
                     Fence fence = new Fence(this.getBoard().getFenceLength());
@@ -222,16 +244,17 @@ public class GameConsole extends GameAbstract {
                     playerChangeFenceOrientation(fence);
                     playerPlaceFence(fence);
                 }
+                else{
+                    System.out.println("You can't move or place a fence. Skip your turn");
+                }
                 this.endPlayerTurn();
             }
 
             Player playerWinner = this.getBoard().getPawn(this.getBoard().getWinner()).getPlayer();
-            System.out.println("The winner is "+playerWinner);
-            this.setState(GameState.FINISHED);
-            
+            System.out.println("The winner is "+playerWinner);            
         } catch (IncorrectPawnIndexException e) {
             // If this exception is thrown the pawn ids are incorrect
-            System.err.println(e);
+            System.err.println(e.getMessage());
             System.exit(-1);
         }
 	}

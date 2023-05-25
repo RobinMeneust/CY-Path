@@ -1,0 +1,50 @@
+.root {
+    -fx-background-image: url('background_image_gamemode.png');
+    -fx-background-position: top center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+
+.menu-button {
+    -fx-font-size: 18px;
+    -fx-width: 100%;
+    -fx-min-height: 50px;
+    -fx-border-color: black;
+}
+
+#two-players-mode-button {
+    -fx-background-color: #99CCFF;
+    -fx-padding: 10px 28px 10px 28px;
+}
+
+#two-players-mode-button:hover {
+    -fx-background-color: #CCE5FF;
+}
+
+#four-players-mode-button {
+    -fx-background-color: #9999FF;
+    fx-padding: 10px 28px 10px 28px;
+}
+
+#four-players-mode-button:hover {
+    -fx-background-color: #CCCCFF;
+}
+
+#go-back {
+    -fx-background-color: #CC99FF;
+    fx-padding: 10px 20px 10px 20px;
+}
+
+#go-back:hover {
+    -fx-background-color: #E5CCFF;
+}
+
+#title-game-mode {
+    -fx-font-size: 40px;
+    -fx-font-family: "technoRace";
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+    -fx-margin: 20px 0 0 0;
+}

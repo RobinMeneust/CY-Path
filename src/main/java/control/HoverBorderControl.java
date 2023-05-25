@@ -66,8 +66,8 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 					Point pStartCell = CYPathFX.getGPaneNodeCoord(stackPane);
 					Point pStartFenceCoord = CYPathFX.gPaneCellCoordToGameCoord(pStartCell);
 
-					Fence fence = new Fence(this.cyPathFX.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
-					if (this.cyPathFX.game.getBoard().isFencePositionValid(fence)) {
+					Fence fence = new Fence(this.cyPathFX.getGame().getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
+					if (this.cyPathFX.getGame().getBoard().isFencePositionValid(fence)) {
 						highlightFence(fence.getOrientation(), pStartCell, fence.getLength(), Color.DARKGREEN);
 					} else {
 						highlightFence(fence.getOrientation(), pStartCell, fence.getLength(), Color.DARKRED);
@@ -78,16 +78,24 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 					this.resetHighlightedFences(this.cyPathFX);
 				}
 				// The player wants to move
-			} else if (this.cyPathFX.previousPossibleCells != null && this.cyPathFX.previousPossibleCells.contains(sourceCell) && sourceCell != null) {
+			} else if (this.cyPathFX.getPreviousPossibleCells() != null && this.cyPathFX.getPreviousPossibleCells().contains(sourceCell) && sourceCell != null) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
-					sourceCell.setFill(this.cyPathFX.cellColorHover);
+					sourceCell.setFill(this.cyPathFX.getCellColorHover());
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-					sourceCell.setFill(this.cyPathFX.game.getCurrentPawn().getColor().toColorPossibleMove());
+					sourceCell.setFill(this.cyPathFX.getGame().getCurrentPawn().getColor().toColorPossibleMove());
 				}
 			}
 		}
 	}
 
+
+	/**
+	 * Set the color the fence for the player to show where it is possible to place a fence.
+	 * @param orientation Orientation of the fence
+	 * @param start Starting point of the fence
+	 * @param length Length of the fence
+	 * @param color Color of the fence
+	 */
 	private void highlightFence(Orientation orientation, Point start, int length, Color color) {
 		if(orientation == Orientation.HORIZONTAL) {
 			int y = start.getY() - 1; // get the upper border
@@ -104,22 +112,22 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 
 
 	/**
-	 * Set the color the dummy fence for the player to show where it is possible to place a fence.
-	 * 
-	 * @param x	The X coordinate of the origin of the fence on the grid
-	 * @param y The Y coordinate of the origin of the fence on the grid
+	 * Set the color the line for the player to show where it is possible to place a fence.
+	 *
+	 * @param x	The X coordinate of the origin of the line on the grid
+	 * @param y The Y coordinate of the origin of the line on the grid
 	 * @param newColor New color of the line
 	 */
 
 	private void highlightLine(int x, int y, Color newColor) {
-		Node n = this.cyPathFX.getNodeFromGridPane(this.cyPathFX.gPane, y, x);
+		Node n = this.cyPathFX.getNodeFromGridPane(this.cyPathFX.getGPane(), y, x);
 		if (n instanceof Line) {
 			Line l = (Line) n;
 			if (l.getStroke() != Color.BLACK) {
 				// If it's not already a border
 				l.setStroke(newColor);
 				l.toFront();
-				this.cyPathFX.prevHighlightedFencesList.add(l);
+				this.cyPathFX.getPrevHighlightedFencesList().add(l);
 			}
 		}
 	}
@@ -132,8 +140,8 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 	 */
 
 	public void resetHighlightedFences(CYPathFX cyPathFX) {
-		if (cyPathFX.prevHighlightedFencesList != null) {
-			for (Line l : cyPathFX.prevHighlightedFencesList) {
+		if (cyPathFX.getPrevHighlightedFencesList() != null) {
+			for (Line l : cyPathFX.getPrevHighlightedFencesList()) {
 				// If the color is BLACK, it means that it's border already placed, and it must not be changed.
 				if (l.getStroke() != Color.BLACK) {
 					// If it's not already a border
@@ -141,7 +149,7 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 					l.toBack();
 				}
 			}
-			cyPathFX.prevHighlightedFencesList.clear();
+			cyPathFX.getPrevHighlightedFencesList().clear();
 		}
 	}
 }

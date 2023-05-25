@@ -27,7 +27,6 @@ public class Player {
         this.nbWins = 0;
     }
 
-
     /**
      * Get the username of a player
      * 

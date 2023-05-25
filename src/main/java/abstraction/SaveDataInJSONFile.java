@@ -1,6 +1,14 @@
 package abstraction;
 
 /*
+ * Importing classes from the java.util package
+ * 
+ * It provides features to work with regular expressions.
+ */
+
+ import java.util.regex.Pattern;
+
+/*
  * Importing classes from the java.io package
  * 
  * It provides input/output functionality for read and write data operations.
@@ -33,27 +41,31 @@ import org.json.JSONObject;
  */
 
 public class SaveDataInJSONFile {
-
     /**
      * Number of rows
      */
     private int rows;
+
     /**
      * Number of columns
      */
     private int columns;
+
     /**
      * Maximum number of fence available
      */
     private int maxNbFences;
+
     /**
      * Table of pawns on the board
      */
     private Pawn[] listPawns;
+
     /**
      * Table of fences placed
      */
     private Fence[] listFences;
+
     /**
      * Index of current pawn playing
      */
@@ -86,11 +98,44 @@ public class SaveDataInJSONFile {
     }
 
     /**
+     * Checks if the backup file name entered by the user is correct
+     * 
+     * @param fileName Name of the file
+     * @return True if the save's name file contains only letters, numbers, the _, the - and the . else false
+     */
+
+    public static boolean isFileNameValid(String fileName) {
+       // Using a regular expression to check the characters of the file name.
+       String pattern = "^[a-zA-Z0-9_.-]+$";
+       return Pattern.matches(pattern, fileName);
+    }
+
+    /**
+     * It provides the name of the load file
+     * 
+     * @param filePath The path of the save file you want loaded
+     * @return The save's name file without extension or the empty string if the save's name file is incorrect
+     */
+
+     public static String extractFileNameWithoutExtension(String filePath) {
+        Path path = Paths.get(filePath);
+        String fileName = path.getFileName().toString();
+        int dotIndex = fileName.lastIndexOf(".json");
+        if (dotIndex > 0) {
+            return fileName.substring(0, dotIndex);
+        } else {
+            return "";
+        }
+    }
+
+    /**
      * Check if the file name used of the save is a duplicate
+     * 
      * @param folderPath Path of the save folder
      * @param fileName Name of the file
      * @return True if the save's name file exits already, false otherwise
      */
+
     private static boolean isFileNameDuplicate(String folderPath, String fileName) {
         File folder = new File(folderPath);
         File[] filesInFolder = folder.listFiles();
@@ -108,11 +153,13 @@ public class SaveDataInJSONFile {
 
     /**
      * Create the save file
+     * 
      * @param folderPath Path of the save folder
      * @param fileName Name of the file
      * @return The new empty save file
      * @throws FileNameIsDuplicateException If the file name already exists
      */
+
     public static File createFile(String folderPath, String fileName) throws FileNameIsDuplicateException {
         File file = null;
 
@@ -134,38 +181,42 @@ public class SaveDataInJSONFile {
 
     /**
      * Replace the content of the file with new content
+     * 
      * @param filePath Path of the save file
      * @param jsonObject New JSON to be placed into the file
+     * @throws FileNameNotExistException If the file doesn't exist
+     * @throws IOException If the entry of the user is wrong
      */
-    public static void replaceExistingJSONFile(String filePath, JSONObject jsonObject) {
+
+    public static void replaceExistingJSONFile(String filePath, JSONObject jsonObject) throws FileNameNotExistException, IOException  {
         File file = new File(filePath);
 
         if (file.exists()) {
             try {
-                //String fileContent = new String(Files.readAllBytes(Paths.get(filePath)));
-
                 FileWriter fileWriter = new FileWriter(file);
                 fileWriter.write(jsonObject.toString());
                 fileWriter.flush();
                 fileWriter.close();
-
-                System.out.println("The JSON file has been replaced successfully.");
             } catch (IOException e) {
-                System.out.println("Error while reading or writing file : " + e.getMessage());
+                throw new IOException("Error while reading or writing file");
             }
         } else {
-            System.out.println("The file does not exist.");
+            throw new FileNameNotExistException();
         }
     }
 
     /**
      * Fill the save file with the information of the current game to be saved and used later
+     * 
      * @param fileName Name of the save file without its extension
      * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
-     * @throws FileNameIsDuplicateException If the file name already exists
-     * @throws IOException If the entry of the user is wrong
+     * @throws FileNameException - If the file name is incorrect
+     * @throws FileNameIsDuplicateException - If the file name already exists
+     * @throws IOException - If the entry of the user is wrong
+     * @throws FileNameNotExistException - If the file that will be overwrite doesn't exist
      */
-    public void save(String fileName, boolean doOverwrite) throws FileNameIsDuplicateException, IOException {
+    
+    public void save(String fileName, boolean doOverwrite) throws FileNameException, FileNameIsDuplicateException, IOException, FileNameNotExistException {
         Path folder = Paths.get(this.defaultFolderPath);
         Path filePath = folder.resolve(fileName+".json");
         try {
@@ -175,16 +226,18 @@ public class SaveDataInJSONFile {
         }
     }
 
-
     /**
      * Fill the save file with the information of the current game to be saved and used later
+     * 
      * @param file File where the game is saved
      * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
+     * @throws FileNameException If the file name is incorrect
      * @throws FileNameIsDuplicateException If the file name already exists
      * @throws IOException If the entry of the user is wrong
+     * @throws FileNameNotExistException If the file that will be overwrite doesn't exist
      */
     
-    public void save(File file, boolean doOverwrite) throws FileNameIsDuplicateException, IOException {
+    public void save(File file, boolean doOverwrite) throws FileNameException, FileNameNotExistException, FileNameIsDuplicateException, IOException  {
         File newFile = null;
 
         JSONObject gameObjects = new JSONObject();
@@ -233,24 +286,28 @@ public class SaveDataInJSONFile {
 
         gameObjects.put("listPawns", gameElementsListPawns);
 
-        try {
-            // Check if the file doesn't already exist and if it does then we save the game
-            newFile = createFile(file.getParent(), file.getName());
-            FileWriter fileWriter = new FileWriter(newFile);
+        if(isFileNameValid(extractFileNameWithoutExtension(file.getName()))) {
+            try {
+                // Check if the file doesn't already exist and if it does then we save the game
+                newFile = createFile(file.getParent(), file.getName());
+                FileWriter fileWriter = new FileWriter(newFile);
 
-            fileWriter.write(gameObjects.toString());
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (FileNameIsDuplicateException e) {
-            if(doOverwrite){
-                // Another file has the same name but we overwrite it
-                String overFilePath = file.getAbsolutePath();
-                replaceExistingJSONFile(overFilePath, gameObjects);
-            } else {
+                fileWriter.write(gameObjects.toString());
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (FileNameIsDuplicateException e) {
+                if(doOverwrite){
+                    // Another file has the same name but we overwrite it
+                    String overFilePath = file.getAbsolutePath();
+                    replaceExistingJSONFile(overFilePath, gameObjects);
+                } else {
+                    throw e;
+                }
+            } catch (IOException e) {
                 throw e;
             }
-        } catch (IOException e) {
-            throw e;
-        }
+        } else {
+            throw new FileNameException();
+        }            
     }
 }

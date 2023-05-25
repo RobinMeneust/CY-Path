@@ -1,6 +1,7 @@
 package control;
 
 import abstraction.GameFX;
+import abstraction.IncorrectJavaFXBoardException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import presentation.CYPathFX;
@@ -52,14 +53,18 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
 			this.game.setAction("Place fence");
 			this.cyPathFX.setMoveMode(false);
 			this.actionButton.setText("Move");
-		} else if(this.actionButton.getText().equals("Move")) {
-			this.cyPathFX.showPossibleCells(this.game.getCurrentPawnIndex());
+		}else{
+			try {
+				this.cyPathFX.showPossibleCells(this.game.getCurrentPawnIndex());
+			} catch(IncorrectJavaFXBoardException e) {
+				System.err.println(e.getMessage());
+			}
 			this.game.setAction("Move");
 			this.cyPathFX.setMoveMode(true);
 			this.actionButton.setText("Place fence");
 		}
 
 		//Update fenceCounter
-		this.cyPathFX.fenceCounter.setText(this.cyPathFX.game.getCurrentPawn().getAvailableFences()+" fence(s) remaining.");
+		this.cyPathFX.getFenceCounter().setText(this.cyPathFX.getGame().getCurrentPawn().getAvailableFences()+" fence(s) remaining.");
 	}
 }
