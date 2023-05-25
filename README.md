@@ -50,13 +50,6 @@ or
 
 or `java -jar target/CYPathStandalone.jar` : it may not work since it's not made specifically for your system configuration
 
-## Known Bugs/Issues to be fixed
-
-- Javadoc isn't complete so `mvn javadoc:jar` may generate errors
-- For now entering an illegal file name for the save causes a crash
-- The content of the save file isn't checked in this version
-- If there are 4 players aligned and trapped in a 1x4 corridor with no fences left to be placed, then the player can skip its turn with a button. But there is a bug when there are no fences left: the skip button disappears
-
 ## How to play
 
 When you launch the application you can either press 'w' to open a JavaFX window or play in console mode by pressing 'c'.
