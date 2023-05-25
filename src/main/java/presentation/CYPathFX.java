@@ -298,6 +298,10 @@ public class CYPathFX extends Application {
         this.getContinueGameButton().setManaged(this.getGame() != null);
         
         this.getPrimaryStage().setScene(this.getMainMenuScene());
+        this.getPrimaryStage().setMinWidth(545);
+        this.getPrimaryStage().setMinHeight(595);
+        this.getPrimaryStage().setWidth(545);
+        this.getPrimaryStage().setHeight(595);
         if(!this.getPrimaryStage().isShowing()) {
             this.getPrimaryStage().show();
         }
@@ -311,6 +315,10 @@ public class CYPathFX extends Application {
             createNewGameScene();
         }
 
+        this.getPrimaryStage().setMinWidth(545);
+        this.getPrimaryStage().setMinHeight(595);
+        this.getPrimaryStage().setWidth(545);
+        this.getPrimaryStage().setHeight(595);
         this.getPrimaryStage().setScene(this.getNewGameMenuScene());
     }
 
@@ -540,7 +548,10 @@ public class CYPathFX extends Application {
                 goToMainMenuScene();
             }
         }
-
+        this.getPrimaryStage().setMinWidth(545);
+        this.getPrimaryStage().setMinHeight(595);
+        this.getPrimaryStage().setWidth(545);
+        this.getPrimaryStage().setHeight(595);
         this.getPrimaryStage().setScene(this.getGameScene());
     }
 
