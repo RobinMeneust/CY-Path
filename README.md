@@ -83,7 +83,9 @@ The cells coordinates are given on the left side and the top side of the board
 
 To play you must write in the console your answer when a question is asked. We have the following questions/answers :
 
-- "How many players do you want ? (2 or 4)"
+- "Enter 'l' (load) to load a save file, and 'n' (new) to start a new game"
+    - Type either l or n whether you want to load a save or create a new game
+- "How many players do you want ? (2 or 4)" (if you chose "new game")
     - Type either 2 or 4
 - "What is your next action ? ('m' (move) or 'f' (fence) or 's' (save))"
     - "m" : Move your pawn to the position that you will provide just after
@@ -101,7 +103,7 @@ To play you must write in the console your answer when a question is asked. We h
     - "Y" : Give a number between 0 and 8. It's the y (vertical) coordinate of the position where you want to move your pawn
     - Here we consider that (0,0) will place a fence going from (0,0) to (0,2) if it's vertical or (0,0) to (2,0) if it's horizontal. So the coordinates given here correspond to leftmost and uppermost point of the fence
 - If any of the given input are incorrect we ask the same question to the user over and over again
-
+- You can at the end of the game either restart or exit the program
 
 ## Documentation
 
