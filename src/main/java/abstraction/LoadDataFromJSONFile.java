@@ -242,16 +242,16 @@ public class LoadDataFromJSONFile {
 
 			JSONObject gameObjects = (JSONObject) parser.parse(new FileReader(filePath));
 
-			this.rows = getIntegerFromJSON(gameObjects,"rows", 2);
-			this.columns = getIntegerFromJSON(gameObjects,"columns", 2);
-			this.maxNbFences = getIntegerFromJSON(gameObjects,"maxNbFences",0);
-			this.currentPawnIndex = getIntegerFromJSON(gameObjects,"currentPawnIndex",0);
+			this.setRows(getIntegerFromJSON(gameObjects,"rows", 2));
+			this.setColumns(getIntegerFromJSON(gameObjects,"columns", 2));
+			this.setMaxNbFences(getIntegerFromJSON(gameObjects,"maxNbFences",0));
+			this.setCurrentPawnIndex(getIntegerFromJSON(gameObjects,"currentPawnIndex",0));
 
 			Object FencesObj = gameObjects.get("listFences");
 			if((FencesObj != null) && (FencesObj instanceof JSONArray)) { 
 				JSONArray listFencesJSON = (JSONArray) FencesObj;
 				Iterator<?> iteratorFence = listFencesJSON.iterator();
-				this.listFences = new ArrayList<Fence>();
+				this.setListFences(new ArrayList<Fence>());
 				while(iteratorFence.hasNext()) {
 					Object iterFence = iteratorFence.next();
 					if (iterFence instanceof JSONObject) {
@@ -271,7 +271,7 @@ public class LoadDataFromJSONFile {
 						end.setY(getIntegerFromJSON(endJSON, "y", 0));
 						
 						try {
-							this.listFences.add(new Fence(Orientation.valueOf(orientation), start, end));
+							this.getListFences().add(new Fence(Orientation.valueOf(orientation), start, end));
 						} catch (Exception e) {
 							// No value found for orientation in the enum Orientation
 							throw new SaveFileFormatInvalidException();
@@ -289,7 +289,7 @@ public class LoadDataFromJSONFile {
 				JSONArray listPawnsJSON = (JSONArray) PawnsObj;
 				Iterator<?> iteratorPawn = listPawnsJSON.iterator();
 				int size = listPawnsJSON.size();
-				this.pawns = new Pawn[size];
+				this.setPawns(new Pawn[size]);
 				int i = 0;
 				while(iteratorPawn.hasNext()) {
 					Object iterPawn = iteratorPawn.next();
@@ -307,7 +307,7 @@ public class LoadDataFromJSONFile {
 						
 						int nbRemainingFences = getIntegerFromJSON(pawnJSON, "nbRemainingFences", 0);
 
-						this.pawns[i] = new Pawn(id, Side.valueOf(startingSide), ColorPawn.valueOf(color), pos, nbRemainingFences);
+						this.setPawn(i,new Pawn(id, Side.valueOf(startingSide), ColorPawn.valueOf(color), pos, nbRemainingFences));
 
 						i++;
 					} else {
@@ -321,5 +321,71 @@ public class LoadDataFromJSONFile {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+
+	/**
+	 * Set the number of rows
+	 * @param rows Number of rows
+	 */
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	/**
+	 * Set the number of columns
+	 * @param columns Number of columns
+	 */
+	public void setColumns(int columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * Set the maximal number of fences
+	 * @param maxNbFences Maximal number of fences
+	 */
+	public void setMaxNbFences(int maxNbFences) {
+		this.maxNbFences = maxNbFences;
+	}
+
+	/**
+	 * Set the list of fences
+	 * @param listFences List of fences
+	 */
+	public void setListFences(ArrayList<Fence> listFences) {
+		this.listFences = listFences;
+	}
+
+	/**
+	 * Set the index of the pawn being played
+	 * @param currentPawnIndex Index of the pawn being played
+	 */
+	public void setCurrentPawnIndex(int currentPawnIndex) {
+		this.currentPawnIndex = currentPawnIndex;
+	}
+
+	/**
+	 * Set the table of pawns
+	 * @param pawns Table of pawns
+	 */
+	public void setPawns(Pawn[] pawns) {
+		this.pawns = pawns;
+	}
+
+	/**
+	 * Get a pawn from the tables of pawns
+	 * @param index Index of the pawn
+	 * @return Pawn selected by the index
+	 */
+	public Pawn getPawn(int index){
+		return this.pawns[index];
+	}
+
+	/**
+	 * Set the pawn in the table of pawns with its index
+	 * @param index Index of the pawn wanted to be set
+	 * @param pawn Pawn wanting to be placed in the table
+	 */
+	public void setPawn(int index, Pawn pawn){
+		this.pawns[index] = pawn;
 	}
 }

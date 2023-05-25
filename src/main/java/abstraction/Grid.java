@@ -104,7 +104,15 @@ public class Grid {
 	 */
 
 	public Set<Point> getNodesList() {
-		return this.adjacencyList.keySet();
+		return this.getAdjacencyList().keySet();
+	}
+
+	/**
+	 * Get the adjacency list of the graph
+	 * @return Adjacency list of the graph
+	 */
+	public HashMap<Point,HashSet<Point>> getAdjacencyList(){
+		return this.adjacencyList;
 	}
 
 	/**
@@ -115,9 +123,9 @@ public class Grid {
 	 */
 
 	public void addEdge(Point p1, Point p2) {
-		if(p1 != null && p2 != null && this.adjacencyList != null) {
-			this.adjacencyList.get(p1).add(p2);
-			this.adjacencyList.get(p2).add(p1);
+		if(p1 != null && p2 != null && this.getAdjacencyList() != null) {
+			this.getAdjacencyList().get(p1).add(p2);
+			this.getAdjacencyList().get(p2).add(p1);
 		}
 	}
 
@@ -129,9 +137,9 @@ public class Grid {
 	 */
 
 	public void removeEdge(Point p1, Point p2) {
-		if(p1 != null && p2 != null && this.adjacencyList != null) {
-			this.adjacencyList.get(p1).remove(p2);
-			this.adjacencyList.get(p2).remove(p1);
+		if(p1 != null && p2 != null && this.getAdjacencyList() != null) {
+			this.getAdjacencyList().get(p1).remove(p2);
+			this.getAdjacencyList().get(p2).remove(p1);
 		}
 	}
 
@@ -159,8 +167,8 @@ public class Grid {
 	 */
 
 	public boolean areConnected(Point p1, Point p2) {
-		if(p1 != null && p2 != null && this.adjacencyList.containsKey(p1))
-			return this.adjacencyList.get(p1).contains(p2);
+		if(p1 != null && p2 != null && this.getAdjacencyList().containsKey(p1))
+			return this.getAdjacencyList().get(p1).contains(p2);
 		else
 			return false;
 	}
@@ -219,7 +227,7 @@ public class Grid {
 	 */
 
 	public HashSet<Point> getListNeighbors(Point node) {
-		return this.adjacencyList.get(node);
+		return this.getAdjacencyList().get(node);
 	}
 
 	/**

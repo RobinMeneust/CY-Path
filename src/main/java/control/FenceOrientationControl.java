@@ -39,16 +39,47 @@ public class FenceOrientationControl implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent event) {
         // Check if the right click of the mouse is pressed
-        if(!this.cyPathFX.isMoveMode() && event.getButton() == MouseButton.SECONDARY){
-            if(this.fence.getOrientation() == Orientation.HORIZONTAL) {
-                this.fence.setOrientation(Orientation.VERTICAL);
+        if(!this.getCyPathFX().isMoveMode() && event.getButton() == MouseButton.SECONDARY){
+            if(this.getFence().getOrientation() == Orientation.HORIZONTAL) {
+                this.getFence().setOrientation(Orientation.VERTICAL);
             } else {
-                this.fence.setOrientation(Orientation.HORIZONTAL);
+                this.getFence().setOrientation(Orientation.HORIZONTAL);
             }
             // Reset the old dummy fence to show a new one
-            HoverBorderControl hoverBorderControl = new HoverBorderControl(this.cyPathFX, this.fence);
-            hoverBorderControl.resetHighlightedFences(this.cyPathFX);
+            HoverBorderControl hoverBorderControl = new HoverBorderControl(this.getCyPathFX(), this.getFence());
+            hoverBorderControl.resetHighlightedFences(this.getCyPathFX());
             hoverBorderControl.handle(event);
         }
+    }
+
+    /**
+     * Get the JavaFX graphical interface
+     * @return JavaFX Graphical interface of the application
+     */
+    public CYPathFX getCyPathFX() {
+        return cyPathFX;
+    }
+    /**
+     * Set the JavaFX graphical interface used in the application
+     * @param cyPathFX avaFX graphical interface
+     */
+    public void setCyPathFX(CYPathFX cyPathFX) {
+        this.cyPathFX = cyPathFX;
+    }
+
+    /**
+     * Get the current fence
+     * @return Fence wanting to be placed
+     */
+    public Fence getFence() {
+        return fence;
+    }
+
+    /**
+     * Set the current fence
+     * @param fence Fence wanting to be placed
+     */
+    public void setFence(Fence fence) {
+        this.fence = fence;
     }
 }

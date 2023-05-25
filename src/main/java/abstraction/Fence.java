@@ -147,15 +147,15 @@ public class Fence {
 
 		switch (this.getOrientation()) {
 			case HORIZONTAL:
-				this.end.setX(this.getStart().getX() + this.getLength());
-				this.end.setY(this.getStart().getY());
+				this.getEnd().setX(this.getStart().getX() + this.getLength());
+				this.getEnd().setY(this.getStart().getY());
 				break;
 			case VERTICAL:
-				this.end.setX(this.getStart().getX());
-				this.end.setY(this.getStart().getY() + this.getLength());
+				this.getEnd().setX(this.getStart().getX());
+				this.getEnd().setY(this.getStart().getY() + this.getLength());
 				break;
 			default:
-				this.end = this.getStart();
+				this.setEnd(this.getStart());
 				break;
 		}
 	}
@@ -185,8 +185,15 @@ public class Fence {
 		}
 	}
 
-	
-	/** 
+	/**
+	 * Set the end point of a fence
+	 * @param end Ending of a fence
+	 */
+	public void setEnd(Point end) {
+		this.end = end;
+	}
+
+	/**
 	 * Returns a String representing the Fence in the following format:
 	 * {
 	 * length: LENGTH

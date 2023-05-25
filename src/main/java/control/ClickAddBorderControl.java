@@ -63,23 +63,23 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 
 	private void placeFenceOnBoard(StackPane stackPane) throws IncorrectPawnIndexException {
 		Point pStartFenceCoord = CYPathFX.gPaneCellCoordToGameCoord(CYPathFX.getGPaneNodeCoord(stackPane));
-		Fence fence = new Fence(this.game.getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
+		Fence fence = new Fence(this.getGame().getBoard().getFenceLength(), this.getFence().getOrientation(), pStartFenceCoord);
 
 		try {
 			// If a fence is selected (highlighted)
-			if(this.cyPathFX.getPrevHighlightedFencesList() != null){
-				if (this.game.getBoard().placeFence(this.game.getCurrentPawnIndex(), fence)) {
+			if(this.getCyPathFX().getPrevHighlightedFencesList() != null){
+				if (this.getGame().getBoard().placeFence(this.getGame().getCurrentPawnIndex(), fence)) {
 					// Add fence to the gridPane
-					for (Line l : this.cyPathFX.getPrevHighlightedFencesList()) {
+					for (Line l : this.getCyPathFX().getPrevHighlightedFencesList()) {
 						l.setStroke(Color.BLACK);
 						l.toFront();
 					}
 					// Clear the prevHighlightedFencesList so that the color isn't removed when the mouse is moved in the next round
-					this.cyPathFX.getPrevHighlightedFencesList().clear();
+					this.getCyPathFX().getPrevHighlightedFencesList().clear();
 
-					this.game.setIsEndTurn(true);
+					this.getGame().setIsEndTurn(true);
 					//We wait the beginning of the next turn
-					while (this.game.getIsEndTurn()) {
+					while (this.getGame().getIsEndTurn()) {
 						try {
 							Thread.sleep(100); //Wait 100 milliseconds before checking again
 						} catch (InterruptedException ev) {
@@ -87,7 +87,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 						}
 					}
 					//update button
-					actionButton.fire();
+					this.getActionButton().fire();
 				} else {
 					System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
 				}
@@ -111,28 +111,28 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 		}
 		try {
 			// If there are possible moves
-			if(this.cyPathFX.getPreviousPossibleCells() != null && this.cyPathFX.getPreviousPossibleCells().contains(sourceCell)) {
-				Pawn pawn = this.game.getCurrentPawn();
+			if(this.getCyPathFX().getPreviousPossibleCells() != null && this.getCyPathFX().getPreviousPossibleCells().contains(sourceCell)) {
+				Pawn pawn = this.getGame().getCurrentPawn();
 
 				// We move circle (pawn of the player) to its new location
-				this.cyPathFX.removeCircleFromCell(this.cyPathFX.getGPane(), pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
+				this.getCyPathFX().removeCircleFromCell(this.getCyPathFX().getGPane(), pawn.getPosition().getY() * 2 + 1, pawn.getPosition().getX() * 2 + 1);
 
 				StackPane parentStackPane = (StackPane) sourceCell.getParent();
 				int columnIndex = GridPane.getColumnIndex(parentStackPane);
 				int rowIndex = GridPane.getRowIndex(parentStackPane);
 				
-				this.game.getBoard().movePawn(this.game.getCurrentPawn().getId(), new Point(columnIndex / 2, rowIndex / 2));
+				this.getGame().getBoard().movePawn(this.getGame().getCurrentPawn().getId(), new Point(columnIndex / 2, rowIndex / 2));
 				
-				this.cyPathFX.addCircleToCell(this.cyPathFX.getGPane(), rowIndex, columnIndex, pawn.getColor());
+				this.getCyPathFX().addCircleToCell(this.getCyPathFX().getGPane(), rowIndex, columnIndex, pawn.getColor());
 				//the information is transmitted to the terminal
-				this.game.setIsEndTurn(true);
+				this.getGame().setIsEndTurn(true);
 				//We wait the beginning of the next turn
-				CYPathFX.checkEndTurn(this.game);
+				CYPathFX.checkEndTurn(this.getGame());
 
 				//update button
-				actionButton.fire();
-				if (!(actionButton.getText().equals("Place fence"))) {
-					actionButton.fire();
+				this.getActionButton().fire();
+				if (!(this.getActionButton().getText().equals("Place fence"))) {
+					this.getActionButton().fire();
 				}
 			}
 		} catch (IncorrectPawnIndexException err) {
@@ -156,9 +156,9 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 			Shape sourceCell = null;
 
 			try {
-				if (!this.cyPathFX.isMoveMode() && event.getButton() == MouseButton.PRIMARY) {
+				if (!this.getCyPathFX().isMoveMode() && event.getButton() == MouseButton.PRIMARY) {
 					placeFenceOnBoard(stackPane);
-				} else if (this.cyPathFX.isMoveMode()) {
+				} else if (this.getCyPathFX().isMoveMode()) {
 					// The cell is a shape (rectangle if there is no pawn and circle if there is a pawn)
 					if (stackPane.getChildren().get(stackPane.getChildren().size() - 1) instanceof Shape) {
 						sourceCell = (Shape) stackPane.getChildren().get(stackPane.getChildren().size() - 1);
@@ -170,5 +170,65 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 				System.exit(-1);
 			}
 		}
+	}
+
+
+	/**
+	 * Get the JavaFX graphical interface
+	 * @return JavaFX Graphical interface of the application
+	 */
+	public CYPathFX getCyPathFX() {
+		return cyPathFX;
+	}
+	/**
+	 * Set the JavaFX graphical interface used in the application
+	 * @param cyPathFX avaFX graphical interface
+	 */
+	public void setCyPathFX(CYPathFX cyPathFX) {
+		this.cyPathFX = cyPathFX;
+	}
+	/**
+	 * Get the current game
+	 * @return Game currently playing
+	 */
+	public GameFX getGame() {
+		return game;
+	}
+	/**
+	 * Set the game
+	 * @param game Game wanting to be changed
+	 */
+	public void setGame(GameFX game) {
+		this.game = game;
+	}
+	/**
+	 * Get the action button
+	 * @return Action button
+	 */
+	public Button getActionButton() {
+		return actionButton;
+	}
+	/**
+	 * Set the action button
+	 * @param actionButton Button of action
+	 */
+	public void setActionButton(Button actionButton) {
+		this.actionButton = actionButton;
+	}
+
+	/**
+	 * Get the current fence
+	 * @return Fence wanting to be placed
+	 */
+	public Fence getFence() {
+		return fence;
+	}
+
+	/**
+	 * Set the current fence
+	 * @param fence Fence wanting to be placed
+	 */
+	public void setFence(Fence fence) {
+		this.fence = fence;
 	}
 }

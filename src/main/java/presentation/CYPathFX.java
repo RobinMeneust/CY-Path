@@ -207,36 +207,36 @@ public class CYPathFX extends Application {
      */
 
     public void start(Stage primaryStage) throws Exception {
-        this.cellColorHover = Color.rgb(239,255,172);
-        this.prevHighlightedFencesList = new LinkedList<Line>();
-        this.moveMode = true;
-        this.fence = new Fence(Orientation.HORIZONTAL);
-        this.gPane = null;
-        this.actionButton = new Button("Place fence");
-        this.mainMenuScene = null;
-        this.newGameMenuScene = null;
-        this.gameScene = null;
-        this.primaryStage = primaryStage;
-        this.terminalThread = null;
-        this.fenceCounter = new Text("0");
-        this.continueGameButton = new Button("Continue");
-        this.continueGameButton.getStyleClass().add("menu-button");
-        this.continueGameButton.setId("continue-game-button");
-        this.continueGameButton.setOnAction(e -> {
+        this.setCellColorHover(Color.rgb(239,255,172));
+        this.setPrevHighlightedFencesList(new LinkedList<Line>());
+        this.setMoveMode(true);
+        this.setFence(new Fence(Orientation.HORIZONTAL));
+        this.setGPane(null);
+        this.setActionButton(new Button("Place fence"));
+        this.setMainMenuScene(null);
+        this.setNewGameMenuScene(null);
+        this.setGameScene(null);
+        this.setPrimaryStage(primaryStage);
+        this.setTerminalThread(null);
+        this.setFenceCounter(new Text("0"));
+        this.setContinueGameButton(new Button("Continue"));
+        this.getContinueGameButton().getStyleClass().add("menu-button");
+        this.getContinueGameButton().setId("continue-game-button");
+        this.getContinueGameButton().setOnAction(e -> {
             goToGameScene();
         });
-        this.continueGameButton.setManaged(false);
-        this.gameSkipTurnButton = null;
+        this.getContinueGameButton().setManaged(false);
+        this.setGameSkipTurnButton(null);
 
         // Set up stage
-        this.primaryStage.setTitle("CY Path : the Game");
+        this.getPrimaryStage().setTitle("CY Path : the Game");
         Image icon = new Image("icone-pion.png");
         primaryStage.getIcons().add(icon);
-        this.primaryStage.setMinWidth(545);
-        this.primaryStage.setMinHeight(595);
-        this.primaryStage.setWidth(545);
-        this.primaryStage.setHeight(595);
-        this.primaryStage.setOnCloseRequest(e -> {
+        this.getPrimaryStage().setMinWidth(545);
+        this.getPrimaryStage().setMinHeight(595);
+        this.getPrimaryStage().setWidth(545);
+        this.getPrimaryStage().setHeight(595);
+        this.getPrimaryStage().setOnCloseRequest(e -> {
             Platform.exit();
             System.exit(0);
         });
@@ -251,7 +251,7 @@ public class CYPathFX extends Application {
      */
     public void createMainMenuScene() {
         BorderPane rootMainMenu = new BorderPane();
-        this.mainMenuScene = new Scene(rootMainMenu);
+        this.setMainMenuScene(new Scene(rootMainMenu));
 
         Label titleMainMenu = new Label("CY Path");
         titleMainMenu.setAlignment(Pos.CENTER);
@@ -282,23 +282,23 @@ public class CYPathFX extends Application {
         buttonsMenuVBox.setAlignment(Pos.CENTER);
         rootMainMenu.setCenter(buttonsMenuVBox);
 
-        buttonsMenuVBox.getChildren().addAll(newGameMenuButton, continueGameButton, loadButton, exitButton);
-        mainMenuScene.getStylesheets().add("styleMainMenu.css");
+        buttonsMenuVBox.getChildren().addAll(newGameMenuButton, this.getContinueGameButton(), loadButton, exitButton);
+        this.getMainMenuScene().getStylesheets().add("styleMainMenu.css");
     }
 
     /**
      * Change the scene to go the main menu
      */
     public void goToMainMenuScene() {
-        if(this.mainMenuScene == null) {
+        if(this.getMainMenuScene() == null) {
             createMainMenuScene();
         }
 
-        this.continueGameButton.setManaged(this.game != null);
+        this.getContinueGameButton().setManaged(this.getGame() != null);
         
-        this.primaryStage.setScene(this.mainMenuScene);
-        if(!this.primaryStage.isShowing()) {
-            this.primaryStage.show();
+        this.getPrimaryStage().setScene(this.getMainMenuScene());
+        if(!this.getPrimaryStage().isShowing()) {
+            this.getPrimaryStage().show();
         }
     }
 
@@ -306,11 +306,11 @@ public class CYPathFX extends Application {
      * Change the scene to the new game scene
      */
     public void goToNewGameMenu() {
-        if (this.newGameMenuScene == null) {
+        if (this.getNewGameMenuScene() == null) {
             createNewGameScene();
         }
 
-        this.primaryStage.setScene(this.newGameMenuScene);
+        this.getPrimaryStage().setScene(this.getNewGameMenuScene());
     }
 
     /**
@@ -374,8 +374,8 @@ public class CYPathFX extends Application {
         root.setCenter(buttonsMenuVBox);
         BorderPane.setAlignment(titleGameMode, Pos.CENTER);
     
-        this.newGameMenuScene = new Scene(root);
-        this.newGameMenuScene.getStylesheets().add("styleGameMode.css");
+        this.setNewGameMenuScene(new Scene(root));
+        this.getNewGameMenuScene().getStylesheets().add("styleGameMode.css");
     }
 
     /**
@@ -390,7 +390,7 @@ public class CYPathFX extends Application {
             playersPawnIndex.put(i, players[i]);
         }
         try {
-            this.game = new GameFX(players,20, 9, 9, playersPawnIndex, 2);
+            this.setGame(new GameFX(players,20, 9, 9, playersPawnIndex, 2));
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(-1);
@@ -402,7 +402,7 @@ public class CYPathFX extends Application {
      * @throws GameNotInitializedException If the game is not initialised properly
      */
     public void createGameScene() throws GameNotInitializedException {
-        if(this.game == null) {
+        if(this.getGame() == null) {
             throw new GameNotInitializedException();
         }
         BorderPane rootGameScene = new BorderPane();
@@ -416,13 +416,13 @@ public class CYPathFX extends Application {
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
 
-        this.gameSkipTurnButton = new Button("Skip");
-        this.gameSkipTurnButton.setVisible(false);
-        this.gameSkipTurnButton.setOnAction(e -> {
-            this.game.setIsEndTurn(true);
-            this.gameSkipTurnButton.setVisible(false);
+        this.setGameSkipTurnButton(new Button("Skip"));
+        this.getGameSkipTurnButton().setVisible(false);
+        this.getGameSkipTurnButton().setOnAction(e -> {
+            this.getGame().setIsEndTurn(true);
+            this.getGameSkipTurnButton().setVisible(false);
 
-            checkEndTurn(this.game);
+            checkEndTurn(this.getGame());
 
             //update button
             this.getActionButton().fire();
@@ -433,29 +433,29 @@ public class CYPathFX extends Application {
         
         HBox buttonsHBox = new HBox();
         buttonsHBox.setAlignment(Pos.CENTER_LEFT);
-        buttonsHBox.getChildren().addAll(this.getActionButton(), saveButton, goBack, fenceCounter, gameSkipTurnButton);
-        this.gPane = createBoard(50,8,Color.LIGHTGRAY, Color.rgb(230, 230, 230));
+        buttonsHBox.getChildren().addAll(this.getActionButton(), saveButton, goBack, this.getFenceCounter(), this.getGameSkipTurnButton());
+        this.setGPane(createBoard(50,8,Color.LIGHTGRAY, Color.rgb(230, 230, 230)));
 
-        rootGameScene.setCenter(this.gPane);
+        rootGameScene.setCenter(this.getGPane());
         rootGameScene.setTop(buttonsHBox);
-        gameScene = new Scene(rootGameScene);
+        this.setGameScene(new Scene(rootGameScene));
 
         // When it's the end of a game, change the user interface
-        this.game.getIsEndGame().addListener((observable, oldValue, newValue) -> {
+        this.getGame().getIsEndGame().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 Button newGameButton = new Button("New game");
                 newGameButton.setOnAction(e -> {
-                    prepareGameScene(this.game.getNbPlayers());
+                    prepareGameScene(this.getGame().getNbPlayers());
                 });
 
                 Text winner = null;
                 try {
-                    winner = new Text("Winner is " + this.game.getBoard().getPawn(this.game.getBoard().getWinner()).getColor().toString());
+                    winner = new Text("Winner is " + this.getGame().getBoard().getPawn(this.getGame().getBoard().getWinner()).getColor().toString());
                 } catch (IncorrectPawnIndexException e1) {
                     System.err.println(e1.getMessage());
                 }
                 
-                this.gPane.setDisable(true);
+                this.getGPane().setDisable(true);
                 buttonsHBox.getChildren().clear();
                 buttonsHBox.getChildren().addAll(winner,newGameButton,goBack);    
                 buttonsHBox.setStyle("-fx-alignment: center;");  
@@ -466,20 +466,20 @@ public class CYPathFX extends Application {
 
         Text currentPlayerText = new Text();
         CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
-        this.game.addObserver(currentPlayerTextControl);
+        this.getGame().addObserver(currentPlayerTextControl);
         buttonsHBox.getChildren().add(currentPlayerText);
         //We click on the button two times for update the first player action
         this.getActionButton().fire();
         this.getActionButton().fire();
         //Create a thread to run in the terminal
-        if(this.terminalThread != null && this.terminalThread.isAlive()) {
-            this.terminalThread.interrupt();
+        if(this.getTerminalThread() != null && this.getTerminalThread().isAlive()) {
+            this.getTerminalThread().interrupt();
         }
-        this.terminalThread = new Thread(() -> {
-            this.game.launch();
-        });
-        this.terminalThread.setDaemon(true);
-        this.terminalThread.start();
+        this.setTerminalThread(new Thread(() -> {
+            this.getGame().launch();
+        }));
+        this.getTerminalThread().setDaemon(true);
+        this.getTerminalThread().start();
     }
 
     /**
@@ -504,7 +504,7 @@ public class CYPathFX extends Application {
      * Change the scene to be the game by creating a new game scene.
      */
     public void goToGameScene()  {
-        if(this.gameScene == null) {
+        if(this.getGameScene() == null) {
             try {
                 createGameScene();
             } catch (GameNotInitializedException e) {
@@ -515,7 +515,7 @@ public class CYPathFX extends Application {
             }
         }
 
-        this.primaryStage.setScene(gameScene);
+        this.getPrimaryStage().setScene(this.getGameScene());
     }
 
     /**
@@ -568,14 +568,14 @@ public class CYPathFX extends Application {
         Rectangle cell = new Rectangle(size, size);
 
         cell.setFill(color);
-        cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.fence));
-        cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.fence));
-        cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.fence, this.game, this.getActionButton()));
+        cellStackPane.setOnMouseEntered(new HoverBorderControl(this, this.getFence()));
+        cellStackPane.setOnMouseExited(new HoverBorderControl(this, this.getFence()));
+        cellStackPane.setOnMouseClicked(new ClickCellControl(this, this.getFence(), this.getGame(), this.getActionButton()));
         cellStackPane.getChildren().add(cell);       
 
         // Check if there is a pawn on this cell and add it if there is one
-        Pawn pawn = this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row));
-        if(this.game.getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row)) != null) {
+        Pawn pawn = this.getGame().getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row));
+        if(this.getGame().getBoard().getPawnAtPos(CYPathFX.gPaneCellCoordToGameCoord(col,row)) != null) {
             cellStackPane.getChildren().add(this.createPlayerCircle(pawn.getColor()));
         }
         return cellStackPane;
@@ -594,8 +594,8 @@ public class CYPathFX extends Application {
 
     public GridPane createBoard(int cellSize, int lineWidth, Color borderColor, Color cellColor) {
         GridPane gPane = new GridPane();
-        int sizeBoardRows = this.game.getBoard().getNbRows();
-        int sizeBoardColumns = this.game.getBoard().getNbCols();
+        int sizeBoardRows = this.getGame().getBoard().getNbRows();
+        int sizeBoardColumns = this.getGame().getBoard().getNbCols();
         Line border = null;
         int lineLength = cellSize;
 
@@ -650,7 +650,7 @@ public class CYPathFX extends Application {
      * @param gPane Grid shown to the player
      */
     private void addFencesToBoard(GridPane gPane){
-        for(Fence f : this.game.getBoard().getFencesArray()) {
+        for(Fence f : this.getGame().getBoard().getFencesArray()) {
             Point pStartFenceGPaneCoord = new Point(f.getStart().getX()*2,f.getStart().getY()*2);
             Point pEndFenceGPaneCoord = new Point(f.getEnd().getX()*2,f.getEnd().getY()*2);
             
@@ -767,7 +767,7 @@ public class CYPathFX extends Application {
         popupStage.setHeight(80);
 
         //Content of the pop-up window
-        Label label = new Label(this.game.getCurrentPawn().getColor().toString() + " can't move. Try to place a fence or skip your turn");
+        Label label = new Label(this.getGame().getCurrentPawn().getColor().toString() + " can't move. Try to place a fence or skip your turn");
         StackPane popupRoot = new StackPane(label);
         popupRoot.setAlignment(Pos.CENTER);
 
@@ -787,13 +787,13 @@ public class CYPathFX extends Application {
     public void showPossibleCells(int pawnId) throws IncorrectJavaFXBoardException {
         LinkedList<Point> possibleMoves = null;
         try {
-            possibleMoves = this.game.getBoard().listPossibleMoves(this.game.getBoard().getPawn(pawnId).getPosition());
+            possibleMoves = this.getGame().getBoard().listPossibleMoves(this.getGame().getBoard().getPawn(pawnId).getPosition());
 
-            if(possibleMoves.isEmpty() && !this.game.getIsEndTurn()){
+            if(possibleMoves.isEmpty() && !this.getGame().getIsEndTurn()){
 
-                System.out.println(this.game.getCurrentPawn().getColor().toString() + " pawn can't move");
-                showPopupWindow(primaryStage);
-                this.gameSkipTurnButton.setVisible(true);
+                System.out.println(this.getGame().getCurrentPawn().getColor().toString() + " pawn can't move");
+                showPopupWindow(this.getPrimaryStage());
+                this.getGameSkipTurnButton().setVisible(true);
             }
 
         } catch(IncorrectPawnIndexException err) {
@@ -802,7 +802,7 @@ public class CYPathFX extends Application {
         }
         
         for(Point p : possibleMoves){
-            StackPane stack = getCellStackPane(gPane, p.getY()*2+1, p.getX()*2+1);
+            StackPane stack = getCellStackPane(this.getGPane(), p.getY()*2+1, p.getX()*2+1);
             if(stack == null) {
                 throw new IncorrectJavaFXBoardException();
             }
@@ -812,8 +812,8 @@ public class CYPathFX extends Application {
 
             if(node instanceof Rectangle){
                 Rectangle rec = (Rectangle) node;
-                rec.setFill(this.game.getCurrentPawn().getColor().toColorPossibleMove());
-                this.previousPossibleCells.add(rec);
+                rec.setFill(this.getGame().getCurrentPawn().getColor().toColorPossibleMove());
+                this.getPreviousPossibleCells().add(rec);
             }
         }
     }
@@ -869,10 +869,10 @@ public class CYPathFX extends Application {
     public void resetPossibleCells(int pawnId){
         Color cellColor = Color.rgb(230, 230, 230);
 
-        while (!previousPossibleCells.isEmpty()) {
-            Rectangle rec = previousPossibleCells.getFirst();
+        while (!this.getPreviousPossibleCells().isEmpty()) {
+            Rectangle rec = this.getPreviousPossibleCells().getFirst();
             rec.setFill(cellColor);
-            previousPossibleCells.removeFirst();
+            this.getPreviousPossibleCells().removeFirst();
         }
     }
 
@@ -883,10 +883,10 @@ public class CYPathFX extends Application {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a file");
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
-        new File(saveDefaultPath).mkdirs();
-        fileChooser.setInitialDirectory(new File(saveDefaultPath));
+        new File(this.getSaveDefaultPath()).mkdirs();
+        fileChooser.setInitialDirectory(new File(this.getSaveDefaultPath()));
 
-        File file = fileChooser.showOpenDialog(this.primaryStage);
+        File file = fileChooser.showOpenDialog(this.getPrimaryStage());
 
         
         if(file != null) {
@@ -901,9 +901,9 @@ public class CYPathFX extends Application {
                     playersPawnIndex.put(i, players[i]);
                 }
 
-                this.game = new GameFX(players, loadDataObject.getMaxNbFences(), loadDataObject.getRows(), loadDataObject.getColumns(), playersPawnIndex, loadDataObject.getPawns(), loadDataObject.getCurrentPawnIndex(), 2);
+                this.setGame(new GameFX(players, loadDataObject.getMaxNbFences(), loadDataObject.getRows(), loadDataObject.getColumns(), playersPawnIndex, loadDataObject.getPawns(), loadDataObject.getCurrentPawnIndex(), 2));
                 for(Fence f : loadDataObject.getListFences()){
-                    this.game.getBoard().addFenceToData(f);
+                    this.getGame().getBoard().addFenceToData(f);
                 }
 
                 alert = new Alert(AlertType.INFORMATION);
@@ -927,14 +927,14 @@ public class CYPathFX extends Application {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select a file");
         fileChooser.getExtensionFilters().addAll(new ExtensionFilter("All Files", "*.json"));
-        new File(saveDefaultPath).mkdirs();
-        fileChooser.setInitialDirectory(new File(saveDefaultPath));
+        new File(this.getSaveDefaultPath()).mkdirs();
+        fileChooser.setInitialDirectory(new File(this.getSaveDefaultPath()));
         fileChooser.setInitialFileName("save.json");
 
-        File file = fileChooser.showSaveDialog(this.primaryStage);
+        File file = fileChooser.showSaveDialog(this.getPrimaryStage());
         
         if(file != null) {
-            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.game.getBoard().getNbRows(), this.game.getBoard().getNbCols(), this.game.getBoard().getFencesArray(), this.game.getNbMaxTotalFences(), this.game.getBoard().getPawnsArray(), this.game.getCurrentPawnIndex());
+            SaveDataInJSONFile saveDataObject = new SaveDataInJSONFile(this.getGame().getBoard().getNbRows(), this.getGame().getBoard().getNbCols(), this.getGame().getBoard().getFencesArray(), this.getGame().getNbMaxTotalFences(), this.getGame().getBoard().getPawnsArray(), this.getGame().getCurrentPawnIndex());
             Alert alert = null;
             try {
                 saveDataObject.save(file, true);
@@ -947,6 +947,199 @@ public class CYPathFX extends Application {
                 alert.showAndWait();
             }
         }
+    }
+
+    /**
+     * Set the action button.
+     * @param actionButton Button of action.
+     */
+    public void setActionButton(Button actionButton) {
+        this.actionButton = actionButton;
+    }
+
+    /**
+     * Set the game.
+     * @param game Game wanting to be changed.
+     */
+    public void setGame(GameFX game) {
+        this.game = game;
+    }
+
+    /**
+     * Set the GridPane used to display the grid to the user.
+     * @param gPane GridPane to be set to show the grid.
+     */
+    public void setGPane(GridPane gPane) {
+        this.gPane = gPane;
+    }
+
+    /**
+     * Get the fence whether it's to be placed or to highlight possible fence placement.
+     * @return Fence that it's used by the player.
+     */
+    public Fence getFence() {
+        return fence;
+    }
+
+    /**
+     * Set the fence used by the player.
+     * @param fence Fence used by the player.
+     */
+    public void setFence(Fence fence) {
+        this.fence = fence;
+    }
+
+    /**
+     * Set the list of the fences, represented by Line, used to show to the player where it can place a fence.
+     * @param prevHighlightedFencesList List the previous highlighted fences shown to the player when placing a fence.
+     */
+    public void setPrevHighlightedFencesList(LinkedList<Line> prevHighlightedFencesList) {
+        this.prevHighlightedFencesList = prevHighlightedFencesList;
+    }
+
+    /**
+     * Set the list of possible cells to move on before moving to another a cell.
+     * @param previousPossibleCells List of cells where you move on.
+     */
+    public void setPreviousPossibleCells(LinkedList<Rectangle> previousPossibleCells) {
+        this.previousPossibleCells = previousPossibleCells;
+    }
+
+    /**
+     * Set the color of cells you can hover
+     * @param cellColorHover Color of the cells you can hover
+     */
+    public void setCellColorHover(Color cellColorHover) {
+        this.cellColorHover = cellColorHover;
+    }
+
+    /**
+     * Set the text of the fence counter for a player
+     * @param fenceCounter Text of the fence counter
+     */
+    public void setFenceCounter(Text fenceCounter) {
+        this.fenceCounter = fenceCounter;
+    }
+
+    /**
+     * Get the terminal thread running behind the graphical interface
+     * @return Thread of the console application
+     */
+    public Thread getTerminalThread() {
+        return terminalThread;
+    }
+
+    /**
+     * Set the terminal thread running behind the graphical interface
+     * @param terminalThread Thread running behind the graphical interface
+     */
+    public void setTerminalThread(Thread terminalThread) {
+        this.terminalThread = terminalThread;
+    }
+
+    /**
+     * Get the primary stage of the graphical application's window
+     * @return Stage where the main interaction is being done
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    /**
+     * Set the primary stage of the graphical application's window
+     * @param primaryStage Stage where the main interaction is being done
+     */
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    /**
+     * Set the scene of the main menu when launching the application.
+     * @return Scene of the main menu
+     */
+    public Scene getMainMenuScene() {
+        return mainMenuScene;
+    }
+
+    /**
+     * Set the scene of the main menu when launching the application.
+     * @param mainMenuScene Scene of the main menu.
+     */
+    public void setMainMenuScene(Scene mainMenuScene) {
+        this.mainMenuScene = mainMenuScene;
+    }
+
+    /**
+     * Get the scene when creating a new game.
+     * @return Scene when creating a new game.
+     */
+    public Scene getNewGameMenuScene() {
+        return newGameMenuScene;
+    }
+
+    /**
+     * Set the scene when creating a new game.
+     * @param newGameMenuScene Scene when creating a new game.
+     */
+    public void setNewGameMenuScene(Scene newGameMenuScene) {
+        this.newGameMenuScene = newGameMenuScene;
+    }
+
+    /**
+     * Get the scene of the game.
+     * @return Scene of the game.
+     */
+    public Scene getGameScene() {
+        return gameScene;
+    }
+
+    /**
+     * Set the scene of the game.
+     * @param gameScene Scene of the game.
+     */
+    public void setGameScene(Scene gameScene) {
+        this.gameScene = gameScene;
+    }
+
+    /**
+     * Get the button to continue a game. This button can be found on the main menu.
+     * @return Button to continue a game.
+     */
+    public Button getContinueGameButton() {
+        return continueGameButton;
+    }
+
+    /**
+     * Set the button to continue a game. This button can be found on the main menu.
+     * @param continueGameButton Button to continue a game.
+     */
+    public void setContinueGameButton(Button continueGameButton) {
+        this.continueGameButton = continueGameButton;
+    }
+
+    /**
+     * Get the button to skip a turn when no there are no possible actions.
+     * @return Button for skipping a turn when no there are no possible actions.
+     */
+    public Button getGameSkipTurnButton() {
+        return gameSkipTurnButton;
+    }
+
+    /**
+     * Set the button to skip a turn when no there are no possible actions.
+     * @param gameSkipTurnButton Button for skipping a turn when no there are no possible actions.
+     */
+    public void setGameSkipTurnButton(Button gameSkipTurnButton) {
+        this.gameSkipTurnButton = gameSkipTurnButton;
+    }
+
+
+    /**
+     * Get the default saving path when creating a new save.
+     * @return String of the default saving path.
+     */
+    public String getSaveDefaultPath() {
+        return saveDefaultPath;
     }
 
     /**

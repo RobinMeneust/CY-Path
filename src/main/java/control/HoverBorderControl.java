@@ -61,13 +61,13 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 				System.exit(-1);
 			}
 			// The player wants to place a fence
-			if (!this.cyPathFX.isMoveMode()) {
+			if (!this.getCyPathFX().isMoveMode()) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED || event.getEventType() == MouseEvent.MOUSE_CLICKED) {
 					Point pStartCell = CYPathFX.getGPaneNodeCoord(stackPane);
 					Point pStartFenceCoord = CYPathFX.gPaneCellCoordToGameCoord(pStartCell);
 
-					Fence fence = new Fence(this.cyPathFX.getGame().getBoard().getFenceLength(), this.fence.getOrientation(), pStartFenceCoord);
-					if (this.cyPathFX.getGame().getBoard().isFencePositionValid(fence)) {
+					Fence fence = new Fence(this.getCyPathFX().getGame().getBoard().getFenceLength(), this.getFence().getOrientation(), pStartFenceCoord);
+					if (this.getCyPathFX().getGame().getBoard().isFencePositionValid(fence)) {
 						highlightFence(fence.getOrientation(), pStartCell, fence.getLength(), Color.DARKGREEN);
 					} else {
 						highlightFence(fence.getOrientation(), pStartCell, fence.getLength(), Color.DARKRED);
@@ -75,14 +75,14 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
 					// If the cursor moves from the current cell, we delete the current temporary fence for the next one to appear properly
-					this.resetHighlightedFences(this.cyPathFX);
+					this.resetHighlightedFences(this.getCyPathFX());
 				}
 				// The player wants to move
-			} else if (this.cyPathFX.getPreviousPossibleCells() != null && this.cyPathFX.getPreviousPossibleCells().contains(sourceCell) && sourceCell != null) {
+			} else if (this.getCyPathFX().getPreviousPossibleCells() != null && this.getCyPathFX().getPreviousPossibleCells().contains(sourceCell) && sourceCell != null) {
 				if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
-					sourceCell.setFill(this.cyPathFX.getCellColorHover());
+					sourceCell.setFill(this.getCyPathFX().getCellColorHover());
 				} else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-					sourceCell.setFill(this.cyPathFX.getGame().getCurrentPawn().getColor().toColorPossibleMove());
+					sourceCell.setFill(this.getCyPathFX().getGame().getCurrentPawn().getColor().toColorPossibleMove());
 				}
 			}
 		}
@@ -120,14 +120,14 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 	 */
 
 	private void highlightLine(int x, int y, Color newColor) {
-		Node n = this.cyPathFX.getNodeFromGridPane(this.cyPathFX.getGPane(), y, x);
+		Node n = this.getCyPathFX().getNodeFromGridPane(this.getCyPathFX().getGPane(), y, x);
 		if (n instanceof Line) {
 			Line l = (Line) n;
 			if (l.getStroke() != Color.BLACK) {
 				// If it's not already a border
 				l.setStroke(newColor);
 				l.toFront();
-				this.cyPathFX.getPrevHighlightedFencesList().add(l);
+				this.getCyPathFX().getPrevHighlightedFencesList().add(l);
 			}
 		}
 	}
@@ -151,5 +151,35 @@ public class HoverBorderControl implements EventHandler<MouseEvent> {
 			}
 			cyPathFX.getPrevHighlightedFencesList().clear();
 		}
+	}
+	/**
+	 * Get the JavaFX graphical interface
+	 * @return JavaFX Graphical interface of the application
+	 */
+	public CYPathFX getCyPathFX() {
+		return cyPathFX;
+	}
+	/**
+	 * Set the JavaFX graphical interface used in the application
+	 * @param cyPathFX avaFX graphical interface
+	 */
+	public void setCyPathFX(CYPathFX cyPathFX) {
+		this.cyPathFX = cyPathFX;
+	}
+
+	/**
+	 * Get the current fence
+	 * @return Fence wanting to be placed
+	 */
+	public Fence getFence() {
+		return fence;
+	}
+
+	/**
+	 * Set the current fence
+	 * @param fence Fence wanting to be placed
+	 */
+	public void setFence(Fence fence) {
+		this.fence = fence;
 	}
 }

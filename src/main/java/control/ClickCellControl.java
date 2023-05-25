@@ -55,12 +55,70 @@ public class ClickCellControl implements EventHandler<MouseEvent> {
 	public void handle(MouseEvent mouseEvent) {
 		// Add a fence
 		if(mouseEvent.getButton() == MouseButton.PRIMARY){
-			ClickAddBorderControl clickAddBorderControl = new ClickAddBorderControl(this.cyPathFX, (GameFX) this.game, this.actionButton, this.fence);
+			ClickAddBorderControl clickAddBorderControl = new ClickAddBorderControl(this.getCyPathFX(), (GameFX) this.getGame(), this.getActionButton(), this.getFence());
 			clickAddBorderControl.handle(mouseEvent);
 		// Change the orientation of a fence
 		} else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-			FenceOrientationControl fenceOrientationControl = new FenceOrientationControl(this.cyPathFX, this.fence);
+			FenceOrientationControl fenceOrientationControl = new FenceOrientationControl(this.getCyPathFX(), this.getFence());
 			fenceOrientationControl.handle(mouseEvent);
 		}
+	}
+	/**
+	 * Get the JavaFX graphical interface
+	 * @return JavaFX Graphical interface of the application
+	 */
+	public CYPathFX getCyPathFX() {
+		return cyPathFX;
+	}
+	/**
+	 * Set the JavaFX graphical interface used in the application
+	 * @param cyPathFX avaFX graphical interface
+	 */
+	public void setCyPathFX(CYPathFX cyPathFX) {
+		this.cyPathFX = cyPathFX;
+	}
+	/**
+	 * Get the current game
+	 * @return Game currently playing
+	 */
+	public GameAbstract getGame() {
+		return game;
+	}
+	/**
+	 * Set the game
+	 * @param game Game wanting to be changed
+	 */
+	public void setGame(GameAbstract game) {
+		this.game = game;
+	}
+	/**
+	 * Get the action button
+	 * @return Action button
+	 */
+	public Button getActionButton() {
+		return actionButton;
+	}
+	/**
+	 * Set the action button
+	 * @param actionButton Button of action
+	 */
+	public void setActionButton(Button actionButton) {
+		this.actionButton = actionButton;
+	}
+
+	/**
+	 * Get the current fence
+	 * @return Fence wanting to be placed
+	 */
+	public Fence getFence() {
+		return fence;
+	}
+
+	/**
+	 * Set the current fence
+	 * @param fence Fence wanting to be placed
+	 */
+	public void setFence(Fence fence) {
+		this.fence = fence;
 	}
 }
