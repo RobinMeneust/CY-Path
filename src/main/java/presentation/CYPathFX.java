@@ -41,6 +41,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 
 /**
  * Main JavaFX class of the CYPath project
@@ -229,6 +230,8 @@ public class CYPathFX extends Application {
 
         // Set up stage
         this.primaryStage.setTitle("CY Path : the Game");
+        Image icon = new Image("icone-pion.png");
+        primaryStage.getIcons().add(icon);
         this.primaryStage.setMinWidth(545);
         this.primaryStage.setMinHeight(595);
         this.primaryStage.setWidth(545);

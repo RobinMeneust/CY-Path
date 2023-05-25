@@ -33,7 +33,7 @@
 
 #exit-game-button{
     -fx-background-color: #99FF99;
-    -fx-padding:10px 50px 10px 50px;
+    -fx-padding: 10px 50px 10px 50px;
 }
 
 #exit-game-button:hover {
@@ -42,6 +42,7 @@
 
 #continue-game-button {
     -fx-background-color: #CCFF99;
+    -fx-padding: 10px 26px 10px 26px;
 }
 
 #continue-game-button:hover {
