@@ -320,7 +320,7 @@ public class CYPathFX extends Application {
             createGameScene();
             goToGameScene();
         } catch (GameNotInitializedException err) {
-            err.printStackTrace();
+            System.err.println(err.getMessage());
             System.exit(-1);
         }
     }
@@ -389,7 +389,7 @@ public class CYPathFX extends Application {
         try {
             this.game = new GameFX(players,20, 9, 9, playersPawnIndex, 2);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             System.exit(-1);
         }
     }
@@ -449,7 +449,7 @@ public class CYPathFX extends Application {
                 try {
                     winner = new Text("Winner is " + this.game.getBoard().getPawn(this.game.getBoard().getWinner()).getColor().toString());
                 } catch (IncorrectPawnIndexException e1) {
-                    e1.printStackTrace();
+                    System.err.println(e1.getMessage());
                 }
                 
                 this.gPane.setDisable(true);
@@ -794,7 +794,7 @@ public class CYPathFX extends Application {
             }
 
         } catch(IncorrectPawnIndexException err) {
-            err.printStackTrace();
+            System.err.println(err.getMessage());
             System.exit(-1);
         }
         
@@ -909,7 +909,6 @@ public class CYPathFX extends Application {
                 this.createGameScene();
                 this.goToGameScene();
             } catch (Exception e) {
-                e.printStackTrace();
                 alert = new Alert(AlertType.ERROR);
                 alert.setContentText("Error while loading the game.\n"+e);
                 alert.showAndWait();

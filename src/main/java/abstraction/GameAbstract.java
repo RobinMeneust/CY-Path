@@ -132,7 +132,7 @@ public abstract class GameAbstract extends Observable {
 			current = this.getBoard().getPawn(this.getCurrentPawnIndex());
 		} catch (IncorrectPawnIndexException e) {
 			// Since the current pawn index is lesser than the number of pawns it shouldn't happen, so the index is incorrect, so we exit the program
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 			System.exit(-1);
 		}
 		return current;
@@ -169,7 +169,7 @@ public abstract class GameAbstract extends Observable {
 			return this.getBoard().getPawn(currentPawnIndex).getPlayer();
 		} catch (IncorrectPawnIndexException e) {
 			// It should not happen since the currentPlayerIndex is positive and lesser than the size of the players array
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 			System.exit(-1);
 		}
 		return null;

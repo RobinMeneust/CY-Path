@@ -57,7 +57,7 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
 			try {
 				this.cyPathFX.showPossibleCells(this.game.getCurrentPawnIndex());
 			} catch(IncorrectJavaFXBoardException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			}
 			this.game.setAction("Move");
 			this.cyPathFX.setMoveMode(true);

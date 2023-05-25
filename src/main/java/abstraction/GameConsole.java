@@ -75,13 +75,13 @@ public class GameConsole extends GameAbstract {
                     saveDataObject.save(fileName, true);
                     System.out.println("Game successfully saved");
                 } catch (Exception err) {
-                    System.err.println("Error: there was an error while saving the game and overwriting the file");
+                    System.err.println("Error: there was an error while saving the game and overwriting the file\n"+e.getMessage());
                 }
             } else {
                 System.out.println("Saving process cancelled");
             }
         } catch (Exception e) {
-            System.err.println("Error: there was an error while saving the game :" + e);
+            System.err.println("Error: there was an error while saving the game :" + e.getMessage());
         }
     }
 
@@ -186,7 +186,7 @@ public class GameConsole extends GameAbstract {
             } while(!isFenceValid);
         } catch (IncorrectPawnIndexException e) {
             // If this exception is thrown the pawn ids are incorrect
-            System.err.println(e);
+            System.err.println(e.getMessage());
             System.exit(-1);
         }
     }
@@ -254,7 +254,7 @@ public class GameConsole extends GameAbstract {
             System.out.println("The winner is "+playerWinner);            
         } catch (IncorrectPawnIndexException e) {
             // If this exception is thrown the pawn ids are incorrect
-            System.err.println(e);
+            System.err.println(e.getMessage());
             System.exit(-1);
         }
 	}

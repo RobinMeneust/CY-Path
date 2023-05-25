@@ -166,7 +166,7 @@ public class ClickAddBorderControl implements EventHandler<MouseEvent> {
 					placePawnOnBoard(sourceCell);
 				}
 			} catch(Exception e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 				System.exit(-1);
 			}
 		}
