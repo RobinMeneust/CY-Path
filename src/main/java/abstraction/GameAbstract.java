@@ -202,7 +202,7 @@ public abstract class GameAbstract extends Observable {
 	 */
 
 	public Player getPlayer(int index) throws IncorrectPlayerIndexException {
-		if(index>=0 && index<players.length) {
+		if(index>=0 && index<this.getNbPlayers()) {
 			return players[index];
 		} else {
 			throw new IncorrectPlayerIndexException();

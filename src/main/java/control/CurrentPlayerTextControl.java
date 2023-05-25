@@ -42,6 +42,37 @@ public class CurrentPlayerTextControl implements Observer {
 	 */
 	@Override
 	public void update(Observable observable, Object o) {
-		currentPlayer.setText(this.game.getCurrentPlayer().getUsername()+"'s turn");
+		this.getCurrentPlayer().setText(this.getGame().getCurrentPlayer().getUsername()+"'s turn");
+	}
+
+	/**
+	 * Get the text of the current player's turn
+	 * @return Text of the current player's turn
+	 */
+	public Text getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	/**
+	 * Set the text of the current player, shown to the player(s)
+	 * @param currentPlayer Text of the current player
+	 */
+	public void setCurrentPlayer(Text currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	/**
+	 * Get the current game
+	 * @return Game currently playing
+	 */
+	public GameAbstract getGame() {
+		return game;
+	}
+	/**
+	 * Set the game
+	 * @param game Game wanting to be changed
+	 */
+	public void setGame(GameAbstract game) {
+		this.game = game;
 	}
 }

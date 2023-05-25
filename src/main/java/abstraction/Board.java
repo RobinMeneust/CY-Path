@@ -197,7 +197,7 @@ public class Board {
 	 */
 
 	public Pawn getPawn(int i) throws IncorrectPawnIndexException {
-		if(i>=0 && i<pawns.length) {
+		if(i>=0 && i<this.getNbPawns()) {
 			return pawns[i];
 		} else {
 			throw new IncorrectPawnIndexException();
@@ -250,11 +250,14 @@ public class Board {
 	 */
 
 	public boolean isPawnAtPos(Point position){
-
-		for(int i = 0; i < this.getGame().getNbPlayers(); i++){
-			if(this.pawns[i].getPosition().equals(position)){
-				return true;
+		try {
+			for (int i = 0; i < this.getGame().getNbPlayers(); i++) {
+				if (this.getPawn(i).getPosition().equals(position)) {
+					return true;
+				}
 			}
+		}catch (IncorrectPawnIndexException err){
+			System.err.println(err);
 		}
 		return false;
 	}
@@ -279,19 +282,19 @@ public class Board {
 		It's shaped like a "T"
 		*/
 		// We check if the tested position is on the board and if the current position and the tested position are not separated by a fence
-		if(this.isCellOnTheBoard(posTested) && this.grid.areConnected(position,posTested)){
+		if(this.isCellOnTheBoard(posTested) && this.getGrid().areConnected(position,posTested)){
 			if(this.isPawnAtPos(posTested)) {
 				// There is a pawn, so we can't go there, but we can maybe jump above it
-				if(this.isCellOnTheBoard(posBehindTested) && this.grid.areConnected(posTested,posBehindTested) && !this.isPawnAtPos(posBehindTested)){
+				if(this.isCellOnTheBoard(posBehindTested) && this.getGrid().areConnected(posTested,posBehindTested) && !this.isPawnAtPos(posBehindTested)){
 					// The cell just behind is free
 					listMove.add(posBehindTested);
 				}
 				else{
 					// If there is a fence behind the pawn we check if we can go left side or right side
-					if(this.isCellOnTheBoard(posLeftTested) && this.grid.areConnected(posTested,posLeftTested) && !this.isPawnAtPos(posLeftTested)){
+					if(this.isCellOnTheBoard(posLeftTested) && this.getGrid().areConnected(posTested,posLeftTested) && !this.isPawnAtPos(posLeftTested)){
 						listMove.add(posLeftTested);
 					}
-					if(this.isCellOnTheBoard(posRightTested) && this.grid.areConnected(posTested,posRightTested) && !this.isPawnAtPos(posRightTested)){
+					if(this.isCellOnTheBoard(posRightTested) && this.getGrid().areConnected(posTested,posRightTested) && !this.isPawnAtPos(posRightTested)){
 						listMove.add(posRightTested);
 					}
 				}
@@ -360,10 +363,14 @@ public class Board {
 	 */
 
 	public Pawn getPawnAtPos(Point pos) {
-		for(int i=0; i<this.pawns.length; i++) {
-			if(this.pawns[i].getPosition().equals(pos)) {
-				return this.pawns[i];
+		try {
+			for (int i = 0; i < this.getNbPawns(); i++) {
+				if (this.getPawn(i).getPosition().equals(pos)) {
+					return this.getPawn(i);
+				}
 			}
+		}catch (IncorrectPawnIndexException err){
+			System.err.println(err);
 		}
 		return null;
 	}
@@ -407,7 +414,7 @@ public class Board {
 	 * Remove the list of possible moves for the current pawn
 	 */
 	private void clearCurrentPossibleMoves() {
-		this.currentPossibleMoves = null;
+		this.setCurrentPossibleMoves(null);
 	}
 
 	/**
@@ -438,13 +445,13 @@ public class Board {
 		switch(type){
 			case COORD_CELL:
 				System.out.print("    ");
-				for(int i=0; i<nbCols; i++) {
+				for(int i=0; i<this.getNbCols(); i++) {
 					System.out.printf("%3d ",i);
 				}
 				break;
 			case COORD_LINE:
 				System.out.print("  ");
-				for(int i=0; i<=nbCols; i++) {
+				for(int i=0; i<=this.getNbCols(); i++) {
 					System.out.printf("%3d ",i);
 				}
 				break;
@@ -456,22 +463,22 @@ public class Board {
 		} else {
 			System.out.print("    ");
 		}
-		for(int x=0; x<nbCols; x++){
+		for(int x=0; x<this.getNbCols(); x++){
 			System.out.print("|---");
 		}
 		System.out.print("|");
 		System.out.println();
 
-		for(int y=0; y<nbRows; y++) {
+		for(int y=0; y<this.getNbRows(); y++) {
 			if(type == DisplayType.COORD_CELL){
 				System.out.printf("%3d | ",y);
 			} else {
 				System.out.print("    | ");
 			}
 
-			for(int x=0; x<nbCols; x++) {
+			for(int x=0; x<this.getNbCols(); x++) {
 				System.out.print(getCellContentText(x,y));
-				if(x==nbCols-1 || grid.areConnected(x, y, x+1, y)) {
+				if(x==this.getNbCols()-1 || this.getGrid().areConnected(x, y, x+1, y)) {
 					// It's the right border or there is no vertical fence between (x,y) and (x+1,y)
 					System.out.print(" | ");
 				} else {
@@ -487,8 +494,8 @@ public class Board {
 			} else {
 				System.out.print("    ");
 			}
-			for(int x=0; x<nbCols; x++){
-				if(y == nbRows-1 || grid.areConnected(x, y, x, y+1)) {
+			for(int x=0; x<this.getNbCols(); x++){
+				if(y == this.getNbRows()-1 || this.getGrid().areConnected(x, y, x, y+1)) {
 					System.out.print("|---");
 				} else {
 					System.out.print("|@@@");
@@ -512,11 +519,11 @@ public class Board {
 
 		if(fence.getOrientation() == Orientation.HORIZONTAL) {
 			for(int i=start.getX(); i<end.getX(); i++) {
-				this.grid.removeEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
+				this.getGrid().removeEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
 			}
 		} else {
 			for(int i=start.getY(); i<end.getY(); i++) {
-				this.grid.removeEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
+				this.getGrid().removeEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
 			}
 		}
 	}
@@ -534,11 +541,11 @@ public class Board {
 
 		if(fence.getOrientation() == Orientation.HORIZONTAL) {
 			for(int i=start.getX(); i<end.getX(); i++) {
-				this.grid.addEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
+				this.getGrid().addEdge(new Point(i,start.getY()-1), new Point(i,start.getY()));
 			}
 		} else {
 			for(int i=start.getY(); i<end.getY(); i++) {
-				this.grid.addEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
+				this.getGrid().addEdge(new Point(start.getX()-1, i), new Point(start.getX(), i));
 			}
 		}
 	}
@@ -550,8 +557,8 @@ public class Board {
 	 */
 
 	public boolean existPathFromPlayerToWin() {
-		if(this.pawns != null) {
-			for (Pawn p : pawns) {
+		if(this.getPawnsArray() != null) {
+			for (Pawn p : this.getPawnsArray()) {
 				if (!this.getGrid().existPath(p.getPosition(), p.getStartingSide().getOpposite())) {
 					return false;
 				}
@@ -683,7 +690,7 @@ public class Board {
 	 */
 
 	public void checkWin(){
-		for(int i = 0; i < this.game.getNbPlayers(); i++){
+		for(int i = 0; i < this.getGame().getNbPlayers(); i++){
 			switch (this.pawns[i].getStartingSide()){
 				case BOTTOM:
 					if(this.pawns[i].getPosition().getY() == 0){

@@ -47,24 +47,72 @@ public class ActionButtonControl implements EventHandler<ActionEvent> {
 	@Override
 	public void handle(ActionEvent event) {
 		// Change the color of the cells to the default
-		this.cyPathFX.resetPossibleCells(this.game.getCurrentPawnIndex());
+		this.getCyPathFX().resetPossibleCells(this.getGame().getCurrentPawnIndex());
 		// Change the text inside the button depending on the action
-		if (this.actionButton.getText().equals("Place fence") && this.game.getCurrentPawn().getAvailableFences() > 0) {
-			this.game.setAction("Place fence");
-			this.cyPathFX.setMoveMode(false);
-			this.actionButton.setText("Move");
+		if (this.getActionButton().getText().equals("Place fence") && this.getGame().getCurrentPawn().getAvailableFences() > 0) {
+			this.getGame().setAction("Place fence");
+			this.getCyPathFX().setMoveMode(false);
+			this.getActionButton().setText("Move");
 		}else{
 			try {
-				this.cyPathFX.showPossibleCells(this.game.getCurrentPawnIndex());
+				this.getCyPathFX().showPossibleCells(this.getGame().getCurrentPawnIndex());
 			} catch(IncorrectJavaFXBoardException e) {
 				System.err.println(e.getMessage());
 			}
-			this.game.setAction("Move");
-			this.cyPathFX.setMoveMode(true);
-			this.actionButton.setText("Place fence");
+			this.getGame().setAction("Move");
+			this.getCyPathFX().setMoveMode(true);
+			this.getActionButton().setText("Place fence");
 		}
 
 		//Update fenceCounter
-		this.cyPathFX.getFenceCounter().setText(this.cyPathFX.getGame().getCurrentPawn().getAvailableFences()+" fence(s) remaining.");
+		this.getCyPathFX().getFenceCounter().setText(this.getCyPathFX().getGame().getCurrentPawn().getAvailableFences()+" fence(s) remaining.");
+	}
+
+	/**
+	 * Get the action button
+	 * @return Action button
+	 */
+	public Button getActionButton() {
+		return actionButton;
+	}
+
+	/**
+	 * Set the action button
+	 * @param actionButton Button of action
+	 */
+	public void setActionButton(Button actionButton) {
+		this.actionButton = actionButton;
+	}
+
+	/**
+	 * Get the current game
+	 * @return Game currently playing
+	 */
+	public GameFX getGame() {
+		return game;
+	}
+
+	/**
+	 * Set the game
+	 * @param game Game wanting to be changed
+	 */
+	public void setGame(GameFX game) {
+		this.game = game;
+	}
+
+	/**
+	 * Get the JavaFX graphical interface
+	 * @return JavaFX Graphical interface of the application
+	 */
+	public CYPathFX getCyPathFX() {
+		return cyPathFX;
+	}
+
+	/**
+	 * Set the JavaFX graphical interface used in the application
+	 * @param cyPathFX avaFX graphical interface
+	 */
+	public void setCyPathFX(CYPathFX cyPathFX) {
+		this.cyPathFX = cyPathFX;
 	}
 }

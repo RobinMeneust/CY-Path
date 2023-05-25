@@ -99,7 +99,7 @@ public class Point {
      */
 
     public static int getDistance(Point p1, Point p2) {
-        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
+        return Math.abs(p1.getX() - p2.getX()) + Math.abs(p1.getY() - p2.getY());
     }
 
     /**
