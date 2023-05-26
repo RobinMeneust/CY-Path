@@ -414,8 +414,8 @@ public class CYPathFX extends Application {
                         @Override
                         protected Void call() throws Exception {
                             try {
-                                CYPathFX.this.game.setTask(this);
-                                CYPathFX.this.game.launch();
+                                CYPathFX.this.getGame().setTask(this);
+                                CYPathFX.this.getGame().launch();
                             } catch(Exception e) {
                                 throw e;
                             }
@@ -454,7 +454,7 @@ public class CYPathFX extends Application {
         goBack.setOnAction(e -> {
             goToMainMenuScene();
         });
-        this.getActionButton().setOnAction(new ActionButtonControl(this, this.getActionButton(), this.game));
+        this.getActionButton().setOnAction(new ActionButtonControl(this, this.getActionButton(), this.getGame()));
         
         Button saveButton = new Button("Save");
         saveButton.setOnAction(e -> saveGame());
@@ -508,7 +508,7 @@ public class CYPathFX extends Application {
         });
 
         Text currentPlayerText = new Text();
-        CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.game, currentPlayerText);
+        CurrentPlayerTextControl currentPlayerTextControl = new CurrentPlayerTextControl(this.getGame(), currentPlayerText);
         this.getGame().addObserver(currentPlayerTextControl);
         buttonsHBox.getChildren().add(currentPlayerText);
         //We click on the button two times for update the first player action

@@ -71,6 +71,15 @@ public class SaveDataInJSONFile {
      */
     private int currentPawnIndex;
 
+
+    /**
+     * Get the default path for the save folder
+     * @return String of the default path of the save folder
+     */
+    public String getDefaultFolderPath() {
+        return defaultFolderPath;
+    }
+
     /**
      * Default path of save files
      */
@@ -217,7 +226,7 @@ public class SaveDataInJSONFile {
      */
     
     public void save(String fileName, boolean doOverwrite) throws FileNameException, FileNameIsDuplicateException, IOException, FileNameNotExistException {
-        Path folder = Paths.get(this.defaultFolderPath);
+        Path folder = Paths.get(this.getDefaultFolderPath());
         Path filePath = folder.resolve(fileName+".json");
         try {
             save(filePath.toFile(), doOverwrite);

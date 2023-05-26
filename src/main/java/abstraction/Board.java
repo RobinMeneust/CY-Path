@@ -507,13 +507,21 @@ public class Board {
 	}
 
 	/**
+	 * Get the list of fences
+	 * @return ArrayList of fences
+	 */
+	public ArrayList<Fence> getFences() {
+		return fences;
+	}
+
+	/**
 	 * Add a fence to the board
 	 * 
 	 * @param fence Fence added
 	 */
 
 	public void addFenceToData(Fence fence) {
-		this.fences.add(fence);
+		this.getFences().add(fence);
 		Point start = fence.getStart();
 		Point end = fence.getEnd();
 
@@ -535,7 +543,7 @@ public class Board {
 	 */
 
 	public void removeFenceFromData(Fence fence) {
-		this.fences.remove(fence);
+		this.getFences().remove(fence);
 		Point start = fence.getStart();
 		Point end = fence.getEnd();
 
@@ -690,30 +698,35 @@ public class Board {
 	 */
 
 	public void checkWin(){
-		for(int i = 0; i < this.getGame().getNbPlayers(); i++){
-			switch (this.pawns[i].getStartingSide()){
-				case BOTTOM:
-					if(this.pawns[i].getPosition().getY() == 0){
-						this.setWinner(this.pawns[i].getId());
-					}
-					break;
-				case TOP:
-					if(this.pawns[i].getPosition().getY() == this.getNbCols()-1){
-						this.setWinner(this.pawns[i].getId());
-					}
-					break;
-				case LEFT:
-					if(this.pawns[i].getPosition().getX() == this.getNbRows()-1){
-						this.setWinner(this.pawns[i].getId());
-					}
-					break;
-				case RIGHT:
-					if(this.pawns[i].getPosition().getX() == 0){
-						this.setWinner(this.pawns[i].getId());
-					}
-					break;
-				default:;
+		try {
+			for (int i = 0; i < this.getGame().getNbPlayers(); i++) {
+				switch (this.getPawn(i).getStartingSide()) {
+					case BOTTOM:
+						if (this.getPawn(i).getPosition().getY() == 0) {
+							this.setWinner(this.getPawn(i).getId());
+						}
+						break;
+					case TOP:
+						if (this.getPawn(i).getPosition().getY() == this.getNbCols() - 1) {
+							this.setWinner(this.getPawn(i).getId());
+						}
+						break;
+					case LEFT:
+						if (this.getPawn(i).getPosition().getX() == this.getNbRows() - 1) {
+							this.setWinner(this.getPawn(i).getId());
+						}
+						break;
+					case RIGHT:
+						if (this.getPawn(i).getPosition().getX() == 0) {
+							this.setWinner(this.getPawn(i).getId());
+						}
+						break;
+					default:
+						;
+				}
 			}
+		}catch (IncorrectPawnIndexException err){
+			System.err.println(err);
 		}
 	}
 

@@ -207,6 +207,6 @@ public class Fence {
 
 	@Override
 	public String toString(){
-		return("{\nlength:"+this.length+",\n"+"Orientation:"+this.orientation+",\n"+"start:"+this.start+",\n"+"end:"+this.end+",\n"+"}");
+		return("{\nlength:"+this.getLength()+",\n"+"Orientation:"+this.getOrientation()+",\n"+"start:"+this.getStart()+",\n"+"end:"+this.getEnd()+",\n"+"}");
 	}
 }
