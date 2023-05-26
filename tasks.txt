@@ -54,6 +54,7 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/15 16h
 		* Estimated end : 2023/05/15 17:45
 		* Real end : 2023/05/15 18h
+		* Notes : No difficulties encountered
 
 	3.2 Create a pawn associated to a player:
 		3.2.1 Create the basic class Pawn
@@ -62,6 +63,7 @@ The task's priority is sorted in ascending order
 			* Start : 2023/05/15 16h
 			* Estimated end : 2023/05/15 17:45
 			* Real end : 2023/05/15 18h
+			* Notes : No difficulties encountered
 		3.2.2 If the pawn place a fence, its available fences must decrease:
 			3.2.2.1 Check if there is enough fence available
 				* PROGRESS: DONE
@@ -85,18 +87,21 @@ The task's priority is sorted in ascending order
 			* Start : 2023/05/15 18:20
 			* Estimated end : 2023/05/15 18:30
 			* Real end : 2023/05/16 18:50
+            * Notes : It took longer than anticipated.
 		4.1.3 The end of the fence must be consistent with its starting point and its length
 			* PROGRESS: DONE
 			* Who: Romain
 			* Start : 2023/05/16 9:00
 			* Estimated end : 2023/05/16 9:30
 			* Real end : 2023/05/16 10:00
+		    * Notes : It took longer than anticipated.
 		4.1.4 Check if the ending point of the fence is outside the board
 			* PROGRESS: DONE
 			* Who: Romain
 			* Start : 2023/05/16 18:30
 			* Estimated end : 2023/05/16 19:00
 			* Real end : 2023/05/16 19:20
+			* Notes : It took longer than anticipated.
 
 5. Add game sequence:
 	5.1 Be able to move or to place a fence,
@@ -164,12 +169,14 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/16 16:00
 		* Estimated end : 2023/05/16 17:30
 		* Real end : 2023/05/16 18:00
+		* Notes : It took longer than excepted.
 	5.4 Ask the player how many players there are and check the number (it must be equals to 2 or 4)
 		* PROGRESS: DONE
 		* Who: Romain
 		* Start : 2023/05/16 16:45
 		* Estimated end : 2023/05/16 16:50
 		* Real end : 2023/05/16 16:49
+		* Notes : No difficulties encountered.
 	5.5 Ask at the end of a game if the player wants to restart or exit
 		* PROGRESS: DONE
 		* Who: Robin
