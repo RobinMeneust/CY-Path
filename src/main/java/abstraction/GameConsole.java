@@ -168,27 +168,36 @@ public class GameConsole extends GameAbstract {
      * Ask where the user wants to place the given fence and place it if's a valid fence
      * 
      * @param fence Fence placed
+     * @return True if the player placed the fence and false if he cancelled his move
      */
 
-    private void playerPlaceFence(Fence fence) {
+    private boolean playerPlaceFence(Fence fence) {
         Point point = null;
         boolean isFenceValid = false;
 
-        try {
-            do {
-                System.out.println("Where do you want to put your fence ? (X,Y)");
+        do {
+            System.out.println("Where do you want to put your fence ? (X,Y)");
+            try {
                 point = Point.choosePoint();
                 fence.setStart(point);
                 isFenceValid = this.getBoard().placeFence(this.getCurrentPawn().getId(), fence);
-                if(!isFenceValid) {
-                    System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").\nTry again.");
+            } catch (NumberFormatException ignored) {
+
+            } catch (IncorrectPawnIndexException e) {
+                // If this exception is thrown the pawn ids are incorrect
+                System.err.println(e.getMessage());
+                System.exit(-1);
+            }
+            if(!isFenceValid) {
+                System.out.println("The fence can't be placed here (Starting point:" + fence.getStart() + ").");
+                System.out.println("Enter 'c' to cancel and to go back to the action selection or 't' to try again another position: ");
+                String response = CYPath.scanner.nextLine();
+                if(response.toUpperCase().matches("C(ANCEL)?")) {
+                    return false;
                 }
-            } while(!isFenceValid);
-        } catch (IncorrectPawnIndexException e) {
-            // If this exception is thrown the pawn ids are incorrect
-            System.err.println(e.getMessage());
-            System.exit(-1);
-        }
+            }
+        } while(!isFenceValid);
+        return true;
     }
     
     /**
@@ -200,7 +209,7 @@ public class GameConsole extends GameAbstract {
     public void launch() throws Exception {
         String response = "";
         Pawn currentPawn = null;
-
+        boolean nextTurn = true;
         try{
             // Play until there is a winner
             while(this.getBoard().getWinner() == -1){
@@ -210,44 +219,47 @@ public class GameConsole extends GameAbstract {
                 currentPawn = this.getCurrentPawn();
                 List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
 
-                if(currentPawn.getAvailableFences() == 0){
-                    System.out.println("You don't have any fence remaining. You can only move.");
-                    response = getUserActionChoice(false,true);
-                } else if(listPossibleMoves.isEmpty()){
-                    //If it can't move
-                    if(currentPawn.getAvailableFences() != 0){
-                        System.out.println("You can't move. You can only place a fence");
-                        response = getUserActionChoice(true,false);
+                do {
+                    nextTurn = true;
+                    if(currentPawn.getAvailableFences() == 0){
+                        System.out.println("You don't have any fence remaining. You can only move.");
+                        response = getUserActionChoice(false,true);
+                    } else if(listPossibleMoves.isEmpty()){
+                        //If it can't move
+                        if(currentPawn.getAvailableFences() != 0){
+                            System.out.println("You can't move. You can only place a fence");
+                            response = getUserActionChoice(true,false);
+                        }
+                        else{
+                            System.out.println("You can't move or place a fence. Skip your turn");
+                            response = getUserActionChoice(false,false);
+                        }
+                    } 
+                    else{
+                        System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
+                        response = getUserActionChoice(true,true);
+                    }
+                    
+                    if(response.matches("M(OVE)?")){
+                        this.getBoard().displayBoard(DisplayType.COORD_CELL);
+
+                    
+                        System.out.println("Those are the cells where your pawn can move to:");
+                        System.out.println(listPossibleMoves);
+                        
+                        playerMovePawn();
+                        
+                    } else if (response.matches("F(ENCE)?")) {
+                        this.getBoard().displayBoard(DisplayType.COORD_LINE);
+                        Fence fence = new Fence(this.getBoard().getFenceLength());
+
+                        playerChangeFenceOrientation(fence);
+                        nextTurn = playerPlaceFence(fence);
                     }
                     else{
                         System.out.println("You can't move or place a fence. Skip your turn");
-                        response = getUserActionChoice(false,false);
                     }
-                } 
-                else{
-                    System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
-                    response = getUserActionChoice(true,true);
-                }
-                
-                if(response.matches("M(OVE)?")){
-                    this.getBoard().displayBoard(DisplayType.COORD_CELL);
-
-                
-                    System.out.println("Those are the cells where your pawn can move to:");
-                    System.out.println(listPossibleMoves);
-                    
-                    playerMovePawn();
-                    
-                } else if (response.matches("F(ENCE)?")) {
-                    this.getBoard().displayBoard(DisplayType.COORD_LINE);
-                    Fence fence = new Fence(this.getBoard().getFenceLength());
-
-                    playerChangeFenceOrientation(fence);
-                    playerPlaceFence(fence);
-                }
-                else{
-                    System.out.println("You can't move or place a fence. Skip your turn");
-                }
+                }while(!nextTurn);
                 this.endPlayerTurn();
             }
 
