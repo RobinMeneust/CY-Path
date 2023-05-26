@@ -69,6 +69,7 @@ The task's priority is sorted in ascending order
 				* Start :  2023/05/15 17:10
 				* Estimated end :  2023/05/15 17:40
 				* Real end :  2023/05/15 17:45
+				* Notes : No difficulties encountered
 
 4. Create fences:
 	4.1 Create a fence with a length, a position and an orientation:
@@ -149,12 +150,14 @@ The task's priority is sorted in ascending order
 				* Start : 2023/05/16 18:30
 				* Estimated end : 2023/05/16 18:45 
 				* Real end : 2023/05/16 19:45
+				* Notes : It took us longer than expected because we restructured the function to avoid code repetition
 		5.2.3 Check if the move give by the player is in that list of available cells
 			* PROGRESS: DONE
 			* Who: Thibault
 			* Start : 2023/05/16 15:00
 			* Estimated end : 2023/05/16 15:10
 			* Real end : 2023/05/16 15:05
+			* Notes : No difficulties encountered
 	5.3 Check if anybody wins,
 		* PROGRESS: DONE
 		* Who: Romain
@@ -271,6 +274,8 @@ The task's priority is sorted in ascending order
 			* Start : 2023/05/18 16h30
 			* Estimated end : 2023/05/18 18h00
 			* Real end : 2023/05/18 20h30
+			* Notes : This step took more time because we linked the functions doing the expected actions to the button while managing 
+			the update of the button at the end of each round
 		
 	10.2 Player movements ("MOVE" mode)
 		10.1.1 Show the possible moves by changing the color of the corresponding cells (e.g greyed)
@@ -320,6 +325,7 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/20 16h40
 		* Estimated end : 2023/05/20 17h20
 		* Real end : 2023/05/20 17h07
+		* Notes :  No difficulties encountered
 	10.5 Add button for the save system
 		10.3.1 Create a load button that opens a FileChoser
 			* PROGRESS: Done
