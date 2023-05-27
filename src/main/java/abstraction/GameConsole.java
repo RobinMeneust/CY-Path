@@ -1,4 +1,5 @@
 package abstraction;
+
 /*
  * Importing java classes needed for the GameConsole class
  * Importing classes from the java.util package
@@ -6,6 +7,14 @@ package abstraction;
 
 import java.util.HashMap;
 import java.util.List;
+
+/*
+ * Importing classes from the java.nio package
+ * 
+ * It provides features for handling non-blocking I/O operations, as well as efficient handling of binary data, such as data transfer between channels and data buffers.
+ */
+
+import java.nio.file.FileAlreadyExistsException;
 
 import presentation.CYPath;
 
@@ -66,7 +75,7 @@ public class GameConsole extends GameAbstract {
         try {
             saveDataObject.save(fileName, false);
             System.out.println("Game successfully saved");
-        } catch (FileNameIsDuplicateException e) {
+        } catch (FileAlreadyExistsException e) {
             System.err.println("Warning: the name of the file is already used, do you want to overwrite it? ('y' (yes) or 'n' (no))");
             String response = CYPath.scanner.nextLine();
 
@@ -84,7 +93,6 @@ public class GameConsole extends GameAbstract {
             System.err.println("Error: there was an error while saving the game :" + e.getMessage());
         }
     }
-
 
     /**
      * Ask the user if he wants to move, place a fence or save a game

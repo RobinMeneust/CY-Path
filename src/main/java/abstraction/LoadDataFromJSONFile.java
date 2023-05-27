@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 /*
  * Importing classes from the java.io package
@@ -24,7 +25,7 @@ import java.nio.file.Paths;
 
 /*
  * Importing classes from the org.json.simple package
-*/
+ */
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -143,20 +144,20 @@ public class LoadDataFromJSONFile {
 	 * @return True if the save's name file contains only letters, numbers, the _, the - and the . else false
 	 */
 
-	 public static boolean isFileNameValid(String fileName) {
+	public static boolean isFileNameValid(String fileName) {
 		// Using a regular expression to check the characters of the file name.
 		String pattern = "^[a-zA-Z0-9_.-]+$";
 		return Pattern.matches(pattern, fileName);
-	 }
+	}
  
-	 /**
-	  * It provides the name of the load file
-	  * 
-	  * @param filePath The path of the save file you want loaded
-	  * @return The save's name file without extension or the empty string if the save's name file is incorrect
-	  */
+	/**
+	 * It provides the name of the load file
+	 * 
+	 * @param filePath The path of the save file you want loaded
+	 * @return The save's name file without extension or the empty string if the save's name file is incorrect
+	 */
  
-	  public static String extractFileNameWithoutExtension(String filePath) {
+	public static String extractFileNameWithoutExtension(String filePath) {
 		Path path = Paths.get(filePath);
 		String fileName = path.getFileName().toString();
 		int dotIndex = fileName.lastIndexOf(".json");
@@ -165,7 +166,7 @@ public class LoadDataFromJSONFile {
 		} else {
 			return "";
 		}
-	 }
+	}
 
 	/**
 	 * Get an object from a JSON object
@@ -175,12 +176,12 @@ public class LoadDataFromJSONFile {
 	 * @return JSON object at the given key
 	 * @throws SaveFileFormatInvalidException If the format of the file is incorrect
 	 */
+
 	public static JSONObject getJSONObjectFromJSON(JSONObject obj, String key) throws SaveFileFormatInvalidException {
 		if(obj.get(key) instanceof JSONObject)
 			return (JSONObject) obj.get(key);
 		throw new SaveFileFormatInvalidException();
 	}
-
 
 	/**
 	 * Get an object from a JSON object and cast it to an int if it is one
@@ -210,27 +211,28 @@ public class LoadDataFromJSONFile {
 	 * @throws SaveFileFormatInvalidException If the format of the file is incorrect
 	 */
 
-	 public static String getStringFromJSON(JSONObject obj, String key) throws SaveFileFormatInvalidException {
+	public static String getStringFromJSON(JSONObject obj, String key) throws SaveFileFormatInvalidException {
 		if(obj.get(key) instanceof String)
 			return obj.get(key).toString();
 		throw new SaveFileFormatInvalidException();
 	}
 
-	 /**
-	  * Procedure to load a game from a file save in the backup folder
-	  *
-	  * @param filePath Filepath of the file to load
-	  * @throws FileNameNotExistException If the file name entered doesn't exist
-	  * @throws IOException If an I/O error occurs while reading the file
-	  * @throws ParseException If an error occurs while parsing the JSON data
-	  * @throws FileNameException If the file name entered is incorrect
-	  * @throws SaveFileFormatInvalidException If the file loaded is incorrect
-	  */
-	public void load(String filePath) throws FileNameNotExistException, IOException, ParseException, FileNameException, SaveFileFormatInvalidException  {			
+	/**
+	 * Procedure to load a game from a file save in the backup folder
+	 *
+	 * @param filePath Filepath of the file to load
+	 * @throws FileNotFoundException If the file name entered doesn't exist
+	 * @throws IOException If an I/O error occurs while reading the file
+	 * @throws ParseException If an error occurs while parsing the JSON data
+	 * @throws FileNameException If the file name entered is incorrect
+	 * @throws SaveFileFormatInvalidException If the file loaded is incorrect
+	 */
+	
+	public void load(String filePath) throws FileNotFoundException, IOException, ParseException, FileNameException, SaveFileFormatInvalidException  {			
 		File file = new File(filePath);
 
 		if (!file.exists()) {
-			throw new FileNameNotExistException();
+			throw new FileNotFoundException("The file doesnt' exist");
 		}
 
 		if(!isFileNameValid(extractFileNameWithoutExtension(filePath))) {    
