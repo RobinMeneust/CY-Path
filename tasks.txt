@@ -213,6 +213,7 @@ The task's priority is sorted in ascending order
 		* Start : 2023/05/16 20:00
 		* Estimated end : 2023/05/16 20:30
 		* Real end : 2023/05/18 23:00
+		* Re-opened between 2023/05/24 and 2023/05/25 to update the type of backup file elements
 
 8. Load a save:
 	8.1 Let the player choose the file containing the save to be loaded in the console (check if the file exists)
