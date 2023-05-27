@@ -404,6 +404,16 @@ public class CYPathFX extends Application {
             System.err.println(e.getMessage());
             System.exit(-1);
         }
+    }
+
+    /**
+     * Create a new game scene, ready to by used py the players
+     * @throws GameNotInitializedException If the game is not initialised properly
+     */
+    public void createGameScene() throws GameNotInitializedException {
+        if(this.getGame() == null) {
+            throw new GameNotInitializedException();
+        }
 
         //Create a thread to run in the terminal
         if(this.getService() == null) {
@@ -438,16 +448,7 @@ public class CYPathFX extends Application {
         } else {
             this.getService().restart();
         }
-    }
-
-    /**
-     * Create a new game scene, ready to by used py the players
-     * @throws GameNotInitializedException If the game is not initialised properly
-     */
-    public void createGameScene() throws GameNotInitializedException {
-        if(this.getGame() == null) {
-            throw new GameNotInitializedException();
-        }
+        
         BorderPane rootGameScene = new BorderPane();
         
         Button goBack = new Button("Main Menu");
