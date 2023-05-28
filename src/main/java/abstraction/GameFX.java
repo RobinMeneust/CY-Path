@@ -175,7 +175,6 @@ public class GameFX extends GameAbstract {
      */
 
      public void launch() throws Exception {
-        System.out.println("TEST");
         Pawn currentPawn = null;
 
         while(!this.getIsEndGame().getValue()) {
