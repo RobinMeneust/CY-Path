@@ -828,8 +828,6 @@ public class CYPathFX extends Application {
             possibleMoves = this.getGame().getBoard().listPossibleMoves(this.getGame().getBoard().getPawn(pawnId).getPosition());
 
             if(possibleMoves.isEmpty() && !this.getGame().getIsEndTurn()){
-
-                System.out.println(this.getGame().getCurrentPawn().getColor().toString() + " pawn can't move");
                 showPopupWindow(this.getPrimaryStage());
                 this.getGameSkipTurnButton().setVisible(true);
             }

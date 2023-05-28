@@ -413,7 +413,7 @@ public class Board {
 	/**
 	 * Remove the list of possible moves for the current pawn
 	 */
-	private void clearCurrentPossibleMoves() {
+	public void clearCurrentPossibleMoves() {
 		this.setCurrentPossibleMoves(null);
 	}
 

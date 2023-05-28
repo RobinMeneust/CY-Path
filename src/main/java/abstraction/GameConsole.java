@@ -226,28 +226,26 @@ public class GameConsole extends GameAbstract {
                 System.out.println("Turn of player: " +  this.getCurrentPlayer() + " (pawn id: " + this.getCurrentPawn().getId() + ")");
                 currentPawn = this.getCurrentPawn();
                 List<Point> listPossibleMoves = this.getBoard().getCurrentPossibleMoves();
-
+                
                 do {
-                    nextTurn = true;
-                    if(currentPawn.getAvailableFences() == 0){
-                        System.out.println("You don't have any fence remaining. You can only move.");
-                        response = getUserActionChoice(false,true);
-                    } else if(listPossibleMoves.isEmpty()){
-                        //If it can't move
-                        if(currentPawn.getAvailableFences() != 0){
-                            System.out.println("You can't move. You can only place a fence");
-                            response = getUserActionChoice(true,false);
-                        }
-                        else{
-                            System.out.println("You can't move or place a fence. Skip your turn");
-                            response = getUserActionChoice(false,false);
-                        }
-                    } 
-                    else{
+                    boolean canPlaceFence = true;
+                    boolean canMove = true;
+                    System.out.println();
+                    if(currentPawn.getAvailableFences() == 0) {
+                        System.out.println("You don't have any fence remaining");
+                        canPlaceFence = false;
+                    } else {
                         System.out.println("You have "+currentPawn.getAvailableFences()+ " fences remaining.\n");
-                        response = getUserActionChoice(true,true);
                     }
-                    
+
+                    if(listPossibleMoves.isEmpty()) {
+                        System.out.println("You can't move");
+                        canMove = false;
+                    }
+
+                    nextTurn = true;
+                    response = getUserActionChoice(canPlaceFence,canMove);
+
                     if(response.matches("M(OVE)?")){
                         this.getBoard().displayBoard(DisplayType.COORD_CELL);
 
@@ -269,6 +267,7 @@ public class GameConsole extends GameAbstract {
                     }
                 }while(!nextTurn);
                 this.endPlayerTurn();
+                this.getBoard().clearCurrentPossibleMoves();
             }
 
             Player playerWinner = this.getBoard().getPawn(this.getBoard().getWinner()).getPlayer();
