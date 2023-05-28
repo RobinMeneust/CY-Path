@@ -231,7 +231,7 @@ public class CYPathFX extends Application {
 
         // Set up stage
         this.getPrimaryStage().setTitle("CY Path : the Game");
-        Image icon = new Image("icone-pion.png");
+        Image icon = new Image("pawns_icon.png");
         primaryStage.getIcons().add(icon);
         this.getPrimaryStage().setMinWidth(545);
         this.getPrimaryStage().setMinHeight(595);
