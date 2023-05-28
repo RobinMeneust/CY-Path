@@ -334,7 +334,7 @@ public class Grid {
 
 			nodesToBeExpanded.remove(currentNode);
 			for(Point neighbor : getListNeighbors(currentNode)) {
-				distToNeighbor = distTo.get(currentNode) + 1; // weight is 1 for all edges so we just add 1
+				distToNeighbor = distTo.get(currentNode) + 1; // weight is 1 for all edges, so we just add 1
 				if(distToNeighbor < distTo.get(neighbor)) {
 					// Update distTo and path if the new distance is smaller
 					parents.replace(neighbor, currentNode);

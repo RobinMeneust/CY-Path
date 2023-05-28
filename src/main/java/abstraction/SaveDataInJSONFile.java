@@ -221,11 +221,11 @@ public class SaveDataInJSONFile {
      * Fill the save file with the information of the current game to be saved and used later
      * 
      * @param fileName Name of the save file without its extension
-     * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
+     * @param doOverwrite If it's true it will overwrite the file if it already exists, otherwise it won't
      * @throws FileNameException - If the file name is incorrect
      * @throws FileAlreadyExistsException - If the file name already exists
      * @throws IOException - If the entry of the user is wrong
-     * @throws FileNotFoundException - If the file that will be overwrite doesn't exist
+     * @throws FileNotFoundException - If the file that will be overwritten doesn't exist
      */
     
     public void save(String fileName, boolean doOverwrite) throws FileNameException, FileAlreadyExistsException, IOException, FileNotFoundException {
@@ -242,11 +242,11 @@ public class SaveDataInJSONFile {
      * Fill the save file with the information of the current game to be saved and used later
      * 
      * @param file File where the game is saved
-     * @param doOverwrite If it's true it will overwrite the file if it alrady exists, otherwise it won't
+     * @param doOverwrite If it's true it will overwrite the file if it already exists, otherwise it won't
      * @throws FileNameException If the file name is incorrect
      * @throws FileAlreadyExistsException If the file name already exists
      * @throws IOException If the entry of the user is wrong
-     * @throws FileNotFoundException If the file that will be overwrite doesn't exist
+     * @throws FileNotFoundException If the file that will be overwritten doesn't exist
      */
     
     public void save(File file, boolean doOverwrite) throws FileNameException, FileNotFoundException, FileAlreadyExistsException, IOException  {

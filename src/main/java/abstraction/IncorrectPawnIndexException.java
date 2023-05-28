@@ -1,7 +1,7 @@
 package abstraction;
 
 /**
- * Exception used to describe the case where a pawn index is incorrect (out of bounds), e.g if it's negative
+ * Exception used to describe the case where a pawn index is incorrect (out of bounds), e.g. if it's negative
  */
 
 public class IncorrectPawnIndexException extends Exception {

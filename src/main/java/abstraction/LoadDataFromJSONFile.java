@@ -203,7 +203,7 @@ public class LoadDataFromJSONFile {
 	}
 
 	/**
-	 * Get an object from a JSON object and cast it to an String if it is one
+	 * Get an object from a JSON object and cast it to a String if it is one
 	 * 
 	 * @param obj JSON object
 	 * @param key Key of the value got from obj

@@ -1,7 +1,7 @@
 package abstraction;
 
 /**
- * Exception used to describe the case where a player index is incorrect (out of bounds), e.g if it's negative
+ * Exception used to describe the case where a player index is incorrect (out of bounds), e.g. if it's negative
  */
 
 public class IncorrectPlayerIndexException extends Exception {

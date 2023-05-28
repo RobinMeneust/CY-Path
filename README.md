@@ -17,8 +17,8 @@ Quoridor can be played by either 2 or 4 players.
 
 ## Important
 
-- Please note that CYPath.jar needs to be with the lib directory in target or you need to specify the libraries location (look at the sections below) whereas CYPathStandalone.jar doesn't
-- The jar executables can be found in the github action of this project (Continuous Integration) in the summary of a commit, in the artifacts section
+- Please note that CYPath.jar needs to be with the lib directory in target, or you need to specify the libraries location (look at the sections below) whereas CYPathStandalone.jar doesn't
+- The jar executables can be found in the GitHub action of this project (Continuous Integration) in the summary of a commit, in the artifacts section
 
 ## Installation
 
@@ -60,12 +60,12 @@ When you launch the application you can either press 'w' to open a JavaFX window
 - Click on the button to change the mode (placing fence or moving)
 - Move mode :
     - The cells where you can move to are in a different color (in the color of your pawn)
-    - Left click on a cell to move there
+    - Left-click on a cell to move there
 - Fence placing mode
-    - Right click on a cell to change the fence orientation
+    - Right-click on a cell to change the fence orientation
     - Move your mouse on a cell to display the current selected fence
     - If a fence is red it's not a valid position and if it's green it can be placed
-    - Left click on a cell to place the selected fence
+    - Left-click on a cell to place the selected fence
 
 ### In the console mode display
 
